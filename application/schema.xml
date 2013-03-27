@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="rss-reader" defaultIdMethod="native">
+	<!-- table definitions go here -->
+	<table name="feed" phpName="Feed">
+		<!-- column and foreign key definitions go here -->
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+		<column name="link" type="varchar" size="255" required="true" />
+		<column name="title" type="varchar" size="255" required="true" />
+		<column name="description" type="longvarchar" size="255" required="false" />
+		<column name="updated" type="timestamp" required="false" />
+		<column name="type_id" type="integer" required="true" />
+		<foreign-key foreignTable="feed_type" phpName="FeedType" refPhpName="Feed">
+			<reference local="type_id" foreign="id" />
+		</foreign-key>
+		<vendor type="mysql">
+			<parameter name="Engine" value="InnoDB"/>
+			<parameter name="Charset" value="utf8"/>
+		</vendor>
+	</table>
+	<table name="entry" phpName="Entry">
+	<!-- column and foreign key definitions go here -->
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+		<column name="published" type="timestamp" required="false" />
+		<column name="updated" type="timestamp" required="false" />
+		<column name="link" type="varchar" size="255" required="true" />
+		<column name="title" type="varchar" size="255" required="true" />
+		<column name="description" type="longvarchar" size="255" required="false" />
+		<column name="read" type="tinyint" required="true" />
+		<column name="content" type="longvarchar" required="false" />
+		<column name="feed_id" type="integer" required="true" />
+		<foreign-key foreignTable="feed" phpName="Feed" refPhpName="Entry">
+			<reference local="feed_id" foreign="id" />
+		</foreign-key>
+		<vendor type="mysql">
+			<parameter name="Engine" value="InnoDB"/>
+			<parameter name="Charset" value="utf8"/>
+		</vendor>
+	</table>
+	<table name="feed_type" phpName="FeedType">
+	<!-- column and foreign key definitions go here -->
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="code" type="varchar" size="10" required="true" />
+		<vendor type="mysql">
+			<parameter name="Engine" value="InnoDB"/>
+			<parameter name="Charset" value="utf8"/>
+		</vendor>
+	</table>
+</database>
