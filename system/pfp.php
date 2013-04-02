@@ -28,12 +28,21 @@ function pfp()
 	if(isset($segments[0]) && $segments[0] != '') $controller = $segments[0];
 	if(isset($segments[1]) && $segments[1] != '') $action = $segments[1];
 
+	require_once(APP_DIR .'helpers/session_helper.php');
+	$sessionHelper = new Session_helper();
+	$currentUser = $sessionHelper->getCurrentUser();
+	if ($currentUser == null)
+	{
+		$controller = 'user';
+		$action = 'login';
+	}
+
 	// Get our controller file
     $path = APP_DIR . 'controllers/' . $controller . '.php';
 	if(file_exists($path)){
         require_once($path);
 	} else {
-        $controller = ERROR_CONTROLLER;
+        $controller = ERROR_CONTROLLER.'Controller';
         require_once(APP_DIR . 'controllers/' . $controller . '.php');
 	}
 
@@ -41,7 +50,7 @@ function pfp()
 
     // Check the action exists
     if(!method_exists($controller, $action)){
-        $controller = ERROR_CONTROLLER;
+        $controller = ERROR_CONTROLLER.'Controller';
         require_once(APP_DIR . 'controllers/' . $controller . '.php');
         $action = 'index';
     }

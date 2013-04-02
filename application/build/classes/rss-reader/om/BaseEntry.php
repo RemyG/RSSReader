@@ -115,6 +115,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -205,6 +206,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getLink()
     {
+
         return $this->link;
     }
 
@@ -215,6 +217,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getTitle()
     {
+
         return $this->title;
     }
 
@@ -225,6 +228,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getDescription()
     {
+
         return $this->description;
     }
 
@@ -235,6 +239,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getRead()
     {
+
         return $this->read;
     }
 
@@ -245,6 +250,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getContent()
     {
+
         return $this->content;
     }
 
@@ -255,6 +261,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function getFeedId()
     {
+
         return $this->feed_id;
     }
 
@@ -504,6 +511,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
+
             return $startcol + 9; // 9 = EntryPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
@@ -1259,7 +1267,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Feed object.
      *
-     * @param             Feed $v
+     * @param   Feed $v
      * @return Entry The current object (for fluent API support)
      * @throws PropelException
      */

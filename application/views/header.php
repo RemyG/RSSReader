@@ -23,27 +23,43 @@
 </head>
 <body>
 
-	<div class="grid-container">
+	<div id="overlay" class="ajax-overlay">
+		<div class="ajax-loader">&nbsp;</div>
+	</div>
 
-		<div id="left-menu" class="grid-25">
+	<div id="header">
+		<a href="/settings">Settings</a>
+	</div>
 
-			<div class="fixed">
+	<div id="left-menu" class="grid-25">
 
-				<ul>
-					<li class="list-feed-header"><a href="/">Feeds</a></li>
-					<li class="list-feed-action"><a href="/feed/add"><i class="icon-plus-sign"> </i> New feed</a></li>
-					<li class="list-feed-action"><a href="/feed/importopml"><i class="icon-download"> </i> Import OPML</a></li>
-					<?php
-						$c = new Criteria();
-						$c->add(EntryPeer::READ, 0);
-						foreach ($feeds as $feed) {
-							echo '<li class="load-feed-link" data-href="feed/load/'.$feed->getId().'">
-									<div class="feed-title">'.$feed->getTitle().'</div>
-									<div class="feed-count">'.$feed->countEntrys($c).'</div></li>';
-						}
-					?>
-				</ul>
+		<ul>
+			<li class="list-feed-header"><a href="/">Feeds</a></li>
+			<li class="list-feed-action"><a href="/feed/add"><i class="icon-plus-sign"> </i> New feed</a></li>
+			<li class="list-feed-action"><a href="/feed/importopml"><i class="icon-download"> </i> Import OPML</a></li>
+			<li class="list-feed-action"><a href="/feed/updateall" class="link-update-all"><i class="icon-repeat"> </i> Update all feeds</a></li>
+			<li class="list-feed-action"><a href="/user/logout"><i class="icon-signout"> </i> Logout</a></li>
+		</ul>
+		<ul class="list-feeds">
+			<?php
+				$c = new Criteria();
+				$c->add(EntryPeer::READ, 0);
+				foreach ($categoriesTree as $category)
+				{
+					echo '<li class="category">'.$category->getName().'</li>';
+					foreach ($category->getFeeds() as $feed) {
+						echo '<li class="load-feed-link" data-href="feed/load/'.$feed->getId().'">
+								<div class="feed-title">'.$feed->getTitle().'</div>
+								<div class="feed-count">'.$feed->countEntrys($c).'</div></li>';
+					}	
+				}
+				
+			?>
+		</ul>
 
-			</div>
-			
-		</div>
+		<script type="text/javascript">
+			// $( ".load-feed-link" ).draggable();
+			// SEE - https://github.com/mjsarfatti/nestedSortable
+		</script>
+		
+	</div>

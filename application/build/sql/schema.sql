@@ -4,6 +4,24 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
+-- category
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `category`;
+
+CREATE TABLE `category`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `parent_category_id` INTEGER,
+    PRIMARY KEY (`id`),
+    INDEX `category_FI_1` (`parent_category_id`),
+    CONSTRAINT `category_FK_1`
+        FOREIGN KEY (`parent_category_id`)
+        REFERENCES `category` (`id`)
+) ENGINE=InnoDB CHARACTER SET='utf8';
+
+-- ---------------------------------------------------------------------
 -- feed
 -- ---------------------------------------------------------------------
 
@@ -17,11 +35,16 @@ CREATE TABLE `feed`
     `description` TEXT(255),
     `updated` DATETIME,
     `type_id` INTEGER NOT NULL,
+    `category_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `feed_FI_1` (`type_id`),
+    INDEX `feed_FI_2` (`category_id`),
     CONSTRAINT `feed_FK_1`
         FOREIGN KEY (`type_id`)
-        REFERENCES `feed_type` (`id`)
+        REFERENCES `feed_type` (`id`),
+    CONSTRAINT `feed_FK_2`
+        FOREIGN KEY (`category_id`)
+        REFERENCES `category` (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
@@ -58,6 +81,20 @@ CREATE TABLE `feed_type`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `code` VARCHAR(10) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET='utf8';
+
+-- ---------------------------------------------------------------------
+-- user
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `login` VARCHAR(50) NOT NULL,
+    `password` VARCHAR(100) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 

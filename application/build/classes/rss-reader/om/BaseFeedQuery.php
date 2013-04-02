@@ -12,6 +12,7 @@
  * @method FeedQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method FeedQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
  * @method FeedQuery orderByTypeId($order = Criteria::ASC) Order by the type_id column
+ * @method FeedQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  *
  * @method FeedQuery groupById() Group by the id column
  * @method FeedQuery groupByLink() Group by the link column
@@ -19,6 +20,7 @@
  * @method FeedQuery groupByDescription() Group by the description column
  * @method FeedQuery groupByUpdated() Group by the updated column
  * @method FeedQuery groupByTypeId() Group by the type_id column
+ * @method FeedQuery groupByCategoryId() Group by the category_id column
  *
  * @method FeedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method FeedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -27,6 +29,10 @@
  * @method FeedQuery leftJoinFeedType($relationAlias = null) Adds a LEFT JOIN clause to the query using the FeedType relation
  * @method FeedQuery rightJoinFeedType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FeedType relation
  * @method FeedQuery innerJoinFeedType($relationAlias = null) Adds a INNER JOIN clause to the query using the FeedType relation
+ *
+ * @method FeedQuery leftJoinCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the Category relation
+ * @method FeedQuery rightJoinCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Category relation
+ * @method FeedQuery innerJoinCategory($relationAlias = null) Adds a INNER JOIN clause to the query using the Category relation
  *
  * @method FeedQuery leftJoinEntry($relationAlias = null) Adds a LEFT JOIN clause to the query using the Entry relation
  * @method FeedQuery rightJoinEntry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Entry relation
@@ -40,6 +46,7 @@
  * @method Feed findOneByDescription(string $description) Return the first Feed filtered by the description column
  * @method Feed findOneByUpdated(string $updated) Return the first Feed filtered by the updated column
  * @method Feed findOneByTypeId(int $type_id) Return the first Feed filtered by the type_id column
+ * @method Feed findOneByCategoryId(int $category_id) Return the first Feed filtered by the category_id column
  *
  * @method array findById(int $id) Return Feed objects filtered by the id column
  * @method array findByLink(string $link) Return Feed objects filtered by the link column
@@ -47,6 +54,7 @@
  * @method array findByDescription(string $description) Return Feed objects filtered by the description column
  * @method array findByUpdated(string $updated) Return Feed objects filtered by the updated column
  * @method array findByTypeId(int $type_id) Return Feed objects filtered by the type_id column
+ * @method array findByCategoryId(int $category_id) Return Feed objects filtered by the category_id column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -150,7 +158,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `type_id` FROM `feed` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `type_id`, `category_id` FROM `feed` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -456,6 +464,50 @@ abstract class BaseFeedQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the category_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCategoryId(1234); // WHERE category_id = 1234
+     * $query->filterByCategoryId(array(12, 34)); // WHERE category_id IN (12, 34)
+     * $query->filterByCategoryId(array('min' => 12)); // WHERE category_id >= 12
+     * $query->filterByCategoryId(array('max' => 12)); // WHERE category_id <= 12
+     * </code>
+     *
+     * @see       filterByCategory()
+     *
+     * @param     mixed $categoryId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterByCategoryId($categoryId = null, $comparison = null)
+    {
+        if (is_array($categoryId)) {
+            $useMinMax = false;
+            if (isset($categoryId['min'])) {
+                $this->addUsingAlias(FeedPeer::CATEGORY_ID, $categoryId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($categoryId['max'])) {
+                $this->addUsingAlias(FeedPeer::CATEGORY_ID, $categoryId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(FeedPeer::CATEGORY_ID, $categoryId, $comparison);
+    }
+
+    /**
      * Filter the query by a related FeedType object
      *
      * @param   FeedType|PropelObjectCollection $feedType The related object(s) to use as filter
@@ -529,6 +581,82 @@ abstract class BaseFeedQuery extends ModelCriteria
         return $this
             ->joinFeedType($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'FeedType', 'FeedTypeQuery');
+    }
+
+    /**
+     * Filter the query by a related Category object
+     *
+     * @param   Category|PropelObjectCollection $category The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 FeedQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCategory($category, $comparison = null)
+    {
+        if ($category instanceof Category) {
+            return $this
+                ->addUsingAlias(FeedPeer::CATEGORY_ID, $category->getId(), $comparison);
+        } elseif ($category instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(FeedPeer::CATEGORY_ID, $category->toKeyValue('PrimaryKey', 'Id'), $comparison);
+        } else {
+            throw new PropelException('filterByCategory() only accepts arguments of type Category or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Category relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function joinCategory($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Category');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Category');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Category relation Category object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CategoryQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoryQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCategory($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Category', 'CategoryQuery');
     }
 
     /**

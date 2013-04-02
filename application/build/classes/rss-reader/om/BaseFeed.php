@@ -66,9 +66,20 @@ abstract class BaseFeed extends BaseObject implements Persistent
     protected $type_id;
 
     /**
+     * The value for the category_id field.
+     * @var        int
+     */
+    protected $category_id;
+
+    /**
      * @var        FeedType
      */
     protected $aFeedType;
+
+    /**
+     * @var        Category
+     */
+    protected $aCategory;
 
     /**
      * @var        PropelObjectCollection|Entry[] Collection to store aggregation of Entry objects.
@@ -109,6 +120,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
      */
     public function getId()
     {
+
         return $this->id;
     }
 
@@ -119,6 +131,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
      */
     public function getLink()
     {
+
         return $this->link;
     }
 
@@ -129,6 +142,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
      */
     public function getTitle()
     {
+
         return $this->title;
     }
 
@@ -139,6 +153,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
      */
     public function getDescription()
     {
+
         return $this->description;
     }
 
@@ -189,7 +204,19 @@ abstract class BaseFeed extends BaseObject implements Persistent
      */
     public function getTypeId()
     {
+
         return $this->type_id;
+    }
+
+    /**
+     * Get the [category_id] column value.
+     *
+     * @return int
+     */
+    public function getCategoryId()
+    {
+
+        return $this->category_id;
     }
 
     /**
@@ -325,6 +352,31 @@ abstract class BaseFeed extends BaseObject implements Persistent
     } // setTypeId()
 
     /**
+     * Set the value of [category_id] column.
+     *
+     * @param int $v new value
+     * @return Feed The current object (for fluent API support)
+     */
+    public function setCategoryId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->category_id !== $v) {
+            $this->category_id = $v;
+            $this->modifiedColumns[] = FeedPeer::CATEGORY_ID;
+        }
+
+        if ($this->aCategory !== null && $this->aCategory->getId() !== $v) {
+            $this->aCategory = null;
+        }
+
+
+        return $this;
+    } // setCategoryId()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -362,6 +414,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->updated = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->type_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->category_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -370,7 +423,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 $this->ensureConsistency();
             }
             $this->postHydrate($row, $startcol, $rehydrate);
-            return $startcol + 6; // 6 = FeedPeer::NUM_HYDRATE_COLUMNS.
+
+            return $startcol + 7; // 7 = FeedPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Feed object", $e);
@@ -395,6 +449,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
         if ($this->aFeedType !== null && $this->type_id !== $this->aFeedType->getId()) {
             $this->aFeedType = null;
+        }
+        if ($this->aCategory !== null && $this->category_id !== $this->aCategory->getId()) {
+            $this->aCategory = null;
         }
     } // ensureConsistency
 
@@ -436,6 +493,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aFeedType = null;
+            $this->aCategory = null;
             $this->collEntrys = null;
 
         } // if (deep)
@@ -563,6 +621,13 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 $this->setFeedType($this->aFeedType);
             }
 
+            if ($this->aCategory !== null) {
+                if ($this->aCategory->isModified() || $this->aCategory->isNew()) {
+                    $affectedRows += $this->aCategory->save($con);
+                }
+                $this->setCategory($this->aCategory);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -636,6 +701,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::TYPE_ID)) {
             $modifiedColumns[':p' . $index++]  = '`type_id`';
         }
+        if ($this->isColumnModified(FeedPeer::CATEGORY_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`category_id`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `feed` (%s) VALUES (%s)',
@@ -664,6 +732,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
                         break;
                     case '`type_id`':
                         $stmt->bindValue($identifier, $this->type_id, PDO::PARAM_INT);
+                        break;
+                    case '`category_id`':
+                        $stmt->bindValue($identifier, $this->category_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -770,6 +841,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aCategory !== null) {
+                if (!$this->aCategory->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aCategory->getValidationFailures());
+                }
+            }
+
 
             if (($retval = FeedPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
@@ -837,6 +914,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             case 5:
                 return $this->getTypeId();
                 break;
+            case 6:
+                return $this->getCategoryId();
+                break;
             default:
                 return null;
                 break;
@@ -872,10 +952,14 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $keys[3] => $this->getDescription(),
             $keys[4] => $this->getUpdated(),
             $keys[5] => $this->getTypeId(),
+            $keys[6] => $this->getCategoryId(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aFeedType) {
                 $result['FeedType'] = $this->aFeedType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aCategory) {
+                $result['Category'] = $this->aCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collEntrys) {
                 $result['Entrys'] = $this->collEntrys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -932,6 +1016,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             case 5:
                 $this->setTypeId($value);
                 break;
+            case 6:
+                $this->setCategoryId($value);
+                break;
         } // switch()
     }
 
@@ -962,6 +1049,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setUpdated($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setTypeId($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setCategoryId($arr[$keys[6]]);
     }
 
     /**
@@ -979,6 +1067,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::DESCRIPTION)) $criteria->add(FeedPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(FeedPeer::UPDATED)) $criteria->add(FeedPeer::UPDATED, $this->updated);
         if ($this->isColumnModified(FeedPeer::TYPE_ID)) $criteria->add(FeedPeer::TYPE_ID, $this->type_id);
+        if ($this->isColumnModified(FeedPeer::CATEGORY_ID)) $criteria->add(FeedPeer::CATEGORY_ID, $this->category_id);
 
         return $criteria;
     }
@@ -1047,6 +1136,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $copyObj->setDescription($this->getDescription());
         $copyObj->setUpdated($this->getUpdated());
         $copyObj->setTypeId($this->getTypeId());
+        $copyObj->setCategoryId($this->getCategoryId());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1114,7 +1204,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a FeedType object.
      *
-     * @param             FeedType $v
+     * @param   FeedType $v
      * @return Feed The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1161,6 +1251,58 @@ abstract class BaseFeed extends BaseObject implements Persistent
         }
 
         return $this->aFeedType;
+    }
+
+    /**
+     * Declares an association between this object and a Category object.
+     *
+     * @param   Category $v
+     * @return Feed The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCategory(Category $v = null)
+    {
+        if ($v === null) {
+            $this->setCategoryId(NULL);
+        } else {
+            $this->setCategoryId($v->getId());
+        }
+
+        $this->aCategory = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Category object, it will not be re-added.
+        if ($v !== null) {
+            $v->addFeed($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Category object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Category The associated Category object.
+     * @throws PropelException
+     */
+    public function getCategory(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aCategory === null && ($this->category_id !== null) && $doQuery) {
+            $this->aCategory = CategoryQuery::create()->findPk($this->category_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCategory->addFeeds($this);
+             */
+        }
+
+        return $this->aCategory;
     }
 
 
@@ -1256,7 +1398,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
                     if (false !== $this->collEntrysPartial && count($collEntrys)) {
                       $this->initEntrys(false);
 
-                      foreach($collEntrys as $obj) {
+                      foreach ($collEntrys as $obj) {
                         if (false == $this->collEntrys->contains($obj)) {
                           $this->collEntrys->append($obj);
                         }
@@ -1266,12 +1408,13 @@ abstract class BaseFeed extends BaseObject implements Persistent
                     }
 
                     $collEntrys->getInternalIterator()->rewind();
+
                     return $collEntrys;
                 }
 
-                if($partial && $this->collEntrys) {
-                    foreach($this->collEntrys as $obj) {
-                        if($obj->isNew()) {
+                if ($partial && $this->collEntrys) {
+                    foreach ($this->collEntrys as $obj) {
+                        if ($obj->isNew()) {
                             $collEntrys[] = $obj;
                         }
                     }
@@ -1334,7 +1477,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 return 0;
             }
 
-            if($partial && !$criteria) {
+            if ($partial && !$criteria) {
                 return count($this->getEntrys());
             }
             $query = EntryQuery::create(null, $criteria);
@@ -1354,7 +1497,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
      * Method called to associate a Entry object to this object
      * through the Entry foreign key attribute.
      *
-     * @param    Entry $l Entry
+     * @param   Entry $l Entry
      * @return Feed The current object (for fluent API support)
      */
     public function addEntry(Entry $l)
@@ -1409,6 +1552,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $this->description = null;
         $this->updated = null;
         $this->type_id = null;
+        $this->category_id = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1439,6 +1583,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             if ($this->aFeedType instanceof Persistent) {
               $this->aFeedType->clearAllReferences($deep);
             }
+            if ($this->aCategory instanceof Persistent) {
+              $this->aCategory->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -1448,6 +1595,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         }
         $this->collEntrys = null;
         $this->aFeedType = null;
+        $this->aCategory = null;
     }
 
     /**

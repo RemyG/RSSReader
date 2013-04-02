@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="rss-reader" defaultIdMethod="native">
 	<!-- table definitions go here -->
+	<table name="category" phpName="Category">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="name" type="varchar" size="255" required="true" />
+		<column name="parent_category_id" type="integer" required="false" />
+		<foreign-key foreignTable="category" phpName="ParentCategory" refPhpName="ChildrenCategory">
+			<reference local="parent_category_id" foreign="id" />
+		</foreign-key>
+		<vendor type="mysql">
+			<parameter name="Engine" value="InnoDB"/>
+			<parameter name="Charset" value="utf8"/>
+		</vendor>
+	</table>
 	<table name="feed" phpName="Feed">
 		<!-- column and foreign key definitions go here -->
 		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
@@ -9,8 +21,12 @@
 		<column name="description" type="longvarchar" size="255" required="false" />
 		<column name="updated" type="timestamp" required="false" />
 		<column name="type_id" type="integer" required="true" />
+		<column name="category_id" type="integer" required="true" />
 		<foreign-key foreignTable="feed_type" phpName="FeedType" refPhpName="Feed">
 			<reference local="type_id" foreign="id" />
+		</foreign-key>
+		<foreign-key foreignTable="category" phpName="Category" refPhpName="Feed">
+			<reference local="category_id" foreign="id" />
 		</foreign-key>
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>
@@ -40,6 +56,15 @@
 	<!-- column and foreign key definitions go here -->
 		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 		<column name="code" type="varchar" size="10" required="true" />
+		<vendor type="mysql">
+			<parameter name="Engine" value="InnoDB"/>
+			<parameter name="Charset" value="utf8"/>
+		</vendor>
+	</table>
+	<table name="user" phpName="User">
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+		<column name="login" type="varchar" size="50" required="true" />
+		<column name="password" type="varchar" size="100" required="true" />
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>
 			<parameter name="Charset" value="utf8"/>

@@ -20,6 +20,20 @@ class EntryController extends Controller {
     	$count = $entry->getFeed()->countEntrys($c);
     	echo $count;
     }
+
+    function markRead($id)
+    {
+    	$entry = EntryQuery::create()->findPK($id);
+		$entry->setRead(1);
+		$entry->save();
+    }
+
+    function markUnread($id)
+	{
+    	$entry = EntryQuery::create()->findPK($id);
+		$entry->setRead(0);
+		$entry->save();
+	}
 }
 
 ?>

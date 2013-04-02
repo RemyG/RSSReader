@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'feed_type' table.
+ * Base class that represents a row from the 'category' table.
  *
  *
  *
  * @package    propel.generator.rss-reader.om
  */
-abstract class BaseFeedType extends BaseObject implements Persistent
+abstract class BaseCategory extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'FeedTypePeer';
+    const PEER = 'CategoryPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        FeedTypePeer
+     * @var        CategoryPeer
      */
     protected static $peer;
 
@@ -36,10 +36,27 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     protected $id;
 
     /**
-     * The value for the code field.
+     * The value for the name field.
      * @var        string
      */
-    protected $code;
+    protected $name;
+
+    /**
+     * The value for the parent_category_id field.
+     * @var        int
+     */
+    protected $parent_category_id;
+
+    /**
+     * @var        Category
+     */
+    protected $aParentCategory;
+
+    /**
+     * @var        PropelObjectCollection|Category[] Collection to store aggregation of Category objects.
+     */
+    protected $collChildrenCategorys;
+    protected $collChildrenCategorysPartial;
 
     /**
      * @var        PropelObjectCollection|Feed[] Collection to store aggregation of Feed objects.
@@ -71,6 +88,12 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $childrenCategorysScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $feedsScheduledForDeletion = null;
 
     /**
@@ -85,21 +108,32 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [code] column value.
+     * Get the [name] column value.
      *
      * @return string
      */
-    public function getCode()
+    public function getName()
     {
 
-        return $this->code;
+        return $this->name;
+    }
+
+    /**
+     * Get the [parent_category_id] column value.
+     *
+     * @return int
+     */
+    public function getParentCategoryId()
+    {
+
+        return $this->parent_category_id;
     }
 
     /**
      * Set the value of [id] column.
      *
      * @param int $v new value
-     * @return FeedType The current object (for fluent API support)
+     * @return Category The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -109,7 +143,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[] = FeedTypePeer::ID;
+            $this->modifiedColumns[] = CategoryPeer::ID;
         }
 
 
@@ -117,25 +151,50 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     } // setId()
 
     /**
-     * Set the value of [code] column.
+     * Set the value of [name] column.
      *
      * @param string $v new value
-     * @return FeedType The current object (for fluent API support)
+     * @return Category The current object (for fluent API support)
      */
-    public function setCode($v)
+    public function setName($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->code !== $v) {
-            $this->code = $v;
-            $this->modifiedColumns[] = FeedTypePeer::CODE;
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[] = CategoryPeer::NAME;
         }
 
 
         return $this;
-    } // setCode()
+    } // setName()
+
+    /**
+     * Set the value of [parent_category_id] column.
+     *
+     * @param int $v new value
+     * @return Category The current object (for fluent API support)
+     */
+    public function setParentCategoryId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->parent_category_id !== $v) {
+            $this->parent_category_id = $v;
+            $this->modifiedColumns[] = CategoryPeer::PARENT_CATEGORY_ID;
+        }
+
+        if ($this->aParentCategory !== null && $this->aParentCategory->getId() !== $v) {
+            $this->aParentCategory = null;
+        }
+
+
+        return $this;
+    } // setParentCategoryId()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -170,7 +229,8 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->code = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->parent_category_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -180,10 +240,10 @@ abstract class BaseFeedType extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 2; // 2 = FeedTypePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = CategoryPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating FeedType object", $e);
+            throw new PropelException("Error populating Category object", $e);
         }
     }
 
@@ -203,6 +263,9 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aParentCategory !== null && $this->parent_category_id !== $this->aParentCategory->getId()) {
+            $this->aParentCategory = null;
+        }
     } // ensureConsistency
 
     /**
@@ -226,13 +289,13 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(FeedTypePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CategoryPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = FeedTypePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = CategoryPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -241,6 +304,9 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aParentCategory = null;
+            $this->collChildrenCategorys = null;
 
             $this->collFeeds = null;
 
@@ -264,12 +330,12 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(FeedTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(CategoryPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = FeedTypeQuery::create()
+            $deleteQuery = CategoryQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -307,7 +373,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(FeedTypePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(CategoryPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -327,7 +393,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                FeedTypePeer::addInstanceToPool($this);
+                CategoryPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -357,6 +423,18 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aParentCategory !== null) {
+                if ($this->aParentCategory->isModified() || $this->aParentCategory->isNew()) {
+                    $affectedRows += $this->aParentCategory->save($con);
+                }
+                $this->setParentCategory($this->aParentCategory);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -366,6 +444,24 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->childrenCategorysScheduledForDeletion !== null) {
+                if (!$this->childrenCategorysScheduledForDeletion->isEmpty()) {
+                    foreach ($this->childrenCategorysScheduledForDeletion as $childrenCategory) {
+                        // need to save related object because we set the relation to null
+                        $childrenCategory->save($con);
+                    }
+                    $this->childrenCategorysScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collChildrenCategorys !== null) {
+                foreach ($this->collChildrenCategorys as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->feedsScheduledForDeletion !== null) {
@@ -406,21 +502,24 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = FeedTypePeer::ID;
+        $this->modifiedColumns[] = CategoryPeer::ID;
         if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . FeedTypePeer::ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CategoryPeer::ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(FeedTypePeer::ID)) {
+        if ($this->isColumnModified(CategoryPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(FeedTypePeer::CODE)) {
-            $modifiedColumns[':p' . $index++]  = '`code`';
+        if ($this->isColumnModified(CategoryPeer::NAME)) {
+            $modifiedColumns[':p' . $index++]  = '`name`';
+        }
+        if ($this->isColumnModified(CategoryPeer::PARENT_CATEGORY_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`parent_category_id`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `feed_type` (%s) VALUES (%s)',
+            'INSERT INTO `category` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -432,8 +531,11 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`code`':
-                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
+                    case '`name`':
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`parent_category_id`':
+                        $stmt->bindValue($identifier, $this->parent_category_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -529,10 +631,30 @@ abstract class BaseFeedType extends BaseObject implements Persistent
             $failureMap = array();
 
 
-            if (($retval = FeedTypePeer::doValidate($this, $columns)) !== true) {
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aParentCategory !== null) {
+                if (!$this->aParentCategory->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aParentCategory->getValidationFailures());
+                }
+            }
+
+
+            if (($retval = CategoryPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collChildrenCategorys !== null) {
+                    foreach ($this->collChildrenCategorys as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
                 if ($this->collFeeds !== null) {
                     foreach ($this->collFeeds as $referrerFK) {
@@ -561,7 +683,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = FeedTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = CategoryPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -581,7 +703,10 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getCode();
+                return $this->getName();
+                break;
+            case 2:
+                return $this->getParentCategoryId();
                 break;
             default:
                 return null;
@@ -606,16 +731,23 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['FeedType'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Category'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['FeedType'][$this->getPrimaryKey()] = true;
-        $keys = FeedTypePeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Category'][$this->getPrimaryKey()] = true;
+        $keys = CategoryPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getCode(),
+            $keys[1] => $this->getName(),
+            $keys[2] => $this->getParentCategoryId(),
         );
         if ($includeForeignObjects) {
+            if (null !== $this->aParentCategory) {
+                $result['ParentCategory'] = $this->aParentCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collChildrenCategorys) {
+                $result['ChildrenCategorys'] = $this->collChildrenCategorys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collFeeds) {
                 $result['Feeds'] = $this->collFeeds->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -637,7 +769,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = FeedTypePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = CategoryPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -657,7 +789,10 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setCode($value);
+                $this->setName($value);
+                break;
+            case 2:
+                $this->setParentCategoryId($value);
                 break;
         } // switch()
     }
@@ -681,10 +816,11 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = FeedTypePeer::getFieldNames($keyType);
+        $keys = CategoryPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setCode($arr[$keys[1]]);
+        if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setParentCategoryId($arr[$keys[2]]);
     }
 
     /**
@@ -694,10 +830,11 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(FeedTypePeer::DATABASE_NAME);
+        $criteria = new Criteria(CategoryPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(FeedTypePeer::ID)) $criteria->add(FeedTypePeer::ID, $this->id);
-        if ($this->isColumnModified(FeedTypePeer::CODE)) $criteria->add(FeedTypePeer::CODE, $this->code);
+        if ($this->isColumnModified(CategoryPeer::ID)) $criteria->add(CategoryPeer::ID, $this->id);
+        if ($this->isColumnModified(CategoryPeer::NAME)) $criteria->add(CategoryPeer::NAME, $this->name);
+        if ($this->isColumnModified(CategoryPeer::PARENT_CATEGORY_ID)) $criteria->add(CategoryPeer::PARENT_CATEGORY_ID, $this->parent_category_id);
 
         return $criteria;
     }
@@ -712,8 +849,8 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(FeedTypePeer::DATABASE_NAME);
-        $criteria->add(FeedTypePeer::ID, $this->id);
+        $criteria = new Criteria(CategoryPeer::DATABASE_NAME);
+        $criteria->add(CategoryPeer::ID, $this->id);
 
         return $criteria;
     }
@@ -754,14 +891,15 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of FeedType (or compatible) type.
+     * @param object $copyObj An object of Category (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setCode($this->getCode());
+        $copyObj->setName($this->getName());
+        $copyObj->setParentCategoryId($this->getParentCategoryId());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -769,6 +907,12 @@ abstract class BaseFeedType extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getChildrenCategorys() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addChildrenCategory($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getFeeds() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -795,7 +939,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return FeedType Clone of current object.
+     * @return Category Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -815,15 +959,67 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return FeedTypePeer
+     * @return CategoryPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new FeedTypePeer();
+            self::$peer = new CategoryPeer();
         }
 
         return self::$peer;
+    }
+
+    /**
+     * Declares an association between this object and a Category object.
+     *
+     * @param   Category $v
+     * @return Category The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setParentCategory(Category $v = null)
+    {
+        if ($v === null) {
+            $this->setParentCategoryId(NULL);
+        } else {
+            $this->setParentCategoryId($v->getId());
+        }
+
+        $this->aParentCategory = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Category object, it will not be re-added.
+        if ($v !== null) {
+            $v->addChildrenCategory($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Category object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Category The associated Category object.
+     * @throws PropelException
+     */
+    public function getParentCategory(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aParentCategory === null && ($this->parent_category_id !== null) && $doQuery) {
+            $this->aParentCategory = CategoryQuery::create()->findPk($this->parent_category_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aParentCategory->addChildrenCategorys($this);
+             */
+        }
+
+        return $this->aParentCategory;
     }
 
 
@@ -837,9 +1033,232 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('ChildrenCategory' == $relationName) {
+            $this->initChildrenCategorys();
+        }
         if ('Feed' == $relationName) {
             $this->initFeeds();
         }
+    }
+
+    /**
+     * Clears out the collChildrenCategorys collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Category The current object (for fluent API support)
+     * @see        addChildrenCategorys()
+     */
+    public function clearChildrenCategorys()
+    {
+        $this->collChildrenCategorys = null; // important to set this to null since that means it is uninitialized
+        $this->collChildrenCategorysPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collChildrenCategorys collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialChildrenCategorys($v = true)
+    {
+        $this->collChildrenCategorysPartial = $v;
+    }
+
+    /**
+     * Initializes the collChildrenCategorys collection.
+     *
+     * By default this just sets the collChildrenCategorys collection to an empty array (like clearcollChildrenCategorys());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initChildrenCategorys($overrideExisting = true)
+    {
+        if (null !== $this->collChildrenCategorys && !$overrideExisting) {
+            return;
+        }
+        $this->collChildrenCategorys = new PropelObjectCollection();
+        $this->collChildrenCategorys->setModel('Category');
+    }
+
+    /**
+     * Gets an array of Category objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Category is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Category[] List of Category objects
+     * @throws PropelException
+     */
+    public function getChildrenCategorys($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collChildrenCategorysPartial && !$this->isNew();
+        if (null === $this->collChildrenCategorys || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collChildrenCategorys) {
+                // return empty collection
+                $this->initChildrenCategorys();
+            } else {
+                $collChildrenCategorys = CategoryQuery::create(null, $criteria)
+                    ->filterByParentCategory($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collChildrenCategorysPartial && count($collChildrenCategorys)) {
+                      $this->initChildrenCategorys(false);
+
+                      foreach ($collChildrenCategorys as $obj) {
+                        if (false == $this->collChildrenCategorys->contains($obj)) {
+                          $this->collChildrenCategorys->append($obj);
+                        }
+                      }
+
+                      $this->collChildrenCategorysPartial = true;
+                    }
+
+                    $collChildrenCategorys->getInternalIterator()->rewind();
+
+                    return $collChildrenCategorys;
+                }
+
+                if ($partial && $this->collChildrenCategorys) {
+                    foreach ($this->collChildrenCategorys as $obj) {
+                        if ($obj->isNew()) {
+                            $collChildrenCategorys[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collChildrenCategorys = $collChildrenCategorys;
+                $this->collChildrenCategorysPartial = false;
+            }
+        }
+
+        return $this->collChildrenCategorys;
+    }
+
+    /**
+     * Sets a collection of ChildrenCategory objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $childrenCategorys A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Category The current object (for fluent API support)
+     */
+    public function setChildrenCategorys(PropelCollection $childrenCategorys, PropelPDO $con = null)
+    {
+        $childrenCategorysToDelete = $this->getChildrenCategorys(new Criteria(), $con)->diff($childrenCategorys);
+
+
+        $this->childrenCategorysScheduledForDeletion = $childrenCategorysToDelete;
+
+        foreach ($childrenCategorysToDelete as $childrenCategoryRemoved) {
+            $childrenCategoryRemoved->setParentCategory(null);
+        }
+
+        $this->collChildrenCategorys = null;
+        foreach ($childrenCategorys as $childrenCategory) {
+            $this->addChildrenCategory($childrenCategory);
+        }
+
+        $this->collChildrenCategorys = $childrenCategorys;
+        $this->collChildrenCategorysPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Category objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Category objects.
+     * @throws PropelException
+     */
+    public function countChildrenCategorys(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collChildrenCategorysPartial && !$this->isNew();
+        if (null === $this->collChildrenCategorys || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collChildrenCategorys) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getChildrenCategorys());
+            }
+            $query = CategoryQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByParentCategory($this)
+                ->count($con);
+        }
+
+        return count($this->collChildrenCategorys);
+    }
+
+    /**
+     * Method called to associate a Category object to this object
+     * through the Category foreign key attribute.
+     *
+     * @param   Category $l Category
+     * @return Category The current object (for fluent API support)
+     */
+    public function addChildrenCategory(Category $l)
+    {
+        if ($this->collChildrenCategorys === null) {
+            $this->initChildrenCategorys();
+            $this->collChildrenCategorysPartial = true;
+        }
+        if (!in_array($l, $this->collChildrenCategorys->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddChildrenCategory($l);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ChildrenCategory $childrenCategory The childrenCategory object to add.
+     */
+    protected function doAddChildrenCategory($childrenCategory)
+    {
+        $this->collChildrenCategorys[]= $childrenCategory;
+        $childrenCategory->setParentCategory($this);
+    }
+
+    /**
+     * @param	ChildrenCategory $childrenCategory The childrenCategory object to remove.
+     * @return Category The current object (for fluent API support)
+     */
+    public function removeChildrenCategory($childrenCategory)
+    {
+        if ($this->getChildrenCategorys()->contains($childrenCategory)) {
+            $this->collChildrenCategorys->remove($this->collChildrenCategorys->search($childrenCategory));
+            if (null === $this->childrenCategorysScheduledForDeletion) {
+                $this->childrenCategorysScheduledForDeletion = clone $this->collChildrenCategorys;
+                $this->childrenCategorysScheduledForDeletion->clear();
+            }
+            $this->childrenCategorysScheduledForDeletion[]= $childrenCategory;
+            $childrenCategory->setParentCategory(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -848,7 +1267,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
-     * @return FeedType The current object (for fluent API support)
+     * @return Category The current object (for fluent API support)
      * @see        addFeeds()
      */
     public function clearFeeds()
@@ -896,7 +1315,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this FeedType is new, it will return
+     * If this Category is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
@@ -913,7 +1332,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                 $this->initFeeds();
             } else {
                 $collFeeds = FeedQuery::create(null, $criteria)
-                    ->filterByFeedType($this)
+                    ->filterByCategory($this)
                     ->find($con);
                 if (null !== $criteria) {
                     if (false !== $this->collFeedsPartial && count($collFeeds)) {
@@ -957,7 +1376,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      *
      * @param PropelCollection $feeds A Propel collection.
      * @param PropelPDO $con Optional connection object
-     * @return FeedType The current object (for fluent API support)
+     * @return Category The current object (for fluent API support)
      */
     public function setFeeds(PropelCollection $feeds, PropelPDO $con = null)
     {
@@ -967,7 +1386,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         $this->feedsScheduledForDeletion = $feedsToDelete;
 
         foreach ($feedsToDelete as $feedRemoved) {
-            $feedRemoved->setFeedType(null);
+            $feedRemoved->setCategory(null);
         }
 
         $this->collFeeds = null;
@@ -1007,7 +1426,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
             }
 
             return $query
-                ->filterByFeedType($this)
+                ->filterByCategory($this)
                 ->count($con);
         }
 
@@ -1019,7 +1438,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      * through the Feed foreign key attribute.
      *
      * @param   Feed $l Feed
-     * @return FeedType The current object (for fluent API support)
+     * @return Category The current object (for fluent API support)
      */
     public function addFeed(Feed $l)
     {
@@ -1040,12 +1459,12 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     protected function doAddFeed($feed)
     {
         $this->collFeeds[]= $feed;
-        $feed->setFeedType($this);
+        $feed->setCategory($this);
     }
 
     /**
      * @param	Feed $feed The feed object to remove.
-     * @return FeedType The current object (for fluent API support)
+     * @return Category The current object (for fluent API support)
      */
     public function removeFeed($feed)
     {
@@ -1056,7 +1475,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
                 $this->feedsScheduledForDeletion->clear();
             }
             $this->feedsScheduledForDeletion[]= clone $feed;
-            $feed->setFeedType(null);
+            $feed->setCategory(null);
         }
 
         return $this;
@@ -1066,23 +1485,23 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this FeedType is new, it will return
-     * an empty collection; or if this FeedType has previously
+     * Otherwise if this Category is new, it will return
+     * an empty collection; or if this Category has previously
      * been saved, it will retrieve related Feeds from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in FeedType.
+     * actually need in Category.
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Feed[] List of Feed objects
      */
-    public function getFeedsJoinCategory($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getFeedsJoinFeedType($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = FeedQuery::create(null, $criteria);
-        $query->joinWith('Category', $join_behavior);
+        $query->joinWith('FeedType', $join_behavior);
 
         return $this->getFeeds($query, $con);
     }
@@ -1093,7 +1512,8 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     public function clear()
     {
         $this->id = null;
-        $this->code = null;
+        $this->name = null;
+        $this->parent_category_id = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1116,19 +1536,32 @@ abstract class BaseFeedType extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collChildrenCategorys) {
+                foreach ($this->collChildrenCategorys as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collFeeds) {
                 foreach ($this->collFeeds as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->aParentCategory instanceof Persistent) {
+              $this->aParentCategory->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collChildrenCategorys instanceof PropelCollection) {
+            $this->collChildrenCategorys->clearIterator();
+        }
+        $this->collChildrenCategorys = null;
         if ($this->collFeeds instanceof PropelCollection) {
             $this->collFeeds->clearIterator();
         }
         $this->collFeeds = null;
+        $this->aParentCategory = null;
     }
 
     /**
@@ -1138,7 +1571,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(FeedTypePeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(CategoryPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

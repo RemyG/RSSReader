@@ -44,6 +44,7 @@ class FeedTableMap extends TableMap
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, 255, null);
         $this->addColumn('updated', 'Updated', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('type_id', 'TypeId', 'INTEGER', 'feed_type', 'id', true, null, null);
+        $this->addForeignKey('category_id', 'CategoryId', 'INTEGER', 'category', 'id', true, null, null);
         // validators
     } // initialize()
 
@@ -53,6 +54,7 @@ class FeedTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('FeedType', 'FeedType', RelationMap::MANY_TO_ONE, array('type_id' => 'id', ), null, null);
+        $this->addRelation('Category', 'Category', RelationMap::MANY_TO_ONE, array('category_id' => 'id', ), null, null);
         $this->addRelation('Entry', 'Entry', RelationMap::ONE_TO_MANY, array('id' => 'feed_id', ), null, null, 'Entrys');
     } // buildRelations()
 

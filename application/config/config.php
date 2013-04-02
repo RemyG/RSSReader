@@ -5,10 +5,6 @@ define('BASE_URL', 'http://rss.local/'); // Base URL including trailing slash (e
 define('DEFAULT_CONTROLLER', 'main'); // Default controller to load
 define('ERROR_CONTROLLER', 'error'); // Controller used for errors (e.g. 404, 500 etc)
 
-/*define('DB_DSN', 'mysql:dbname=test;host=localhost'); // Database DSN
-define('DB_USERNAME', 'root'); // Database username
-define('DB_PASSWORD', ''); // Database password*/
-
 define('PROJECT_NAME', 'RSS Reader');
 
 define('DEFAULT_AUTHOR', 'Default author name'); // Default author name, displayed as meta author

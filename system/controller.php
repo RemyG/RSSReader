@@ -29,7 +29,7 @@ class Controller {
 	
 	public function loadHelper($name)
 	{
-		require(APP_DIR .'helpers/'. strtolower($name) .'.php');
+		require_once(APP_DIR .'helpers/'. strtolower($name) .'.php');
 		$helper = new $name;
 		return $helper;
 	}

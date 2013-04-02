@@ -1,11 +1,12 @@
-<div id="content">
+<div id="content" class="padding-20">
 
-	<form method="post" enctype="multipart/form-data">
-		<input type="file" name="opmlfile" id="opmlfile"><br>
-		<input type="submit" name="submit" value="Submit">
+	<h1>Import feeds from an OPML file</h1>
+
+	<form class="feed-form" method="post" enctype="multipart/form-data">
+		<label for="opmlfile">OPML file</label>
+		<input type="file" name="opmlfile" id="opmlfile">
+		<input type="submit" name="submit" value="Import file">
 	</form>
-
-	<a href="/">Home</a>
 
 	<?php
 		if (isset($errors) && count($errors) > 0)

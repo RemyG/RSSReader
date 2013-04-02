@@ -1,11 +1,21 @@
-<div id="content">
+<div id="content" class="padding-20">
 
-	<form method="post">
+	<h1>Add a new feed</h1>
+
+	<form method="post" class="feed-form">
+		<label for="feed-url">Feed URL</label>
 		<input type="text" length="255" name="feed-url" id="feed-url" />
-		<input type="submit" value="Submit" />
+		<label for="feed-category">Category</label>
+		<select name="feed-category" id="feed-category">
+			<?php
+				foreach ($categories as $category)
+				{
+					echo '<option value="'.$category->getId().'">'.$category->getName().'</option>';
+				}
+			?>
+		</select>
+		<input type="submit" value="Add feed" />
 	</form>
-
-	<a href="/">Home</a>
 
 	<?php
 		if (isset($errors) && count($errors) > 0)
