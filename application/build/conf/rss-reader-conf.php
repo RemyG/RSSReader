@@ -12,6 +12,13 @@ $conf = array (
         'dsn' => 'mysql:host=localhost;dbname=rss-reader',
         'user' => 'root',
         'password' => '',
+        'options' => 
+        array (
+          'ATTR_TIMEOUT' => 
+          array (
+            'value' => '1200',
+          ),
+        ),
       ),
     ),
     'default' => 'rss-reader',

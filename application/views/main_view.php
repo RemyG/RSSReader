@@ -1,20 +1,13 @@
-<div id="content" class="grid-75">
-
-	<!--<div class="fixed">-->
-
-		<div id="feed-content">
-		</div>
-
-	<!--</div>-->
-
+<div id="feed-content">
 </div>
 
 <script type="text/javascript">
-$('.load-feed-link').click(function(e) {
+
+$(".load-feed-link").on("click", "a", function(e) {
 	e.preventDefault();
 	$('#overlay').show();
-	var href = $(this).attr('data-href');
-	var $field = $(this);
+	var href = this.href;
+	var $field = $(this).parent();
 	var request = $.ajax({
 		url: href,
 		type: "GET",
@@ -24,6 +17,7 @@ $('.load-feed-link').click(function(e) {
 		$('.load-feed-link').removeClass('active');
 		$field.addClass('active');
 		$("#feed-content").html(msg);
+		scrollToActiveEntry('feed-content');
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -47,7 +41,7 @@ $("#feed-content").on("click", ".load-entry-link", function(e) {
 			dataType: "html"
 		});
 		request.done(function(msg) {
-			$field.addClass('read');
+			$field.parent().addClass('read');
 			$('.load-entry-div').hide();
 			$('.load-entry-link').parent().removeClass('active');
 			$field.parent().addClass('active');
@@ -71,12 +65,11 @@ $("#feed-content").on("click", ".iframe-link", function(e) {
 	$(this).hide();
 	$("#load-entry-div-" + id).find('.source-link').show();	
 	$("#load-entry-div-" + id).find('.entry-content').css('padding', 0);
-	$("#load-entry-div-" + id).find('.entry-content').html('<iframe src="' + this.href + '" width="100%" height="500px"></iframe>');
-
-	var containerHeight = $("#content").find('.fixed').height(),
-		metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 5;
+	$("#load-entry-div-" + id).find('.entry-content').html('<iframe src="' + this.href + '" width="100%" height="500px" '
+		+ 'sandbox="allow-same-origin" ></iframe>');
+	var containerHeight = $(window).height(),
+		metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 25;
 	$("#load-entry-div-" + id).find('iframe').height(containerHeight - metaHeight);
-
 	scrollToActiveEntry("load-entry-link-" + id);
 });
 
@@ -96,6 +89,7 @@ $("#feed-content").on("click", ".source-link", function(e) {
 		$("#load-entry-div-" + id).find('.iframe-link').show();
 		$("#load-entry-div-" + id).find('.entry-content').css('padding', 5);
 		$("#load-entry-div-" + id).find('.entry-content').html(msg);
+		scrollToActiveEntry("load-entry-link-" + id);
 	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
@@ -114,7 +108,7 @@ $("#feed-content").on("click", ".read-link", function(e) {
 		dataType: "html"
 	});
 	request.done(function(msg) {
-		$("#load-entry-link-" + id).addClass('read');
+		$("#load-entry-link-" + id).parent().addClass('read');
 		$field.siblings('.unread-link').show();
 		$field.hide();
 		updateCountForEntry(id);
@@ -136,7 +130,7 @@ $("#feed-content").on("click", ".unread-link", function(e) {
 		dataType: "html"
 	});
 	request.done(function(msg) {
-		$("#load-entry-link-" + id).removeClass('read');
+		$("#load-entry-link-" + id).parent().removeClass('read');
 		$field.siblings('.read-link').show();
 		$field.hide();
 		updateCountForEntry(id);
@@ -261,10 +255,10 @@ function updateCountForFeed(id)
 
 function scrollToActiveEntry(entryId)
 {
-	var container = $("#content").find('.fixed'),
+	var container = $("html"),
 		scrollTo = $("#" + entryId);
 	container.scrollTop(
-		scrollTo.offset().top - container.offset().top + container.scrollTop()
+		scrollTo.offset().top - 10
 	);
 }
 
@@ -276,7 +270,7 @@ function markEntryRead(id)
 		dataType: "html"
 	});
 	request.done(function(msg) {
-		$("#load-entry-link-" + id).addClass('read');
+		$("#load-entry-link-" + id).parent().addClass('read');
 		$("#load-entry-div-" + id).find('.unread-link').show();
 		$("#load-entry-div-" + id).find('.read-link').hide();
 		updateCountForEntry(id);

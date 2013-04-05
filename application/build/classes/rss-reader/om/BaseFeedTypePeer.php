@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'feed_type' table.
+ * Base static class for performing query and update operations on the 'rss_feed_type' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseFeedTypePeer
     const DATABASE_NAME = 'rss-reader';
 
     /** the table name for this class */
-    const TABLE_NAME = 'feed_type';
+    const TABLE_NAME = 'rss_feed_type';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'FeedType';
@@ -33,10 +33,10 @@ abstract class BaseFeedTypePeer
     const NUM_HYDRATE_COLUMNS = 2;
 
     /** the column name for the id field */
-    const ID = 'feed_type.id';
+    const ID = 'rss_feed_type.id';
 
     /** the column name for the code field */
-    const CODE = 'feed_type.code';
+    const CODE = 'rss_feed_type.code';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -355,7 +355,7 @@ abstract class BaseFeedTypePeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to feed_type
+     * Method to invalidate the instance pool of all tables related to rss_feed_type
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -573,7 +573,7 @@ abstract class BaseFeedTypePeer
     }
 
     /**
-     * Deletes all rows from the feed_type table.
+     * Deletes all rows from the rss_feed_type table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

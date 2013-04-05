@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'category' table.
+ * Base static class for performing query and update operations on the 'rss_category' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseCategoryPeer
     const DATABASE_NAME = 'rss-reader';
 
     /** the table name for this class */
-    const TABLE_NAME = 'category';
+    const TABLE_NAME = 'rss_category';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Category';
@@ -33,13 +33,13 @@ abstract class BaseCategoryPeer
     const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
-    const ID = 'category.id';
+    const ID = 'rss_category.id';
 
     /** the column name for the name field */
-    const NAME = 'category.name';
+    const NAME = 'rss_category.name';
 
     /** the column name for the parent_category_id field */
-    const PARENT_CATEGORY_ID = 'category.parent_category_id';
+    const PARENT_CATEGORY_ID = 'rss_category.parent_category_id';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -360,7 +360,7 @@ abstract class BaseCategoryPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to category
+     * Method to invalidate the instance pool of all tables related to rss_category
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -673,7 +673,7 @@ abstract class BaseCategoryPeer
     }
 
     /**
-     * Deletes all rows from the category table.
+     * Deletes all rows from the rss_category table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

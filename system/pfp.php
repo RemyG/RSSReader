@@ -28,13 +28,15 @@ function pfp()
 	if(isset($segments[0]) && $segments[0] != '') $controller = $segments[0];
 	if(isset($segments[1]) && $segments[1] != '') $action = $segments[1];
 
-	require_once(APP_DIR .'helpers/session_helper.php');
-	$sessionHelper = new Session_helper();
-	$currentUser = $sessionHelper->getCurrentUser();
-	if ($currentUser == null)
+	if ($controller != 'install' && !($controller == 'user' && $action == 'login'))
 	{
-		$controller = 'user';
-		$action = 'login';
+		require_once(APP_DIR .'helpers/session_helper.php');
+		$sessionHelper = new Session_helper();
+		$currentUser = $sessionHelper->getCurrentUser();
+		if ($currentUser == null)
+		{
+			header('Location: '. BASE_URL . 'user/login');
+		}
 	}
 
 	// Get our controller file

@@ -37,6 +37,7 @@
 			
 		}
 		echo '
+			<div class="entry-container" id="entry-container-'.$entry->getId().'">
 				<div class="entry-link-container">
 					<div class="remove">
 						<a href="#" class="remove-entry" data-id="'.$entry->getId().'" title="Remove this entry">
@@ -44,11 +45,12 @@
 						</a>
 					</div>
 					<div id="load-entry-link-'.$entry->getId().'" class="load-entry-link" data-id="'.$entry->getId().'">
-						<div class="title">'.$entry->getTitle().'</div>						
+						<div class="title-wrapper">
+							<div class="title">'.$entry->getTitle().'</div>
+						</div>
 						<div class="date">'.$entry->getUpdated('Y-m-d').'</div>
 					</div>
-				</div>';
-		echo '
+				</div>
 				<div class="load-entry-div" id="load-entry-div-'.$entry->getId().'">
 					<div class="entry-menu">
 						<a class="iframe-link" data-id="'.$entry->getId().'" href="'.$entry->getLink().'" title="View as website">WWW</a>
@@ -58,7 +60,8 @@
 						<a class="unread-link" href="'.$entry->getLink().'" data-id="'.$entry->getId().'" title="Mark as unread"><i class="icon-check-empty"> </i></a>
 					</div>
 					<div class="entry-content"></div>
-				</div>';
+				</div>
+			</div>';
 	}
 	echo '</div>';
 ?>

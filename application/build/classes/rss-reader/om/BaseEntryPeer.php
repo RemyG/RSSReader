@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'entry' table.
+ * Base static class for performing query and update operations on the 'rss_entry' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseEntryPeer
     const DATABASE_NAME = 'rss-reader';
 
     /** the table name for this class */
-    const TABLE_NAME = 'entry';
+    const TABLE_NAME = 'rss_entry';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Entry';
@@ -33,31 +33,31 @@ abstract class BaseEntryPeer
     const NUM_HYDRATE_COLUMNS = 9;
 
     /** the column name for the id field */
-    const ID = 'entry.id';
+    const ID = 'rss_entry.id';
 
     /** the column name for the published field */
-    const PUBLISHED = 'entry.published';
+    const PUBLISHED = 'rss_entry.published';
 
     /** the column name for the updated field */
-    const UPDATED = 'entry.updated';
+    const UPDATED = 'rss_entry.updated';
 
     /** the column name for the link field */
-    const LINK = 'entry.link';
+    const LINK = 'rss_entry.link';
 
     /** the column name for the title field */
-    const TITLE = 'entry.title';
+    const TITLE = 'rss_entry.title';
 
     /** the column name for the description field */
-    const DESCRIPTION = 'entry.description';
+    const DESCRIPTION = 'rss_entry.description';
 
     /** the column name for the read field */
-    const READ = 'entry.read';
+    const READ = 'rss_entry.read';
 
     /** the column name for the content field */
-    const CONTENT = 'entry.content';
+    const CONTENT = 'rss_entry.content';
 
     /** the column name for the feed_id field */
-    const FEED_ID = 'entry.feed_id';
+    const FEED_ID = 'rss_entry.feed_id';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -390,7 +390,7 @@ abstract class BaseEntryPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to entry
+     * Method to invalidate the instance pool of all tables related to rss_entry
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -846,7 +846,7 @@ abstract class BaseEntryPeer
     }
 
     /**
-     * Deletes all rows from the entry table.
+     * Deletes all rows from the rss_entry table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

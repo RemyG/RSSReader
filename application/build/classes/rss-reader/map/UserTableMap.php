@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'user' table.
+ * This class defines the structure of the 'rss_user' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class UserTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('user');
+        $this->setName('rss_user');
         $this->setPhpName('User');
         $this->setClassname('User');
         $this->setPackage('rss-reader');

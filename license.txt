@@ -1,5 +1,4 @@
  Copyright (c) 2013 Remy Gardette
- Copyright (c) 2011 Gilbert Pellegrom, Dev7studios
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation

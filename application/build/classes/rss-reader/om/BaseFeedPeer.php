@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'feed' table.
+ * Base static class for performing query and update operations on the 'rss_feed' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseFeedPeer
     const DATABASE_NAME = 'rss-reader';
 
     /** the table name for this class */
-    const TABLE_NAME = 'feed';
+    const TABLE_NAME = 'rss_feed';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Feed';
@@ -33,25 +33,25 @@ abstract class BaseFeedPeer
     const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
-    const ID = 'feed.id';
+    const ID = 'rss_feed.id';
 
     /** the column name for the link field */
-    const LINK = 'feed.link';
+    const LINK = 'rss_feed.link';
 
     /** the column name for the title field */
-    const TITLE = 'feed.title';
+    const TITLE = 'rss_feed.title';
 
     /** the column name for the description field */
-    const DESCRIPTION = 'feed.description';
+    const DESCRIPTION = 'rss_feed.description';
 
     /** the column name for the updated field */
-    const UPDATED = 'feed.updated';
+    const UPDATED = 'rss_feed.updated';
 
     /** the column name for the type_id field */
-    const TYPE_ID = 'feed.type_id';
+    const TYPE_ID = 'rss_feed.type_id';
 
     /** the column name for the category_id field */
-    const CATEGORY_ID = 'feed.category_id';
+    const CATEGORY_ID = 'rss_feed.category_id';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -380,7 +380,7 @@ abstract class BaseFeedPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to feed
+     * Method to invalidate the instance pool of all tables related to rss_feed
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1229,7 +1229,7 @@ abstract class BaseFeedPeer
     }
 
     /**
-     * Deletes all rows from the feed table.
+     * Deletes all rows from the rss_feed table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

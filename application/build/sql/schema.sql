@@ -4,30 +4,30 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
--- category
+-- rss_category
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `category`;
+DROP TABLE IF EXISTS `rss_category`;
 
-CREATE TABLE `category`
+CREATE TABLE `rss_category`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
     `parent_category_id` INTEGER,
     PRIMARY KEY (`id`),
-    INDEX `category_FI_1` (`parent_category_id`),
-    CONSTRAINT `category_FK_1`
+    INDEX `rss_category_FI_1` (`parent_category_id`),
+    CONSTRAINT `rss_category_FK_1`
         FOREIGN KEY (`parent_category_id`)
-        REFERENCES `category` (`id`)
+        REFERENCES `rss_category` (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
--- feed
+-- rss_feed
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `feed`;
+DROP TABLE IF EXISTS `rss_feed`;
 
-CREATE TABLE `feed`
+CREATE TABLE `rss_feed`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `link` VARCHAR(255) NOT NULL,
@@ -37,23 +37,23 @@ CREATE TABLE `feed`
     `type_id` INTEGER NOT NULL,
     `category_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `feed_FI_1` (`type_id`),
-    INDEX `feed_FI_2` (`category_id`),
-    CONSTRAINT `feed_FK_1`
+    INDEX `rss_feed_FI_1` (`type_id`),
+    INDEX `rss_feed_FI_2` (`category_id`),
+    CONSTRAINT `rss_feed_FK_1`
         FOREIGN KEY (`type_id`)
-        REFERENCES `feed_type` (`id`),
-    CONSTRAINT `feed_FK_2`
+        REFERENCES `rss_feed_type` (`id`),
+    CONSTRAINT `rss_feed_FK_2`
         FOREIGN KEY (`category_id`)
-        REFERENCES `category` (`id`)
+        REFERENCES `rss_category` (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
--- entry
+-- rss_entry
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `entry`;
+DROP TABLE IF EXISTS `rss_entry`;
 
-CREATE TABLE `entry`
+CREATE TABLE `rss_entry`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `published` DATETIME,
@@ -65,19 +65,19 @@ CREATE TABLE `entry`
     `content` TEXT,
     `feed_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `entry_FI_1` (`feed_id`),
-    CONSTRAINT `entry_FK_1`
+    INDEX `rss_entry_FI_1` (`feed_id`),
+    CONSTRAINT `rss_entry_FK_1`
         FOREIGN KEY (`feed_id`)
-        REFERENCES `feed` (`id`)
+        REFERENCES `rss_feed` (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
--- feed_type
+-- rss_feed_type
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `feed_type`;
+DROP TABLE IF EXISTS `rss_feed_type`;
 
-CREATE TABLE `feed_type`
+CREATE TABLE `rss_feed_type`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `code` VARCHAR(10) NOT NULL,
@@ -85,12 +85,12 @@ CREATE TABLE `feed_type`
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
--- user
+-- rss_user
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `rss_user`;
 
-CREATE TABLE `user`
+CREATE TABLE `rss_user`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `login` VARCHAR(50) NOT NULL,

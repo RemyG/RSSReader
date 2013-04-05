@@ -52,9 +52,16 @@ class FeedController extends Controller {
 			&& $_FILES['opmlfile']['error'] == UPLOAD_ERR_OK		//checks for errors
 			&& is_uploaded_file($_FILES['opmlfile']['tmp_name']))	//checks that file is uploaded
 		{
-			$opmlContent = simplexml_load_file($_FILES['opmlfile']['tmp_name']);
-			$rootCat = CategoryQuery::create()->findPK(1);
-			$this->recursiveOpmlImport($opmlContent->body, $errors, $rootCat);
+			try
+			{
+				$opmlContent = simplexml_load_file($_FILES['opmlfile']['tmp_name']);
+				$rootCat = CategoryQuery::create()->findPK(1);
+				$this->recursiveOpmlImport($opmlContent->body, $errors, $rootCat);
+			}
+			catch (Exception $e)
+			{
+				$errors[] = 'Error while importing the OPML file';
+			}
 		}		
 		$template->set('errors', $errors);
 		$template->render();
@@ -105,259 +112,95 @@ class FeedController extends Controller {
 
 	private function importFeed($feedUrl, &$errors, $parentCat = null)
 	{
-		try {
-			$feedContent = simplexml_load_file($feedUrl);
-			if ($feedContent === false)
-			{
-				$errors[] = 'Unable to load '.$feedUrl;
-				return;
-			}
-		} catch (Exception $e) {
-			$errors[] = 'Caught exception: '.$e->getMessage();
-			return;
-		}		
-		if ($feedContent->getName() == 'feed')
-		{
-			$codeType = 'ATOM';
-			$feedUpdated = $feedContent->updated;
-		}
-		else if ($feedContent->getName() == 'rss')
-		{
-			$codeType = 'RSS';
-			$feedContent = $feedContent->channel;
-			$feedUpdated = $feedContent->lastBuildDate;
-		}
-		else
-		{
-			$errors[] = 'Unrecognized feed type '.$feedUrl;
-			return;
-		}
-		$feedTitle = $feedContent->title;
-		
-		$feedDescription = $feedContent->description;
-		$type = FeedTypeQuery::create()->findOneByCode($codeType);
+
+		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
+
+		$feedSP = new SimplePie();
+		$feedSP->set_feed_url($feedUrl);
+		$feedSP->enable_cache(false);
+		$feedSP->init();
+
 		$feed = new Feed();
-		$feed->setTitle($feedTitle);
-		$feed->setDescription($feedDescription);
-		$feed->setLink($feedUrl);
+		$feed->setTitle($feedSP->get_title());
+		$feed->setUpdated(new DateTime());
+		$feed->setDescription($feedSP->get_description());
+		$feed->setLink($feedSP->get_permalink());
 		if ($parentCat != null)
 		{
 			$feed->setCategory($parentCat);
 		}
-		try
-		{
-			$feed->setUpdated($feedUpdated);
-			$feed->setFeedType($type);
-			$feed->save();
-		}
-		catch (Exception $e)
-		{
-			$errors[] = 'Caught exception: '.$e->getMessage();
-			return;
-		}
-		
+		$feed->save();
 
-		if ($codeType == "ATOM")
+		foreach ($feedSP->get_items() as $item)
 		{
-			foreach ($feedContent->entry as $entry)
-			{
-				$published = $entry->published;
-				$updated = $entry->updated;
-				$link = $entry->link['href'];
-				$title = $entry->title;
-				$content = $entry->content;
-				$entry = new Entry();
-				try
-				{
-					$entry->setPublished($published);
-					$entry->setUpdated($updated);
-					$entry->setLink($link);
-					$entry->setTitle($title);
-					$entry->setContent($content);
-					$entry->setFeed($feed);
-					$entry->save();
-				}
-				catch (Exception $e) {
-					$errors[] = 'Caught exception: '.$e->getMessage();
-				}				
-			}
+			$entry = new Entry();
+			$entry->setPublished($item->get_date('U'));
+			$entry->setUpdated($item->get_date('U'));
+			$entry->setLink($item->get_link());
+			$entry->setTitle($item->get_title());
+			$entry->setContent($item->get_content());
+			$entry->setFeed($feed);
+			$entry->save();
 		}
 
-		if ($codeType = "RSS")
-		{
-			foreach ($feedContent->item as $item)
-			{
-				$published = $item->pubDate;
-				$updated = $item->pubDate;
-				$link = $item->link;
-				$title = $item->title;
-				$content = $item->content;
-				$description = $item->description;
-				$entry = new Entry();
-				try
-				{
-					$entry->setPublished($published);
-					$entry->setUpdated($updated);
-					$entry->setLink($link);
-					$entry->setTitle($title);
-					$entry->setContent($content);
-					$entry->setDescription($description);
-					$entry->setFeed($feed);
-					$entry->save();
-				}
-				catch (Exception $e) {
-					$errors[] = 'Caught exception: '.$e->getMessage();
-				}	
-			}
-		}
 	}
 
 	private function updateFeed($feed, &$errors)
 	{
 		$feedUrl = $feed->getLink();
-		try {
-			$feedContent = simplexml_load_file($feedUrl);
-			if ($feedContent === false)
-			{
-				$errors[] = 'Unable to load '.$feedUrl;
-				return;
-			}
-		} catch (Exception $e) {
-			$errors[] = 'Caught exception: '.$e->getMessage();
-			return;
-		}		
-		if ($feedContent->getName() == 'feed')
-		{
-			$codeType = 'ATOM';
-			$feedUpdated = $feedContent->updated;
-		}
-		else if ($feedContent->getName() == 'rss')
-		{
-			$codeType = 'RSS';
-			$feedContent = $feedContent->channel;
-			$feedUpdated = $feedContent->lastBuildDate;
-		}
-		else
-		{
-			$errors[] = 'Unrecognized feed type '.$feedUrl;
-			return;
-		}
 
-		try
-		{
-			$dtFeedUpdated = new DateTime($feedUpdated);
-			$lastUpdate = $feed->getUpdated(null);
-		}
-		catch (Exception $e)
-		{
-			$errors[] = 'Caught exception: '.$e->getMessage();
-			return;
-		}
+		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
 
-		try
+		$feedSP = new SimplePie();
+		$feedSP->set_feed_url($feedUrl);
+		$feedSP->enable_cache(false);
+		$feedSP->init();
+
+		$lastUpdate = $feed->getUpdated(null)->getTimestamp();
+
+		$feed->setTitle($feedSP->get_title());
+		$feed->setUpdated(new DateTime());
+		$feed->setDescription($feedSP->get_description());
+		$feed->save();
+
+		foreach ($feedSP->get_items() as $item)
 		{
-			$feed->setUpdated(new DateTime());
-			$feed->save();
-		}
-		catch (Exception $e)
-		{
-			$errors[] = 'Caught exception: '.$e->getMessage();
-			return;
-		}
-		
-		if ($dtFeedUpdated > $lastUpdate)
-		{
-			if ($codeType == "ATOM")
+			$entryUpdated = $item->get_date('U');
+			if ($entryUpdated > $lastUpdate)
 			{
-				foreach ($feedContent->entry as $entry)
+				$link = $item->get_link();
+				$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
+				if ($entry == null)
 				{
-					try
-					{
-						$published = $entry->published;
-						$updated = $entry->updated;
-						$link = $entry->link['href'];
-						$title = $entry->title;
-						$content = $entry->content;
-						$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
-						if ($entry == null) {
-							$entry = new Entry();
-							$entry->setLink($link);
-							$entry->setFeed($feed);
-						}
-						$dtEntryUpdated = new DateTime($updated);
-						$dtEntryPublished = new DateTime($published);
-						if ($updated != null) {
-							$entry->setUpdated($updated);
-						} else {
-							$entry->setUpdated($feedUpdated);
-						}
-						if ($published != null) {
-							$entry->setPublished($published);
-						} else {
-							$entry->setPublished($feedUpdated);
-						}
-						$entry->setTitle($title);
-						$entry->setContent($content);
-						$entry->save();
-					}
-					catch (Exception $e) {
-						$errors[] = 'Caught exception: '.$e->getMessage();
-					}
+					$entry = new Entry();
+					$entry->setLink($link);
+					$entry->setFeed($feed);
 				}
+				$entry->setPublished($item->get_date('U'));
+				$entry->setUpdated($item->get_date('U'));
+				$entry->setTitle($item->get_title());
+				$entry->setContent($item->get_content());
+				$entry->save();
 			}
-
-			if ($codeType = "RSS")
-			{
-				foreach ($feedContent->item as $item)
-				{
-					try
-					{
-						$published = $item->pubDate;
-						$updated = $item->pubDate;
-						$link = $item->link;
-						$title = $item->title;
-						$content = $item->content;
-						$description = $item->description;
-						$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
-						if ($entry == null) {
-							$entry = new Entry();
-							$entry->setLink($link);
-							$entry->setFeed($feed);
-						}
-						$dtEntryUpdated = new DateTime($updated);
-						$dtEntryPublished = new DateTime($published);
-						if ($updated != null) {
-							$entry->setUpdated($updated);
-						}
-						if ($published != null) {
-							$entry->setPublished($published);
-						}
-						$entry->setTitle($title);
-						$entry->setContent($content);
-						$entry->setDescription($description);
-						$entry->save();
-					}
-					catch (Exception $e) {
-						$errors[] = 'Caught exception: '.$e->getMessage();
-					}
-				}
-			}
-
 		}
 		
 	}
 
 	private function recursiveOpmlImport($xmlNode, &$errors, $parentCat)
 	{
-		if ($xmlNode->count() > 0) {
-			if ($xmlNode->getName() == 'outline') {
+		if ($xmlNode->count() > 0)
+		{
+			if ($xmlNode->getName() == 'outline')
+			{
 				$category = new Category();
 				$category->setName($xmlNode['title']);
 				$category->setParentCategory($parentCat);
 				$category->save();
-			} else {
+			}
+			else
+			{
 				$category = $parentCat;
-			}			
+			}
 			foreach ($xmlNode->outline as $outline)
 			{				
 				$this->recursiveOpmlImport($outline, $errors, $category);

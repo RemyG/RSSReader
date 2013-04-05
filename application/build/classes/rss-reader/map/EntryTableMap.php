@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'entry' table.
+ * This class defines the structure of the 'rss_entry' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class EntryTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('entry');
+        $this->setName('rss_entry');
         $this->setPhpName('Entry');
         $this->setClassname('Entry');
         $this->setPackage('rss-reader');
@@ -46,7 +46,7 @@ class EntryTableMap extends TableMap
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, 255, null);
         $this->addColumn('read', 'Read', 'TINYINT', true, null, null);
         $this->addColumn('content', 'Content', 'LONGVARCHAR', false, null, null);
-        $this->addForeignKey('feed_id', 'FeedId', 'INTEGER', 'feed', 'id', true, null, null);
+        $this->addForeignKey('feed_id', 'FeedId', 'INTEGER', 'rss_feed', 'id', true, null, null);
         // validators
     } // initialize()
 

@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'user' table.
+ * Base class that represents a row from the 'rss_user' table.
  *
  *
  *
@@ -430,7 +430,7 @@ abstract class BaseUser extends BaseObject implements Persistent
         }
 
         $sql = sprintf(
-            'INSERT INTO `user` (%s) VALUES (%s)',
+            'INSERT INTO `rss_user` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );

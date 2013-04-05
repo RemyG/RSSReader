@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'user' table.
+ * Base static class for performing query and update operations on the 'rss_user' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseUserPeer
     const DATABASE_NAME = 'rss-reader';
 
     /** the table name for this class */
-    const TABLE_NAME = 'user';
+    const TABLE_NAME = 'rss_user';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'User';
@@ -33,13 +33,13 @@ abstract class BaseUserPeer
     const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
-    const ID = 'user.id';
+    const ID = 'rss_user.id';
 
     /** the column name for the login field */
-    const LOGIN = 'user.login';
+    const LOGIN = 'rss_user.login';
 
     /** the column name for the password field */
-    const PASSWORD = 'user.password';
+    const PASSWORD = 'rss_user.password';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -360,7 +360,7 @@ abstract class BaseUserPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to user
+     * Method to invalidate the instance pool of all tables related to rss_user
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -578,7 +578,7 @@ abstract class BaseUserPeer
     }
 
     /**
-     * Deletes all rows from the user table.
+     * Deletes all rows from the rss_user table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

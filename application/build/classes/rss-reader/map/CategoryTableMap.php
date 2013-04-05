@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'category' table.
+ * This class defines the structure of the 'rss_category' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class CategoryTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('category');
+        $this->setName('rss_category');
         $this->setPhpName('Category');
         $this->setClassname('Category');
         $this->setPackage('rss-reader');
@@ -40,7 +40,7 @@ class CategoryTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
-        $this->addForeignKey('parent_category_id', 'ParentCategoryId', 'INTEGER', 'category', 'id', false, null, null);
+        $this->addForeignKey('parent_category_id', 'ParentCategoryId', 'INTEGER', 'rss_category', 'id', false, null, null);
         // validators
     } // initialize()
 

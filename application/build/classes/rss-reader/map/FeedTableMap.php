@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'feed' table.
+ * This class defines the structure of the 'rss_feed' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class FeedTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('feed');
+        $this->setName('rss_feed');
         $this->setPhpName('Feed');
         $this->setClassname('Feed');
         $this->setPackage('rss-reader');
@@ -43,8 +43,8 @@ class FeedTableMap extends TableMap
         $this->addColumn('title', 'Title', 'VARCHAR', true, 255, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, 255, null);
         $this->addColumn('updated', 'Updated', 'TIMESTAMP', false, null, null);
-        $this->addForeignKey('type_id', 'TypeId', 'INTEGER', 'feed_type', 'id', true, null, null);
-        $this->addForeignKey('category_id', 'CategoryId', 'INTEGER', 'category', 'id', true, null, null);
+        $this->addForeignKey('type_id', 'TypeId', 'INTEGER', 'rss_feed_type', 'id', true, null, null);
+        $this->addForeignKey('category_id', 'CategoryId', 'INTEGER', 'rss_category', 'id', true, null, null);
         // validators
     } // initialize()
 

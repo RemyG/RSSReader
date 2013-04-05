@@ -27,6 +27,17 @@ Propel::init(APP_DIR."build/conf/rss-reader-conf.php");
 // Add the generated 'classes' directory to the include path
 set_include_path(APP_DIR."build/classes" . PATH_SEPARATOR . get_include_path());
 
+function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
+{
+    // error was suppressed with the @-operator
+    if (0 === error_reporting()) {
+        return false;
+    }
+
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+set_error_handler('handleError');
+
 pfp();
 
 ?>

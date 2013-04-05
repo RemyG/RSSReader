@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'category' table.
+ * Base class that represents a row from the 'rss_category' table.
  *
  *
  *
@@ -519,7 +519,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
         }
 
         $sql = sprintf(
-            'INSERT INTO `category` (%s) VALUES (%s)',
+            'INSERT INTO `rss_category` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );

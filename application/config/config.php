@@ -11,6 +11,4 @@ define('DEFAULT_AUTHOR', 'Default author name'); // Default author name, display
 define('DEFAULT_TITLE', PROJECT_NAME.' - Default page title'); // Default page title, displayed in head > title
 define('DEFAULT_DESCRIPTION', 'Default page description'); // Default page description, displayed as meta description
 
-
-
 ?>

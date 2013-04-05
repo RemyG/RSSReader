@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="rss-reader" defaultIdMethod="native">
+<database name="rss-reader" defaultIdMethod="native" tablePrefix="rss_">
 	<!-- table definitions go here -->
 	<table name="category" phpName="Category">
 		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
@@ -22,9 +22,6 @@
 		<column name="updated" type="timestamp" required="false" />
 		<column name="type_id" type="integer" required="true" />
 		<column name="category_id" type="integer" required="true" />
-		<foreign-key foreignTable="feed_type" phpName="FeedType" refPhpName="Feed">
-			<reference local="type_id" foreign="id" />
-		</foreign-key>
 		<foreign-key foreignTable="category" phpName="Category" refPhpName="Feed">
 			<reference local="category_id" foreign="id" />
 		</foreign-key>
@@ -47,15 +44,6 @@
 		<foreign-key foreignTable="feed" phpName="Feed" refPhpName="Entry">
 			<reference local="feed_id" foreign="id" />
 		</foreign-key>
-		<vendor type="mysql">
-			<parameter name="Engine" value="InnoDB"/>
-			<parameter name="Charset" value="utf8"/>
-		</vendor>
-	</table>
-	<table name="feed_type" phpName="FeedType">
-	<!-- column and foreign key definitions go here -->
-		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
-		<column name="code" type="varchar" size="10" required="true" />
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>
 			<parameter name="Charset" value="utf8"/>

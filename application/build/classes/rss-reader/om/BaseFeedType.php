@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'feed_type' table.
+ * Base class that represents a row from the 'rss_feed_type' table.
  *
  *
  *
@@ -420,7 +420,7 @@ abstract class BaseFeedType extends BaseObject implements Persistent
         }
 
         $sql = sprintf(
-            'INSERT INTO `feed_type` (%s) VALUES (%s)',
+            'INSERT INTO `rss_feed_type` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );

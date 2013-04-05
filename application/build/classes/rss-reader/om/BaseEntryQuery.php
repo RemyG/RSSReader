@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'entry' table.
+ * Base class that represents a query for the 'rss_entry' table.
  *
  *
  *
@@ -158,7 +158,7 @@ abstract class BaseEntryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `read`, `content`, `feed_id` FROM `entry` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `read`, `content`, `feed_id` FROM `rss_entry` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

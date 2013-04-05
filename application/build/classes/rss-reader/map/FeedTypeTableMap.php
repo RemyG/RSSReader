@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'feed_type' table.
+ * This class defines the structure of the 'rss_feed_type' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class FeedTypeTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('feed_type');
+        $this->setName('rss_feed_type');
         $this->setPhpName('FeedType');
         $this->setClassname('FeedType');
         $this->setPackage('rss-reader');

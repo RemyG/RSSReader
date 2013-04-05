@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'category' table.
+ * Base class that represents a query for the 'rss_category' table.
  *
  *
  *
@@ -142,7 +142,7 @@ abstract class BaseCategoryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `parent_category_id` FROM `category` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `parent_category_id` FROM `rss_category` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

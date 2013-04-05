@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'user' table.
+ * Base class that represents a query for the 'rss_user' table.
  *
  *
  *
@@ -130,7 +130,7 @@ abstract class BaseUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `login`, `password` FROM `user` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `login`, `password` FROM `rss_user` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

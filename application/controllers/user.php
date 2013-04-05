@@ -16,11 +16,11 @@ class UserController extends Controller
 				$passwordHashed = crypt($password, '$5$rounds=5000$'.md5($password).'$');
 				if ($user != null)
 				{
-					var_dump($user);
 					if ($passwordHashed == $user->getPassword())
 					{
-						session_start();
 						$sessionHelper = $this->loadHelper('Session_helper');
+						$sessionHelper->destroy();
+						session_start();						
 						$sessionHelper->set('user-login', $user->getLogin());
 						$this->redirect('');
 					}
@@ -34,8 +34,7 @@ class UserController extends Controller
 		}
 		else
 		{
-			$template = $this->loadView('install_view');
-			$template->render();
+			$this->redirect('install');
 		}
 	}
 

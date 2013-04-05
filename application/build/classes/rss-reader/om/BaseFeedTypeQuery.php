@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'feed_type' table.
+ * Base class that represents a query for the 'rss_feed_type' table.
  *
  *
  *
@@ -130,7 +130,7 @@ abstract class BaseFeedTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `code` FROM `feed_type` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `code` FROM `rss_feed_type` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

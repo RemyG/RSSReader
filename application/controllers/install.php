@@ -11,7 +11,7 @@ class InstallController extends Controller {
 		$users = UserQuery::create()->find();
 
 		if (array_key_exists('password', $_POST) && array_key_exists('login', $_POST))
-		{			
+		{
 			if (count($users) == 0)
 			{
 				$login = $_POST['login'];
@@ -21,8 +21,11 @@ class InstallController extends Controller {
 				$passwordHashed = crypt($password, '$5$rounds=5000$'.md5($password).'$');
 				$user->setPassword($passwordHashed);
 				$user->save();
-				$sessionHelper = new Session_helper();
+				$sessionHelper = $this->loadHelper('Session_helper');
+				$sessionHelper->destroy();
+				session_start();
 				$sessionHelper->set('user-login', $user->getLogin());
+				$this->redirect('');
 			}
 		}
 		else if (count($users) == 0)
