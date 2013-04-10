@@ -55,7 +55,7 @@ class EntryTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Feed', 'Feed', RelationMap::MANY_TO_ONE, array('feed_id' => 'id', ), null, null);
+        $this->addRelation('Feed', 'Feed', RelationMap::MANY_TO_ONE, array('feed_id' => 'id', ), 'CASCADE', null);
     } // buildRelations()
 
 } // EntryTableMap

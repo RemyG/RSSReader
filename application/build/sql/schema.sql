@@ -37,12 +37,8 @@ CREATE TABLE `rss_feed`
     `type_id` INTEGER NOT NULL,
     `category_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `rss_feed_FI_1` (`type_id`),
-    INDEX `rss_feed_FI_2` (`category_id`),
+    INDEX `rss_feed_FI_1` (`category_id`),
     CONSTRAINT `rss_feed_FK_1`
-        FOREIGN KEY (`type_id`)
-        REFERENCES `rss_feed_type` (`id`),
-    CONSTRAINT `rss_feed_FK_2`
         FOREIGN KEY (`category_id`)
         REFERENCES `rss_category` (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
@@ -69,19 +65,7 @@ CREATE TABLE `rss_entry`
     CONSTRAINT `rss_entry_FK_1`
         FOREIGN KEY (`feed_id`)
         REFERENCES `rss_feed` (`id`)
-) ENGINE=InnoDB CHARACTER SET='utf8';
-
--- ---------------------------------------------------------------------
--- rss_feed_type
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `rss_feed_type`;
-
-CREATE TABLE `rss_feed_type`
-(
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `code` VARCHAR(10) NOT NULL,
-    PRIMARY KEY (`id`)
+        ON DELETE CASCADE
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------

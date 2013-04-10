@@ -3,6 +3,12 @@
 
 <script type="text/javascript">
 
+$(".nav-list").on("click", ".nav-header", function(e) {
+	e.preventDefault();
+	var catId = $(this).attr('data-cat-id');
+	$('.load-feed-link[data-cat-id="'+catId+'"]').toggle();
+});
+
 $(".load-feed-link").on("click", "a", function(e) {
 	e.preventDefault();
 	$('#overlay').show();
@@ -68,7 +74,7 @@ $("#feed-content").on("click", ".iframe-link", function(e) {
 	$("#load-entry-div-" + id).find('.entry-content').html('<iframe src="' + this.href + '" width="100%" height="500px" '
 		+ 'sandbox="allow-same-origin" ></iframe>');
 	var containerHeight = $(window).height(),
-		metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 25;
+		metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 75;
 	$("#load-entry-div-" + id).find('iframe').height(containerHeight - metaHeight);
 	scrollToActiveEntry("load-entry-link-" + id);
 });
@@ -229,6 +235,31 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 
 });
 
+$("#feed-content").on("click", ".delete-feed", function(e) {
+	e.preventDefault();	
+	$('#modal-from-dom').modal('show');
+});
+
+$("#feed-content").on("click", ".cancel-delete", function(e) {
+	e.preventDefault();
+	$("#modal-from-dom").modal("hide");
+});
+
+$("#feed-content").on("click", ".confirm-delete", function(e) {
+	e.preventDefault();
+	var id = $(this).data("id");
+	$("#load-feed-link-"+id).hide();
+	var request = $.ajax({
+		url: 'feed/delete/' + id,
+		type: "GET",
+		dataType: "html"
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+});
+
+
 function updateCountForEntry(id)
 {
 	var request2 = $.ajax({
@@ -258,7 +289,7 @@ function scrollToActiveEntry(entryId)
 	var container = $("html"),
 		scrollTo = $("#" + entryId);
 	container.scrollTop(
-		scrollTo.offset().top - 10
+		scrollTo.offset().top - 10 - 50
 	);
 }
 

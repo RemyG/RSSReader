@@ -56,11 +56,11 @@ class FeedController extends Controller {
 			{
 				$opmlContent = simplexml_load_file($_FILES['opmlfile']['tmp_name']);
 				$rootCat = CategoryQuery::create()->findPK(1);
-				$this->recursiveOpmlImport($opmlContent->body, $errors, $rootCat);
+				$errors = $this->recursiveOpmlImport($opmlContent->body, $errors, $rootCat);
 			}
 			catch (Exception $e)
 			{
-				$errors[] = 'Error while importing the OPML file';
+				$errors[] = 'Error while importing the OPML file: '.$e->getTraceAsString();
 			}
 		}		
 		$template->set('errors', $errors);
@@ -110,42 +110,92 @@ class FeedController extends Controller {
 		return $this->load($id);
 	}
 
-	private function importFeed($feedUrl, &$errors, $parentCat = null)
+	function delete($id)
+	{
+		FeedQuery::create()->findPK($id)->delete();
+	}
+
+	private function importFeed($feedUrl, $errors, $parentCat = null)
 	{
 
 		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
 
-		$feedSP = new SimplePie();
-		$feedSP->set_feed_url($feedUrl);
-		$feedSP->enable_cache(false);
-		$feedSP->init();
-
-		$feed = new Feed();
-		$feed->setTitle($feedSP->get_title());
-		$feed->setUpdated(new DateTime());
-		$feed->setDescription($feedSP->get_description());
-		$feed->setLink($feedSP->get_permalink());
-		if ($parentCat != null)
+		try
 		{
-			$feed->setCategory($parentCat);
-		}
-		$feed->save();
+			$feedSP = new SimplePie();
+			$feedSP->set_feed_url((string)$feedUrl);
+			$feedSP->enable_cache(false);
+			$feedSP->init();
 
-		foreach ($feedSP->get_items() as $item)
-		{
-			$entry = new Entry();
-			$entry->setPublished($item->get_date('U'));
-			$entry->setUpdated($item->get_date('U'));
-			$entry->setLink($item->get_link());
-			$entry->setTitle($item->get_title());
-			$entry->setContent($item->get_content());
-			$entry->setFeed($feed);
-			$entry->save();
+			$feed = new Feed();
+			$title = $feedSP->get_title();
+			if ($title == null || $title == '')
+			{
+				$feedSP = new SimplePie();
+				$feedSP->set_feed_url((string)$feedUrl);
+				$feedSP->enable_cache(false);
+				$feedSP->force_feed(true);
+				$feedSP->init();
+				$title = $feedSP->get_title();
+				if ($title == null || $title == '')
+				{
+					$feedSP = new SimplePie();
+					$feedAsString = file_get_contents($feedUrl);
+					$config = array(
+						'input-xml'  => true,
+						'output-xml' => true,
+						'wrap'       => false);
+					// Tidy
+					$tidy = new tidy();
+					$tidy->parseString($feedAsString, $config);
+					$tidy->cleanRepair();
+					$feedSP->set_raw_data($tidy);
+					$feedSP->enable_cache(false);
+					$feedSP->force_feed(true);
+					$feedSP->init();
+					$feedSP->handle_content_type();
+					$title = $feedSP->get_title();
+					if ($title == null || $title == '')
+					{
+						$errors[] = 'Feed not imported (no title): '.(string)$feedUrl;
+						return $errors;
+					}
+				}
+			}
+			$feed->setTitle($feedSP->get_title());
+			$feed->setUpdated(new DateTime());
+			$feed->setDescription($feedSP->get_description());
+			$feed->setLink($feedSP->get_permalink());
+			if ($parentCat != null)
+			{
+				$feed->setCategory($parentCat);
+			}
+			$feed->save();
+
+			foreach ($feedSP->get_items() as $item)
+			{
+				$entry = new Entry();
+				$entry->setPublished($item->get_date('U'));
+				$entry->setUpdated($item->get_date('U'));
+				$entry->setLink($item->get_link());
+				$entry->setTitle($item->get_title());
+				$entry->setContent($item->get_content());
+				$entry->setFeed($feed);
+				$entry->save();
+			}
 		}
+		catch (Exception $e)
+		{
+			$errors[] = 'Error when importing feed '.$feedUrl.': '.$e->getMessage();
+		}
+
+		$feedSP = null;
+
+		return $errors;
 
 	}
 
-	private function updateFeed($feed, &$errors)
+	private function updateFeed($feed, $errors)
 	{
 		$feedUrl = $feed->getLink();
 
@@ -153,7 +203,6 @@ class FeedController extends Controller {
 
 		$feedSP = new SimplePie();
 		$feedSP->set_feed_url($feedUrl);
-		$feedSP->enable_cache(false);
 		$feedSP->init();
 
 		$lastUpdate = $feed->getUpdated(null)->getTimestamp();
@@ -183,19 +232,27 @@ class FeedController extends Controller {
 				$entry->save();
 			}
 		}
+
+		$feedSP = null;
+
+		return $errors;
 		
 	}
 
-	private function recursiveOpmlImport($xmlNode, &$errors, $parentCat)
+	private function recursiveOpmlImport($xmlNode, $errors, $parentCat)
 	{
 		if ($xmlNode->count() > 0)
 		{
 			if ($xmlNode->getName() == 'outline')
 			{
-				$category = new Category();
-				$category->setName($xmlNode['title']);
-				$category->setParentCategory($parentCat);
-				$category->save();
+				$category = CategoryQuery::create()->findOneByName($xmlNode['title']);
+				if ($category == null || $category->getParentCategory()->getId() != $parentCat->getId())
+				{
+					$category = new Category();
+					$category->setName($xmlNode['title']);
+					$category->setParentCategory($parentCat);
+					$category->save();
+				}
 			}
 			else
 			{
@@ -203,13 +260,14 @@ class FeedController extends Controller {
 			}
 			foreach ($xmlNode->outline as $outline)
 			{				
-				$this->recursiveOpmlImport($outline, $errors, $category);
+				$errors = $this->recursiveOpmlImport($outline, $errors, $category);
 			}
 		}
 		else if ($xmlNode['xmlUrl'] != null)
 		{
-			$this->importFeed($xmlNode['xmlUrl'], $errors, $parentCat);
+			$errors = $this->importFeed($xmlNode['xmlUrl'], $errors, $parentCat);
 		}
+		return $errors;
 	}
 
 }

@@ -26,10 +26,6 @@
  * @method FeedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method FeedQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method FeedQuery leftJoinFeedType($relationAlias = null) Adds a LEFT JOIN clause to the query using the FeedType relation
- * @method FeedQuery rightJoinFeedType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FeedType relation
- * @method FeedQuery innerJoinFeedType($relationAlias = null) Adds a INNER JOIN clause to the query using the FeedType relation
- *
  * @method FeedQuery leftJoinCategory($relationAlias = null) Adds a LEFT JOIN clause to the query using the Category relation
  * @method FeedQuery rightJoinCategory($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Category relation
  * @method FeedQuery innerJoinCategory($relationAlias = null) Adds a INNER JOIN clause to the query using the Category relation
@@ -430,8 +426,6 @@ abstract class BaseFeedQuery extends ModelCriteria
      * $query->filterByTypeId(array('max' => 12)); // WHERE type_id <= 12
      * </code>
      *
-     * @see       filterByFeedType()
-     *
      * @param     mixed $typeId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -505,82 +499,6 @@ abstract class BaseFeedQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FeedPeer::CATEGORY_ID, $categoryId, $comparison);
-    }
-
-    /**
-     * Filter the query by a related FeedType object
-     *
-     * @param   FeedType|PropelObjectCollection $feedType The related object(s) to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 FeedQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByFeedType($feedType, $comparison = null)
-    {
-        if ($feedType instanceof FeedType) {
-            return $this
-                ->addUsingAlias(FeedPeer::TYPE_ID, $feedType->getId(), $comparison);
-        } elseif ($feedType instanceof PropelObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(FeedPeer::TYPE_ID, $feedType->toKeyValue('PrimaryKey', 'Id'), $comparison);
-        } else {
-            throw new PropelException('filterByFeedType() only accepts arguments of type FeedType or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the FeedType relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return FeedQuery The current query, for fluid interface
-     */
-    public function joinFeedType($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('FeedType');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'FeedType');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the FeedType relation FeedType object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   FeedTypeQuery A secondary query class using the current class as primary query
-     */
-    public function useFeedTypeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinFeedType($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'FeedType', 'FeedTypeQuery');
     }
 
     /**

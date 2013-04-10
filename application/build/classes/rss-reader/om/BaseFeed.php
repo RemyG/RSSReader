@@ -72,11 +72,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
     protected $category_id;
 
     /**
-     * @var        FeedType
-     */
-    protected $aFeedType;
-
-    /**
      * @var        Category
      */
     protected $aCategory;
@@ -343,10 +338,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->modifiedColumns[] = FeedPeer::TYPE_ID;
         }
 
-        if ($this->aFeedType !== null && $this->aFeedType->getId() !== $v) {
-            $this->aFeedType = null;
-        }
-
 
         return $this;
     } // setTypeId()
@@ -447,9 +438,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aFeedType !== null && $this->type_id !== $this->aFeedType->getId()) {
-            $this->aFeedType = null;
-        }
         if ($this->aCategory !== null && $this->category_id !== $this->aCategory->getId()) {
             $this->aCategory = null;
         }
@@ -492,7 +480,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aFeedType = null;
             $this->aCategory = null;
             $this->collEntrys = null;
 
@@ -614,13 +601,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aFeedType !== null) {
-                if ($this->aFeedType->isModified() || $this->aFeedType->isNew()) {
-                    $affectedRows += $this->aFeedType->save($con);
-                }
-                $this->setFeedType($this->aFeedType);
-            }
-
             if ($this->aCategory !== null) {
                 if ($this->aCategory->isModified() || $this->aCategory->isNew()) {
                     $affectedRows += $this->aCategory->save($con);
@@ -641,10 +621,10 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
             if ($this->entrysScheduledForDeletion !== null) {
                 if (!$this->entrysScheduledForDeletion->isEmpty()) {
-                    foreach ($this->entrysScheduledForDeletion as $entry) {
-                        // need to save related object because we set the relation to null
-                        $entry->save($con);
-                    }
+                    //the foreign key is flagged as `CASCADE`, so we delete the items
+                    EntryQuery::create()
+                        ->filterByPrimaryKeys($this->entrysScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->entrysScheduledForDeletion = null;
                 }
             }
@@ -835,12 +815,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aFeedType !== null) {
-                if (!$this->aFeedType->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aFeedType->getValidationFailures());
-                }
-            }
-
             if ($this->aCategory !== null) {
                 if (!$this->aCategory->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aCategory->getValidationFailures());
@@ -955,9 +929,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $keys[6] => $this->getCategoryId(),
         );
         if ($includeForeignObjects) {
-            if (null !== $this->aFeedType) {
-                $result['FeedType'] = $this->aFeedType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aCategory) {
                 $result['Category'] = $this->aCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
@@ -1199,58 +1170,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
         }
 
         return self::$peer;
-    }
-
-    /**
-     * Declares an association between this object and a FeedType object.
-     *
-     * @param   FeedType $v
-     * @return Feed The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setFeedType(FeedType $v = null)
-    {
-        if ($v === null) {
-            $this->setTypeId(NULL);
-        } else {
-            $this->setTypeId($v->getId());
-        }
-
-        $this->aFeedType = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the FeedType object, it will not be re-added.
-        if ($v !== null) {
-            $v->addFeed($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated FeedType object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return FeedType The associated FeedType object.
-     * @throws PropelException
-     */
-    public function getFeedType(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aFeedType === null && ($this->type_id !== null) && $doQuery) {
-            $this->aFeedType = FeedTypeQuery::create()->findPk($this->type_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aFeedType->addFeeds($this);
-             */
-        }
-
-        return $this->aFeedType;
     }
 
     /**
@@ -1580,9 +1499,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->aFeedType instanceof Persistent) {
-              $this->aFeedType->clearAllReferences($deep);
-            }
             if ($this->aCategory instanceof Persistent) {
               $this->aCategory->clearAllReferences($deep);
             }
@@ -1594,7 +1510,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->collEntrys->clearIterator();
         }
         $this->collEntrys = null;
-        $this->aFeedType = null;
         $this->aCategory = null;
     }
 

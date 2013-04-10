@@ -11,8 +11,8 @@
 
 @entry-list-bg: #eeebe4;
 @entry-link-text: #ffffff;
-@entry-link-text-hover: #2BA6CB;
-@entry-link-text-active: #2BA6CB;
+@entry-link-text-hover: #0088cc;
+@entry-link-text-active: #0088cc;
 @entry-link-text-read: #bbb;
 @entry-link-bg: #232323;
 @entry-link-bg-hover: #2e2e2e;
@@ -24,6 +24,19 @@
 @header-bg: #166549;
 @header-bg-hover: #1b7e5a;
 @menu-width: 350px;
+
+html, body {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding-top: 50px;
+}
+
+* {
+	/*font-family: 'Montserrat', sans-serif;*/
+}
 
 .ajax-overlay {
 	background-color: #fff;
@@ -42,7 +55,7 @@
 	height:100%;
 }
 
-#header {
+/*#header {
 	padding: 15px 0;
 	h1.title {
 		font-size: 2em;
@@ -52,7 +65,7 @@
 	div.links {
 		text-align: right;
 	}
-}
+}*/
 
 .load-feed-link {
 	.feed-count {
@@ -66,36 +79,57 @@
 	}
 }
 
+a, a:hover, a:focus {
+	text-decoration: none;
+}
+
+[class^="icon-"], [class*=" icon-"]  {
+	vertical-align: baseline;
+	text-align: center;
+}
+
 #content {
 	padding-top: 10px;
 	div.feed-title {
-		font-size: 1.4em;
-		font-variant: small-caps;
+		font-size: 1.4em;		
 		padding: 7px 5px;
 		padding-bottom: 20px;
 		div.title {
 			display: inline-block;
 			color: inherit;
 			font-family: inherit;
+			font-variant: small-caps;
 		}
 		div.meta {
 			display: inline-block;
 			float: right;
 			text-align: right;
-			a {
-				color: inherit;
-				text-decoration: none;
-				font-family: inherit;
-				-webkit-border-radius: 5px;
-				-moz-border-radius: 5px;
-				border-radius: 5px;
-				padding: 4px 8px;
-				&:hover {
-					color: #232323;
-					background-color: #ccc;
-				}
+			a {				
 				i {
 					font-size: 0.8em;
+					color: inherit;
+					text-decoration: none;
+					-webkit-border-radius: 5px;
+					-moz-border-radius: 5px;
+					border-radius: 5px;
+					padding: 8px 8px;
+					&:hover {
+						background-color: #eee;
+					}
+				}
+			}
+			span.dropdown {
+				font-variant: normal;
+				ul.dropdown-menu {
+					right: 0;
+					left: inherit;
+					font-size: 0.6em;
+					min-width: 0;			
+					a {
+						-webkit-border-radius: 0;
+						-moz-border-radius: 0;
+						border-radius: 0;
+					}
 				}
 			}
 		}
@@ -160,7 +194,7 @@
 				}
 				div.entry-menu {
 					/*background-color: #eeebe4;*/
-					padding: 5px;
+					padding: 0 5px;
 					a {
 						color: #232323;
 						font-size: 0.6em;
@@ -214,4 +248,10 @@
 
 iframe {
 	border: none;
+	border-top: 1px solid #ccc;;
 }
+
+.nav-header {
+	cursor: pointer;
+}
+

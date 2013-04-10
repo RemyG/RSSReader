@@ -2,31 +2,35 @@
 
 <h2>Categories</h2>
 
-<div class="container">
+<div class="container-fluid">
 
-	<div class="column">
+	<div class="row-fluid">
 
-		<ul>
-			<?php
-				foreach ($categories as $category)
-				{
-					echo '<li>'.$category->getName().'</li>';
-				}
-			?>
-		</ul>
+		<div class="span6">
 
-	</div>
+			<ul>
+				<?php
+					foreach ($categories as $category)
+					{
+						echo '<li>'.$category->getName().'</li>';
+					}
+				?>
+			</ul>
 
-	<div class="column">
+		</div>
 
-		<h3>New category</h3>
+		<div class="span6">
 
-		<form method="post" class="settings-form">
-			<label for="category-name">Category name</label>
-			<input type="text" name="category-text" id="category-text" required />
-			<input type="hidden" name="action" value="new-category" />
-			<input type="submit" value="Create category" />
-		</form>
+			<h3>New category</h3>
+
+			<form method="post" class="settings-form">
+				<label for="category-name">Category name</label>
+				<input type="text" name="category-text" id="category-text" required />
+				<input type="hidden" name="action" value="new-category" />
+				<input type="submit" value="Create category" />
+			</form>
+
+		</div>
 
 	</div>
 
