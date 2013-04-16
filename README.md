@@ -20,16 +20,16 @@ To run this application, you need:
 * Clone the main project:
 
 ```
-mkdir /var/www/rss-reader
-cd /var/www/rss-reader
-git clone https://github.com/RemyG/RSSReader.git .
+$ mkdir /var/www/rss-reader
+$ cd /var/www/rss-reader
+$ git clone https://github.com/RemyG/RSSReader.git .
 ```
 
 * Fetch the submodules Propel ORM and SimplePie:
 
 ```
-git submodule init
-git submodule update
+$ git submodule init
+$ git submodule update
 ```
 
 #### Without git
