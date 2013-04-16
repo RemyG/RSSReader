@@ -28,7 +28,7 @@ function pfp()
 	if(isset($segments[0]) && $segments[0] != '') $controller = $segments[0];
 	if(isset($segments[1]) && $segments[1] != '') $action = $segments[1];
 
-	if ($controller != 'install' && !($controller == 'user' && $action == 'login'))
+	if ($controller != 'install' && !($controller == 'user' && $action == 'login') && !($controller == 'feed' && $action == 'updateall'))
 	{
 		require_once(APP_DIR .'helpers/session_helper.php');
 		$sessionHelper = new Session_helper();

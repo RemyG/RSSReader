@@ -29,14 +29,21 @@ class FeedController extends Controller {
   		$template->render();
 	}
 
-	function load($id)
+	function load($id, $all = null)
 	{
 		$template = $this->loadView('feed_load_view');
 		$feed = FeedQuery::create()->findPK($id);
 		$errors = array();
 		// $this->updateFeed($feed, $errors);
 		// $feed = FeedQuery::create()->findPK($id);
-		$entries = EntryQuery::create()->filterByFeed($feed)->filterByRead(0)->orderByUpdated('desc')->find();
+		if ($all == null || $all == 0)
+		{
+			$entries = EntryQuery::create()->filterByFeed($feed)->filterByRead(0)->orderByUpdated('desc')->find();
+		}
+		else
+		{
+			$entries = EntryQuery::create()->filterByFeed($feed)->orderByUpdated('desc')->find();
+		}		
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
 		return $template->renderString();
@@ -62,6 +69,16 @@ class FeedController extends Controller {
 			{
 				$errors[] = 'Error while importing the OPML file: '.$e->getTraceAsString();
 			}
+			$return = "";
+			foreach ($errors as $error)
+			{
+				$return .= '
+					<div class="alert">
+    					<button type="button" class="close" data-dismiss="alert">&times;</button>
+    					'.$error.'
+    				</div>';
+			}
+			return $return;
 		}		
 		$template->set('errors', $errors);
 		$template->render();
@@ -201,39 +218,47 @@ class FeedController extends Controller {
 
 		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
 
-		$feedSP = new SimplePie();
-		$feedSP->set_feed_url($feedUrl);
-		$feedSP->init();
-
-		$lastUpdate = $feed->getUpdated(null)->getTimestamp();
-
-		$feed->setTitle($feedSP->get_title());
-		$feed->setUpdated(new DateTime());
-		$feed->setDescription($feedSP->get_description());
-		$feed->save();
-
-		foreach ($feedSP->get_items() as $item)
+		try
 		{
-			$entryUpdated = $item->get_date('U');
-			if ($entryUpdated > $lastUpdate)
-			{
-				$link = $item->get_link();
-				$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
-				if ($entry == null)
-				{
-					$entry = new Entry();
-					$entry->setLink($link);
-					$entry->setFeed($feed);
-				}
-				$entry->setPublished($item->get_date('U'));
-				$entry->setUpdated($item->get_date('U'));
-				$entry->setTitle($item->get_title());
-				$entry->setContent($item->get_content());
-				$entry->save();
-			}
-		}
 
-		$feedSP = null;
+			$feedSP = new SimplePie();
+			$feedSP->set_feed_url($feedUrl);
+			$feedSP->enable_cache(false);
+			$feedSP->init();
+
+			$lastUpdate = $feed->getUpdated(null)->getTimestamp();
+
+			$feed->setUpdated(new DateTime());
+			$feed->setDescription($feedSP->get_description());
+			$feed->save();
+
+			foreach ($feedSP->get_items() as $item)
+			{
+				$entryUpdated = $item->get_date('U');
+				if ($entryUpdated > $lastUpdate)
+				{
+					$link = $item->get_link();
+					$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
+					if ($entry == null)
+					{
+						$entry = new Entry();
+						$entry->setLink($link);
+						$entry->setFeed($feed);
+					}
+					$entry->setPublished($item->get_date('U'));
+					$entry->setUpdated($item->get_date('U'));
+					$entry->setTitle($item->get_title());
+					$entry->setContent($item->get_content());
+					$entry->save();
+				}
+			}
+
+			$feedSP = null;
+		}
+		catch (Exception $e)
+		{
+			$errors[] = 'Error when updating feed '.$feedUrl.': '.$e->getMessage();
+		}
 
 		return $errors;
 		

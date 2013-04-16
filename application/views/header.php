@@ -14,7 +14,6 @@
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/font-awesome.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap-responsive.min.css" />
-	<!--<link rel="stylesheet" href="<?php //echo BASE_URL; ?>static/css/unsemantic-grid-responsive-no-ie7.css" type="text/css" media="screen" />-->
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.less" type="text/less" media="screen" />
 
 	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -24,13 +23,15 @@
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/bootstrap.min.js"></script>
 
-	
-
-
 </head>
 <body>
 
 	<div id="overlay" class="ajax-overlay">
+		<div class="ajax-loader-text"></div>
+		<div class="ajax-loader">&nbsp;</div>
+	</div>
+
+	<div id="overlay-content" class="ajax-overlay-content">
 		<div class="ajax-loader">&nbsp;</div>
 	</div>
 
@@ -41,8 +42,22 @@
 				<div class="navbar-inner">
 					<div class="container-fluid">
 					<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
-					<ul class="nav pull-right">
-						<li><a href="<?php echo BASE_URL; ?>settings">Settings</a></li>
+				    <ul class="nav pull-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								Settings
+								<b class="caret"> </b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="<?php echo BASE_URL; ?>feed/add"><i class="icon-plus-sign"> </i> New feed</a></li>
+								<li><a href="<?php echo BASE_URL; ?>feed/importopml"><i class="icon-download"> </i> Import OPML</a></li>
+								<li><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all"><i class="icon-repeat"> </i> Update all feeds</a></li>
+								<li class="divider"></li>
+								<li><a href="<?php echo BASE_URL; ?>settings"><i class="icon-cog"> </i> Settings</a></li>
+								<li class="divider"></li>
+								<li class="list-feed-action"><a href="<?php echo BASE_URL; ?>user/logout"><i class="icon-signout"> </i> Logout</a></li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -54,24 +69,22 @@
 
 		<div class="row-fluid">
 
-			<div id="left-menu" class="span3">
+			<div id="left-menu">
 
 				<ul class="nav nav-list">
-					<li class="list-feed-header"><a href="<?php echo BASE_URL; ?>">Feeds</a></li>
-					<li class="divider"></li>
-					<li class="list-feed-action"><a href="<?php echo BASE_URL; ?>feed/add"><i class="icon-plus-sign"> </i> New feed</a></li>
-					<li class="list-feed-action"><a href="<?php echo BASE_URL; ?>feed/importopml"><i class="icon-download"> </i> Import OPML</a></li>
-					<li class="list-feed-action"><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all"><i class="icon-repeat"> </i> Update all feeds</a></li>
-					<li class="divider"></li>
-					<li class="list-feed-action"><a href="<?php echo BASE_URL; ?>user/logout"><i class="icon-signout"> </i> Logout</a></li>
 					<?php
 						if (isset($categoriesTree))
 						{
 							$c = new Criteria();
 							$c->add(EntryPeer::READ, 0);
+							$i = 0;
 							foreach ($categoriesTree as $category)
 							{
-								echo '<li class="divider"></li>';
+								if ($i != 0)
+								{
+									echo '<li class="divider"></li>';
+								}
+								$i++;
 								echo '<li class="nav-header" data-cat-id="'.$category->getId().'">'.$category->getName().'</li>';
 								foreach ($category->getFeeds() as $feed) {
 									echo '
@@ -89,4 +102,4 @@
 				
 			</div>
 
-			<div id="content" class="span9">
+			<div id="content">

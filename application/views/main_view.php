@@ -11,9 +11,10 @@ $(".nav-list").on("click", ".nav-header", function(e) {
 
 $(".load-feed-link").on("click", "a", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
+	$('#overlay-content').show();
 	var href = this.href;
 	var $field = $(this).parent();
+	$(this).blur();
 	var request = $.ajax({
 		url: href,
 		type: "GET",
@@ -24,10 +25,10 @@ $(".load-feed-link").on("click", "a", function(e) {
 		$field.addClass('active');
 		$("#feed-content").html(msg);
 		scrollToActiveEntry('feed-content');
-		$('#overlay').hide();
+		$('#overlay-content').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		$('#overlay-content').hide();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -151,6 +152,7 @@ $("#feed-content").on("click", ".feed-update", function(e) {
 
 	e.preventDefault();
 	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Updating the feed");
 	var id = $(this).attr('data-id');
 	var href = this.href;
 	var request = $.ajax({
@@ -180,12 +182,11 @@ $("#feed-content").on("click", ".remove-entry", function(e) {
 		dataType: "html"
 	});
 	request.done(function(msg) {
-		$('#load-entry-link-'+id).parent().hide();
-		$('#load-entry-div-'+id).hide();
-		if ($('#load-entry-link-'+id).parent().prevUntil(".entries-date", ":visible").length == 0
-			&& $('#load-entry-link-'+id).parent().nextUntil(".entries-date", ":visible").length == 0)
+		$('#entry-container-'+id).hide();
+		if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
+			&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
 		{
-			$('#load-entry-link-'+id).parent().prevAll(".entries-date:first").hide();
+			$('#entry-container-'+id).prevAll(".entries-date:first").hide();
 		}
 		updateCountForEntry(id);
 	});
@@ -198,6 +199,7 @@ $("#feed-content").on("click", ".remove-entry", function(e) {
 $('.link-update-all').click(function(e) {
 	e.preventDefault();
 	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Updating all feeds");
 	var request = $.ajax({
 		url: 'feed/updateall',
 		type: "GET",
@@ -248,11 +250,51 @@ $("#feed-content").on("click", ".cancel-delete", function(e) {
 $("#feed-content").on("click", ".confirm-delete", function(e) {
 	e.preventDefault();
 	var id = $(this).data("id");
-	$("#load-feed-link-"+id).hide();
+	$("#load-feed-link-"+id).hide();	
+	$("#modal-from-dom").modal("hide");
+	$("#feed-content").html("");
 	var request = $.ajax({
 		url: 'feed/delete/' + id,
 		type: "GET",
 		dataType: "html"
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+});
+
+$("#feed-content").on("click", ".show-all", function(e) {
+	e.preventDefault();
+	var id = $(this).data("id");
+	var request = $.ajax({
+		url: 'feed/load/' + id + '/1',
+		type: "GET",
+		dataType: "html"
+	});
+	request.done(function(msg) {
+		$("#feed-content").html(msg);
+		$('.show-unread').parent().show();
+		$('.show-all').parent().hide();
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+});
+
+$("#feed-content").on("click", ".show-unread", function(e) {
+	e.preventDefault();
+	var id = $(this).data("id");
+	var request = $.ajax({
+		url: 'feed/load/' + id + '/0',
+		type: "GET",
+		dataType: "html"
+	});
+	request.done(function(msg) {
+		$("#feed-content").html(msg);
+		$('.show-unread').parent().hide();
+		$('.show-all').parent().show();
+		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
@@ -286,10 +328,10 @@ function updateCountForFeed(id)
 
 function scrollToActiveEntry(entryId)
 {
-	var container = $("html"),
+	var container = $("#content"),
 		scrollTo = $("#" + entryId);
 	container.scrollTop(
-		scrollTo.offset().top - 10 - 50
+		scrollTo.offset().top - container.offset().top + container.scrollTop() - 10
 	);
 }
 

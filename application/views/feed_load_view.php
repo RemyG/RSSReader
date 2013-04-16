@@ -23,6 +23,9 @@
 				    <span class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"> </i></a>
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+							<li><a href="#" data-id="'.$feed->getId().'" class="show-all">Show all</a></li>
+							<li style="display: none;"><a href="#" data-id="'.$feed->getId().'" class="show-unread">Show unread</a></li>
+							<li class="divider"></li>
 							<li><a href="#" data-id="'.$feed->getId().'" class="delete-feed">Delete feed</a></li>
 						</ul>
 					</span>
@@ -59,7 +62,7 @@
 		}
 		echo '
 			<div class="entry-container" id="entry-container-'.$entry->getId().'">
-				<div class="entry-link-container">
+				<div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').'">
 					<div class="remove">
 						<a href="#" class="remove-entry" data-id="'.$entry->getId().'" title="Remove this entry">
 							<i class="icon-remove-sign"> </i>
