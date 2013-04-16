@@ -37,6 +37,7 @@ To run this application, you need:
 ### Configuration
 
 * Edit the file `application/config/config.php` and fill in your `BASE_URL`.
+* Edit the file `application/build/conf/rss-reader-conf.php` and update the values of `dns`, `user` and `password` with the connection information for your database.
 * Import the files `application/build/sql/schema.sql` and `application/build/sql/insert.sql` with your MySql browser ([PHPMyAdmin](http://www.phpmyadmin.net), [SQL Buddy](http://sqlbuddy.com/),...).
 * Go to `BASE_URL` in a browser, and create the main user as asked.
 * You're good to go!
