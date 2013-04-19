@@ -67,8 +67,14 @@ abstract class BaseEntryQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rss-reader', $modelName = 'Entry', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rss-reader';
+        }
+        if (null === $modelName) {
+            $modelName = 'Entry';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -85,10 +91,8 @@ abstract class BaseEntryQuery extends ModelCriteria
         if ($criteria instanceof EntryQuery) {
             return $criteria;
         }
-        $query = new EntryQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new EntryQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }

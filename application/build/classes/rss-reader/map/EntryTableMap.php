@@ -43,7 +43,7 @@ class EntryTableMap extends TableMap
         $this->addColumn('updated', 'Updated', 'TIMESTAMP', false, null, null);
         $this->addColumn('link', 'Link', 'VARCHAR', true, 255, null);
         $this->addColumn('title', 'Title', 'VARCHAR', true, 255, null);
-        $this->addColumn('description', 'Description', 'LONGVARCHAR', false, 255, null);
+        $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addColumn('read', 'Read', 'TINYINT', true, null, null);
         $this->addColumn('content', 'Content', 'LONGVARCHAR', false, null, null);
         $this->addForeignKey('feed_id', 'FeedId', 'INTEGER', 'rss_feed', 'id', true, null, null);

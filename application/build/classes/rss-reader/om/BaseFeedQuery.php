@@ -11,16 +11,16 @@
  * @method FeedQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method FeedQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method FeedQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
- * @method FeedQuery orderByTypeId($order = Criteria::ASC) Order by the type_id column
  * @method FeedQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
+ * @method FeedQuery orderByValid($order = Criteria::ASC) Order by the valid column
  *
  * @method FeedQuery groupById() Group by the id column
  * @method FeedQuery groupByLink() Group by the link column
  * @method FeedQuery groupByTitle() Group by the title column
  * @method FeedQuery groupByDescription() Group by the description column
  * @method FeedQuery groupByUpdated() Group by the updated column
- * @method FeedQuery groupByTypeId() Group by the type_id column
  * @method FeedQuery groupByCategoryId() Group by the category_id column
+ * @method FeedQuery groupByValid() Group by the valid column
  *
  * @method FeedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method FeedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -41,16 +41,16 @@
  * @method Feed findOneByTitle(string $title) Return the first Feed filtered by the title column
  * @method Feed findOneByDescription(string $description) Return the first Feed filtered by the description column
  * @method Feed findOneByUpdated(string $updated) Return the first Feed filtered by the updated column
- * @method Feed findOneByTypeId(int $type_id) Return the first Feed filtered by the type_id column
  * @method Feed findOneByCategoryId(int $category_id) Return the first Feed filtered by the category_id column
+ * @method Feed findOneByValid(boolean $valid) Return the first Feed filtered by the valid column
  *
  * @method array findById(int $id) Return Feed objects filtered by the id column
  * @method array findByLink(string $link) Return Feed objects filtered by the link column
  * @method array findByTitle(string $title) Return Feed objects filtered by the title column
  * @method array findByDescription(string $description) Return Feed objects filtered by the description column
  * @method array findByUpdated(string $updated) Return Feed objects filtered by the updated column
- * @method array findByTypeId(int $type_id) Return Feed objects filtered by the type_id column
  * @method array findByCategoryId(int $category_id) Return Feed objects filtered by the category_id column
+ * @method array findByValid(boolean $valid) Return Feed objects filtered by the valid column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -63,8 +63,14 @@ abstract class BaseFeedQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rss-reader', $modelName = 'Feed', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rss-reader';
+        }
+        if (null === $modelName) {
+            $modelName = 'Feed';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -81,10 +87,8 @@ abstract class BaseFeedQuery extends ModelCriteria
         if ($criteria instanceof FeedQuery) {
             return $criteria;
         }
-        $query = new FeedQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new FeedQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }
@@ -154,7 +158,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `type_id`, `category_id` FROM `rss_feed` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `category_id`, `valid` FROM `rss_feed` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -416,48 +420,6 @@ abstract class BaseFeedQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the type_id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByTypeId(1234); // WHERE type_id = 1234
-     * $query->filterByTypeId(array(12, 34)); // WHERE type_id IN (12, 34)
-     * $query->filterByTypeId(array('min' => 12)); // WHERE type_id >= 12
-     * $query->filterByTypeId(array('max' => 12)); // WHERE type_id <= 12
-     * </code>
-     *
-     * @param     mixed $typeId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return FeedQuery The current query, for fluid interface
-     */
-    public function filterByTypeId($typeId = null, $comparison = null)
-    {
-        if (is_array($typeId)) {
-            $useMinMax = false;
-            if (isset($typeId['min'])) {
-                $this->addUsingAlias(FeedPeer::TYPE_ID, $typeId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($typeId['max'])) {
-                $this->addUsingAlias(FeedPeer::TYPE_ID, $typeId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(FeedPeer::TYPE_ID, $typeId, $comparison);
-    }
-
-    /**
      * Filter the query on the category_id column
      *
      * Example usage:
@@ -499,6 +461,33 @@ abstract class BaseFeedQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FeedPeer::CATEGORY_ID, $categoryId, $comparison);
+    }
+
+    /**
+     * Filter the query on the valid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByValid(true); // WHERE valid = true
+     * $query->filterByValid('yes'); // WHERE valid = true
+     * </code>
+     *
+     * @param     boolean|string $valid The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterByValid($valid = null, $comparison = null)
+    {
+        if (is_string($valid)) {
+            $valid = in_array(strtolower($valid), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(FeedPeer::VALID, $valid, $comparison);
     }
 
     /**

@@ -15,6 +15,7 @@ CREATE TABLE `rss_category`
     `name` VARCHAR(255) NOT NULL,
     `parent_category_id` INTEGER,
     PRIMARY KEY (`id`),
+    UNIQUE INDEX `rss_category_U_1` (`name`),
     INDEX `rss_category_FI_1` (`parent_category_id`),
     CONSTRAINT `rss_category_FK_1`
         FOREIGN KEY (`parent_category_id`)
@@ -34,9 +35,10 @@ CREATE TABLE `rss_feed`
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT(255),
     `updated` DATETIME,
-    `type_id` INTEGER NOT NULL,
     `category_id` INTEGER NOT NULL,
+    `valid` TINYINT(1),
     PRIMARY KEY (`id`),
+    UNIQUE INDEX `rss_feed_U_1` (`link`),
     INDEX `rss_feed_FI_1` (`category_id`),
     CONSTRAINT `rss_feed_FK_1`
         FOREIGN KEY (`category_id`)
@@ -56,7 +58,7 @@ CREATE TABLE `rss_entry`
     `updated` DATETIME,
     `link` VARCHAR(255) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
-    `description` TEXT(255),
+    `description` TEXT,
     `read` TINYINT NOT NULL,
     `content` TEXT,
     `feed_id` INTEGER NOT NULL,

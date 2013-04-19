@@ -1,4 +1,13 @@
 <div id="feed-content">
+
+	<?php 
+	if (!isset($categoriesTree) || sizeof($categoriesTree) == 0)
+	{
+		echo "You haven't imported any feed yet. To do so, <a href='".BASE_URL."feed/add'><i class='icon-plus-sign'> </i> Import a new feed</a>
+		or <a href='".BASE_URL."feed/importopml'><i class='icon-download'> </i> Import an OPML file</a>";
+	}
+	?>
+
 </div>
 
 <script type="text/javascript">

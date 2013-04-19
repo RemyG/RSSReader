@@ -39,8 +39,14 @@ abstract class BaseUserQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rss-reader', $modelName = 'User', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rss-reader';
+        }
+        if (null === $modelName) {
+            $modelName = 'User';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -57,10 +63,8 @@ abstract class BaseUserQuery extends ModelCriteria
         if ($criteria instanceof UserQuery) {
             return $criteria;
         }
-        $query = new UserQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new UserQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }

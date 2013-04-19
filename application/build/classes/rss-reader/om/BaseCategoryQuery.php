@@ -51,8 +51,14 @@ abstract class BaseCategoryQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'rss-reader', $modelName = 'Category', $modelAlias = null)
+    public function __construct($dbName = null, $modelName = null, $modelAlias = null)
     {
+        if (null === $dbName) {
+            $dbName = 'rss-reader';
+        }
+        if (null === $modelName) {
+            $modelName = 'Category';
+        }
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
@@ -69,10 +75,8 @@ abstract class BaseCategoryQuery extends ModelCriteria
         if ($criteria instanceof CategoryQuery) {
             return $criteria;
         }
-        $query = new CategoryQuery();
-        if (null !== $modelAlias) {
-            $query->setModelAlias($modelAlias);
-        }
+        $query = new CategoryQuery(null, null, $modelAlias);
+
         if ($criteria instanceof Criteria) {
             $query->mergeWith($criteria);
         }

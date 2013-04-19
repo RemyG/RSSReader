@@ -60,16 +60,16 @@ abstract class BaseFeed extends BaseObject implements Persistent
     protected $updated;
 
     /**
-     * The value for the type_id field.
-     * @var        int
-     */
-    protected $type_id;
-
-    /**
      * The value for the category_id field.
      * @var        int
      */
     protected $category_id;
+
+    /**
+     * The value for the valid field.
+     * @var        boolean
+     */
+    protected $valid;
 
     /**
      * @var        Category
@@ -193,17 +193,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [type_id] column value.
-     *
-     * @return int
-     */
-    public function getTypeId()
-    {
-
-        return $this->type_id;
-    }
-
-    /**
      * Get the [category_id] column value.
      *
      * @return int
@@ -212,6 +201,17 @@ abstract class BaseFeed extends BaseObject implements Persistent
     {
 
         return $this->category_id;
+    }
+
+    /**
+     * Get the [valid] column value.
+     *
+     * @return boolean
+     */
+    public function getValid()
+    {
+
+        return $this->valid;
     }
 
     /**
@@ -322,27 +322,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
     } // setUpdated()
 
     /**
-     * Set the value of [type_id] column.
-     *
-     * @param int $v new value
-     * @return Feed The current object (for fluent API support)
-     */
-    public function setTypeId($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->type_id !== $v) {
-            $this->type_id = $v;
-            $this->modifiedColumns[] = FeedPeer::TYPE_ID;
-        }
-
-
-        return $this;
-    } // setTypeId()
-
-    /**
      * Set the value of [category_id] column.
      *
      * @param int $v new value
@@ -366,6 +345,35 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
         return $this;
     } // setCategoryId()
+
+    /**
+     * Sets the value of the [valid] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Feed The current object (for fluent API support)
+     */
+    public function setValid($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->valid !== $v) {
+            $this->valid = $v;
+            $this->modifiedColumns[] = FeedPeer::VALID;
+        }
+
+
+        return $this;
+    } // setValid()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -404,8 +412,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->title = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->updated = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->type_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->category_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->category_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->valid = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -678,11 +686,11 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::UPDATED)) {
             $modifiedColumns[':p' . $index++]  = '`updated`';
         }
-        if ($this->isColumnModified(FeedPeer::TYPE_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`type_id`';
-        }
         if ($this->isColumnModified(FeedPeer::CATEGORY_ID)) {
             $modifiedColumns[':p' . $index++]  = '`category_id`';
+        }
+        if ($this->isColumnModified(FeedPeer::VALID)) {
+            $modifiedColumns[':p' . $index++]  = '`valid`';
         }
 
         $sql = sprintf(
@@ -710,11 +718,11 @@ abstract class BaseFeed extends BaseObject implements Persistent
                     case '`updated`':
                         $stmt->bindValue($identifier, $this->updated, PDO::PARAM_STR);
                         break;
-                    case '`type_id`':
-                        $stmt->bindValue($identifier, $this->type_id, PDO::PARAM_INT);
-                        break;
                     case '`category_id`':
                         $stmt->bindValue($identifier, $this->category_id, PDO::PARAM_INT);
+                        break;
+                    case '`valid`':
+                        $stmt->bindValue($identifier, (int) $this->valid, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -886,10 +894,10 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 return $this->getUpdated();
                 break;
             case 5:
-                return $this->getTypeId();
+                return $this->getCategoryId();
                 break;
             case 6:
-                return $this->getCategoryId();
+                return $this->getValid();
                 break;
             default:
                 return null;
@@ -925,8 +933,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $keys[2] => $this->getTitle(),
             $keys[3] => $this->getDescription(),
             $keys[4] => $this->getUpdated(),
-            $keys[5] => $this->getTypeId(),
-            $keys[6] => $this->getCategoryId(),
+            $keys[5] => $this->getCategoryId(),
+            $keys[6] => $this->getValid(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aCategory) {
@@ -985,10 +993,10 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 $this->setUpdated($value);
                 break;
             case 5:
-                $this->setTypeId($value);
+                $this->setCategoryId($value);
                 break;
             case 6:
-                $this->setCategoryId($value);
+                $this->setValid($value);
                 break;
         } // switch()
     }
@@ -1019,8 +1027,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setTitle($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setUpdated($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setTypeId($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setCategoryId($arr[$keys[6]]);
+        if (array_key_exists($keys[5], $arr)) $this->setCategoryId($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setValid($arr[$keys[6]]);
     }
 
     /**
@@ -1037,8 +1045,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::TITLE)) $criteria->add(FeedPeer::TITLE, $this->title);
         if ($this->isColumnModified(FeedPeer::DESCRIPTION)) $criteria->add(FeedPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(FeedPeer::UPDATED)) $criteria->add(FeedPeer::UPDATED, $this->updated);
-        if ($this->isColumnModified(FeedPeer::TYPE_ID)) $criteria->add(FeedPeer::TYPE_ID, $this->type_id);
         if ($this->isColumnModified(FeedPeer::CATEGORY_ID)) $criteria->add(FeedPeer::CATEGORY_ID, $this->category_id);
+        if ($this->isColumnModified(FeedPeer::VALID)) $criteria->add(FeedPeer::VALID, $this->valid);
 
         return $criteria;
     }
@@ -1106,8 +1114,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $copyObj->setTitle($this->getTitle());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setUpdated($this->getUpdated());
-        $copyObj->setTypeId($this->getTypeId());
         $copyObj->setCategoryId($this->getCategoryId());
+        $copyObj->setValid($this->getValid());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1470,8 +1478,8 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $this->title = null;
         $this->description = null;
         $this->updated = null;
-        $this->type_id = null;
         $this->category_id = null;
+        $this->valid = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
