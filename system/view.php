@@ -38,6 +38,16 @@ class View {
 		require($this->template);
 		return ob_get_clean();
 	}
+
+	public function renderMobile()
+	{
+		extract($this->pageVars);
+		ob_start();
+		include APP_DIR.'views/mobile_header.php';
+		require($this->template);
+		include APP_DIR.'views/mobile_footer.php';
+		echo ob_get_clean();	
+	}
 }
 
 ?>

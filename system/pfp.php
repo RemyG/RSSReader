@@ -23,20 +23,40 @@ function pfp()
     
 	// Split the url into segments
 	$segments = explode('/', $url);
-	
-	// Do our default checks
-	if(isset($segments[0]) && $segments[0] != '') $controller = $segments[0];
-	if(isset($segments[1]) && $segments[1] != '') $action = $segments[1];
 
-	if ($controller != 'install' && !($controller == 'user' && $action == 'login') && !($controller == 'feed' && $action == 'updateall'))
+	require_once(APP_DIR .'helpers/session_helper.php');
+	$sessionHelper = new Session_helper();
+
+	$mobile = '';
+	$useMobile = false;
+	if (isset($segments[0]) && $segments[0] == 'm')
 	{
-		require_once(APP_DIR .'helpers/session_helper.php');
-		$sessionHelper = new Session_helper();
+		$mobile = 'm/';
+		$useMobile = true;
+		$sessionHelper->set('mobile', '1');
+		if(isset($segments[1]) && $segments[1] != '') $controller = $segments[1];
+		if(isset($segments[2]) && $segments[2] != '') $action = $segments[2];
+		$arguments = array_slice($segments, 3);
+	}
+	else
+	{
+		if(isset($segments[0]) && $segments[0] != '') $controller = $segments[0];
+		if(isset($segments[1]) && $segments[1] != '') $action = $segments[1];
+		$arguments = array_slice($segments, 2);
+	}
+	
+	if ($controller != 'install' && !($controller == 'user' && $action == 'login') && !($controller == 'feed' && $action == 'updateall'))
+	{		
 		$currentUser = $sessionHelper->getCurrentUser();
 		if ($currentUser == null)
 		{
-			header('Location: '. BASE_URL . 'user/login');
+			header('Location: '. BASE_URL . $mobile . 'user/login');
 		}
+	}
+
+	if ($useMobile)
+	{
+		$controller = 'mobile'.$controller;
 	}
 
 	// Get our controller file
@@ -59,7 +79,7 @@ function pfp()
 
 	// Create object and call method
 	$obj = new $controller;
-    die(call_user_func_array(array($obj, $action), array_slice($segments, 2)));
+    die(call_user_func_array(array($obj, $action), $arguments));
 }
 
 ?>
