@@ -12,12 +12,14 @@
 
 <script type="text/javascript">
 
+// Show / hide the feeds from a category
 $(".nav-list").on("click", ".nav-header", function(e) {
 	e.preventDefault();
 	var catId = $(this).attr('data-cat-id');
 	$('.load-feed-link[data-cat-id="'+catId+'"]').toggle();
 });
 
+// Open a feed
 $(".load-feed-link").on("click", "a", function(e) {
 	e.preventDefault();
 	$('#overlay-content').show();
@@ -42,6 +44,7 @@ $(".load-feed-link").on("click", "a", function(e) {
 	});
 });
 
+// Open an entry
 $("#feed-content").on("click", ".load-entry-link", function(e) {
 	e.preventDefault();	
 	var id = $(this).attr('data-id');
@@ -73,6 +76,7 @@ $("#feed-content").on("click", ".load-entry-link", function(e) {
 	
 });
 
+// Show an entry inside an iframe
 $("#feed-content").on("click", ".iframe-link", function(e) {
 
 	e.preventDefault();
@@ -89,6 +93,7 @@ $("#feed-content").on("click", ".iframe-link", function(e) {
 	scrollToActiveEntry("load-entry-link-" + id);
 });
 
+// Show the content of an entry from the source
 $("#feed-content").on("click", ".source-link", function(e) {
 
 	e.preventDefault();
@@ -113,6 +118,7 @@ $("#feed-content").on("click", ".source-link", function(e) {
 
 });
 
+// Mark an entry as read
 $("#feed-content").on("click", ".read-link", function(e) {
 
 	e.preventDefault();
@@ -135,6 +141,7 @@ $("#feed-content").on("click", ".read-link", function(e) {
 
 });
 
+// Mark an entry as not read
 $("#feed-content").on("click", ".unread-link", function(e) {
 
 	e.preventDefault();
@@ -157,6 +164,7 @@ $("#feed-content").on("click", ".unread-link", function(e) {
 
 });
 
+// Update a feed
 $("#feed-content").on("click", ".feed-update", function(e) {
 
 	e.preventDefault();
@@ -181,22 +189,23 @@ $("#feed-content").on("click", ".feed-update", function(e) {
 
 });
 
+// Remove an entry
 $("#feed-content").on("click", ".remove-entry", function(e) {
 
 	e.preventDefault();
 	var id = $(this).attr('data-id');
+	$('#entry-container-'+id).hide();
+	if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
+		&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
+	{
+		$('#entry-container-'+id).prevAll(".entries-date:first").hide();
+	}	
 	var request = $.ajax({
 		url: "entry/markread/" + id,
 		type: "GET",
 		dataType: "html"
 	});
 	request.done(function(msg) {
-		$('#entry-container-'+id).hide();
-		if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
-			&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
-		{
-			$('#entry-container-'+id).prevAll(".entries-date:first").hide();
-		}
 		updateCountForEntry(id);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -205,6 +214,7 @@ $("#feed-content").on("click", ".remove-entry", function(e) {
 
 });
 
+// Update all feeds
 $('.link-update-all').click(function(e) {
 	e.preventDefault();
 	$('#overlay').show();
@@ -225,6 +235,7 @@ $('.link-update-all').click(function(e) {
 	});
 });
 
+// Mark all entries from a feed as read
 $("#feed-content").on("click", ".feed-markread", function(e) {
 
 	e.preventDefault();
@@ -246,16 +257,19 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 
 });
 
+// Show the modal to Delete a feed (and its entries)
 $("#feed-content").on("click", ".delete-feed", function(e) {
 	e.preventDefault();	
 	$('#modal-from-dom').modal('show');
 });
 
+// Close the feed deletion modal
 $("#feed-content").on("click", ".cancel-delete", function(e) {
 	e.preventDefault();
 	$("#modal-from-dom").modal("hide");
 });
 
+// Delete a feed (and its entries)
 $("#feed-content").on("click", ".confirm-delete", function(e) {
 	e.preventDefault();
 	var id = $(this).data("id");
@@ -272,6 +286,7 @@ $("#feed-content").on("click", ".confirm-delete", function(e) {
 	});
 });
 
+// Show all entries from a feed (read and unread)
 $("#feed-content").on("click", ".show-all", function(e) {
 	e.preventDefault();
 	var id = $(this).data("id");
@@ -291,6 +306,7 @@ $("#feed-content").on("click", ".show-all", function(e) {
 	});
 });
 
+// Show only the unread entries from a feed
 $("#feed-content").on("click", ".show-unread", function(e) {
 	e.preventDefault();
 	var id = $(this).data("id");
