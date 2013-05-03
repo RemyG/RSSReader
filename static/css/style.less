@@ -76,13 +76,21 @@ body {
 
 .load-feed-link {
 	.feed-count {
+		display: inline;
 		&:before {
 			content: "(";
 		}
 		&:after {
 			content: ")";
 		}
-
+	}
+	font-weight: bold;
+	font-size: 12px;
+	&.empty {
+		font-weight: normal;
+		.feed-count {
+			display: none;
+		}
 	}
 }
 

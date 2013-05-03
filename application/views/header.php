@@ -89,8 +89,11 @@
 								foreach ($category->getFeeds() as $feed) {
 									if ($feed->getValid() == 1 || $feed->countEntrys($c) > 0)
 									{
+										$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';
 										echo '
-											<li class="load-feed-link" id="load-feed-link-'.$feed->getId().'" data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'">
+											<li class="load-feed-link'.$empty.'" id="load-feed-link-'.$feed->getId().'" 
+												data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
+												data-id="'.$feed->getId().'">
 												<a href="feed/load/'.$feed->getId().'">
 													<span class="feed-title">'.$feed->getTitle().'</span>
 													<span class="feed-count">'.$feed->countEntrys($c).'</span>
