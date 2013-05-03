@@ -1,7 +1,8 @@
 <div data-role="page">
 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 		<h1><?php echo $category->getName(); ?></h1>
+                <a data-direction="reverse" data-iconpos="notext" data-icon="arrow-l" href="<?php echo $backUrl; ?>" ></a>
 	</div>
 
 	<div data-role="content">
@@ -20,8 +21,8 @@
 					echo '
 						<li>
 							<a href="/m/feed/load/'.$feed->getId().'">
-								<span class="feed-title">'.$feed->getTitle().'</span>
-								<span class="feed-count">'.$feed->countEntrys($c).'</span>
+								'.$feed->getTitle().'
+								<span class="ui-li-count ui-btn-corner-all countBubl">'.$feed->countEntrys($c).'</span>
 							</a>
 						</li>';
 				}

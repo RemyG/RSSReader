@@ -17,6 +17,7 @@ class MobileFeedController extends Controller {
 		$template->set('pageDescription', 'Welcome to PFP - Main page');	
 		$category = CategoryQuery::create()->findPK($id);
   		$template->set('category', $category);
+		$template->set('backUrl', '/m/');
   		$template->renderMobile();
 	}
 	
@@ -54,6 +55,9 @@ class MobileFeedController extends Controller {
 		}		
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
+		$template->set('backUrl', '/m/feed/category/'.$feed->getCategory()->getId());		
+		$template->set('toggleText', $all == null || $all == 0 ? 'All' : 'Unread');
+		$template->set('toggleUrl', '/m/feed/load/'.$id.($all == null || $all == 0 ? '/1' : ''));
 		$template->renderMobile();
 		
 	}

@@ -1,6 +1,6 @@
 <div data-role="page">
 
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 		<h1>Sign in</h1>
 	</div>
 
