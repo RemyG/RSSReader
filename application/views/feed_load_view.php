@@ -68,7 +68,7 @@
 							<i class="icon-remove-sign"> </i>
 						</a>
 					</div>
-					<div id="load-entry-link-'.$entry->getId().'" class="load-entry-link" data-id="'.$entry->getId().'">
+					<div id="load-entry-link-'.$entry->getId().'" class="load-entry-link" data-id="'.$entry->getId().'" data-href="'.$entry->getLink().'">
 						<div class="title-wrapper">
 							<div class="title">'.$entry->getTitle().'</div>
 						</div>

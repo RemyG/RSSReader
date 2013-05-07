@@ -13,6 +13,7 @@
  * @method FeedQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
  * @method FeedQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  * @method FeedQuery orderByValid($order = Criteria::ASC) Order by the valid column
+ * @method FeedQuery orderByViewframe($order = Criteria::ASC) Order by the viewframe column
  *
  * @method FeedQuery groupById() Group by the id column
  * @method FeedQuery groupByLink() Group by the link column
@@ -21,6 +22,7 @@
  * @method FeedQuery groupByUpdated() Group by the updated column
  * @method FeedQuery groupByCategoryId() Group by the category_id column
  * @method FeedQuery groupByValid() Group by the valid column
+ * @method FeedQuery groupByViewframe() Group by the viewframe column
  *
  * @method FeedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method FeedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -43,6 +45,7 @@
  * @method Feed findOneByUpdated(string $updated) Return the first Feed filtered by the updated column
  * @method Feed findOneByCategoryId(int $category_id) Return the first Feed filtered by the category_id column
  * @method Feed findOneByValid(boolean $valid) Return the first Feed filtered by the valid column
+ * @method Feed findOneByViewframe(boolean $viewframe) Return the first Feed filtered by the viewframe column
  *
  * @method array findById(int $id) Return Feed objects filtered by the id column
  * @method array findByLink(string $link) Return Feed objects filtered by the link column
@@ -51,6 +54,7 @@
  * @method array findByUpdated(string $updated) Return Feed objects filtered by the updated column
  * @method array findByCategoryId(int $category_id) Return Feed objects filtered by the category_id column
  * @method array findByValid(boolean $valid) Return Feed objects filtered by the valid column
+ * @method array findByViewframe(boolean $viewframe) Return Feed objects filtered by the viewframe column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -158,7 +162,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `category_id`, `valid` FROM `rss_feed` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `category_id`, `valid`, `viewframe` FROM `rss_feed` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -488,6 +492,33 @@ abstract class BaseFeedQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FeedPeer::VALID, $valid, $comparison);
+    }
+
+    /**
+     * Filter the query on the viewframe column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByViewframe(true); // WHERE viewframe = true
+     * $query->filterByViewframe('yes'); // WHERE viewframe = true
+     * </code>
+     *
+     * @param     boolean|string $viewframe The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterByViewframe($viewframe = null, $comparison = null)
+    {
+        if (is_string($viewframe)) {
+            $viewframe = in_array(strtolower($viewframe), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(FeedPeer::VIEWFRAME, $viewframe, $comparison);
     }
 
     /**

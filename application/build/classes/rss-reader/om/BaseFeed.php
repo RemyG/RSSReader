@@ -67,9 +67,17 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
     /**
      * The value for the valid field.
+     * Note: this column has a database default value of: true
      * @var        boolean
      */
     protected $valid;
+
+    /**
+     * The value for the viewframe field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $viewframe;
 
     /**
      * @var        Category
@@ -107,6 +115,28 @@ abstract class BaseFeed extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $entrysScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->valid = true;
+        $this->viewframe = false;
+    }
+
+    /**
+     * Initializes internal state of BaseFeed object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [id] column value.
@@ -212,6 +242,17 @@ abstract class BaseFeed extends BaseObject implements Persistent
     {
 
         return $this->valid;
+    }
+
+    /**
+     * Get the [viewframe] column value.
+     *
+     * @return boolean
+     */
+    public function getViewframe()
+    {
+
+        return $this->viewframe;
     }
 
     /**
@@ -376,6 +417,35 @@ abstract class BaseFeed extends BaseObject implements Persistent
     } // setValid()
 
     /**
+     * Sets the value of the [viewframe] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Feed The current object (for fluent API support)
+     */
+    public function setViewframe($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->viewframe !== $v) {
+            $this->viewframe = $v;
+            $this->modifiedColumns[] = FeedPeer::VIEWFRAME;
+        }
+
+
+        return $this;
+    } // setViewframe()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -385,6 +455,14 @@ abstract class BaseFeed extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->valid !== true) {
+                return false;
+            }
+
+            if ($this->viewframe !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -414,6 +492,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->updated = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->category_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
             $this->valid = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
+            $this->viewframe = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -423,7 +502,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = FeedPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = FeedPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Feed object", $e);
@@ -692,6 +771,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::VALID)) {
             $modifiedColumns[':p' . $index++]  = '`valid`';
         }
+        if ($this->isColumnModified(FeedPeer::VIEWFRAME)) {
+            $modifiedColumns[':p' . $index++]  = '`viewframe`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `rss_feed` (%s) VALUES (%s)',
@@ -723,6 +805,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
                         break;
                     case '`valid`':
                         $stmt->bindValue($identifier, (int) $this->valid, PDO::PARAM_INT);
+                        break;
+                    case '`viewframe`':
+                        $stmt->bindValue($identifier, (int) $this->viewframe, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -899,6 +984,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             case 6:
                 return $this->getValid();
                 break;
+            case 7:
+                return $this->getViewframe();
+                break;
             default:
                 return null;
                 break;
@@ -935,6 +1023,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $keys[4] => $this->getUpdated(),
             $keys[5] => $this->getCategoryId(),
             $keys[6] => $this->getValid(),
+            $keys[7] => $this->getViewframe(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aCategory) {
@@ -998,6 +1087,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             case 6:
                 $this->setValid($value);
                 break;
+            case 7:
+                $this->setViewframe($value);
+                break;
         } // switch()
     }
 
@@ -1029,6 +1121,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setUpdated($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setCategoryId($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setValid($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setViewframe($arr[$keys[7]]);
     }
 
     /**
@@ -1047,6 +1140,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::UPDATED)) $criteria->add(FeedPeer::UPDATED, $this->updated);
         if ($this->isColumnModified(FeedPeer::CATEGORY_ID)) $criteria->add(FeedPeer::CATEGORY_ID, $this->category_id);
         if ($this->isColumnModified(FeedPeer::VALID)) $criteria->add(FeedPeer::VALID, $this->valid);
+        if ($this->isColumnModified(FeedPeer::VIEWFRAME)) $criteria->add(FeedPeer::VIEWFRAME, $this->viewframe);
 
         return $criteria;
     }
@@ -1116,6 +1210,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $copyObj->setUpdated($this->getUpdated());
         $copyObj->setCategoryId($this->getCategoryId());
         $copyObj->setValid($this->getValid());
+        $copyObj->setViewframe($this->getViewframe());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1480,10 +1575,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $this->updated = null;
         $this->category_id = null;
         $this->valid = null;
+        $this->viewframe = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

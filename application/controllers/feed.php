@@ -135,6 +135,20 @@ class FeedController extends Controller {
 		FeedQuery::create()->findPK($id)->delete();
 	}
 
+	function setViewSource($id)
+	{
+		$feed = FeedQuery::create()->findPK($id);
+		$feed->setViewFrame(0);
+		$feed->save();
+	}
+
+	function setViewFrame($id)
+	{
+		$feed = FeedQuery::create()->findPK($id);
+		$feed->setViewFrame(1);
+		$feed->save();
+	}
+
 	private function importFeed($feedUrl, $errors, $parentCat = null, $logFile = null)
 	{
 
@@ -142,6 +156,11 @@ class FeedController extends Controller {
 
 		try
 		{
+			if ($logFile == null)
+			{
+				$logFile = LOG_DIR."import-logs-".date("Ymd").".log";
+			}
+
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url((string)$feedUrl);
 			$feedSP->init();
@@ -189,6 +208,7 @@ class FeedController extends Controller {
 			$feed->setUpdated(0);
 			$feed->setDescription($feedSP->get_description());
 			$feed->setLink((string)$feedUrl);
+			$feed->setValid(1);
 			if ($parentCat != null)
 			{
 				$feed->setCategory($parentCat);

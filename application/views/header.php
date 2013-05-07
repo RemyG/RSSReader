@@ -93,7 +93,7 @@
 										echo '
 											<li class="load-feed-link'.$empty.'" id="load-feed-link-'.$feed->getId().'" 
 												data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
-												data-id="'.$feed->getId().'">
+												data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'">
 												<a href="feed/load/'.$feed->getId().'">
 													<span class="feed-title">'.$feed->getTitle().'</span>
 													<span class="feed-count">'.$feed->countEntrys($c).'</span>

@@ -12,6 +12,11 @@
 
 <script type="text/javascript">
 
+// rss or www
+var viewType = 'rss';
+
+var feedId = 0;
+
 // Show / hide the feeds from a category
 $(".nav-list").on("click", ".nav-header", function(e) {
 	e.preventDefault();
@@ -22,9 +27,11 @@ $(".nav-list").on("click", ".nav-header", function(e) {
 // Open a feed
 $(".load-feed-link").on("click", "a", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
-	var href = this.href;
 	var $field = $(this).parent();
+	viewType = $field.data('viewtype');
+	feedId = $field.data('id');
+	$('#overlay-content').show();
+	var href = this.href;	
 	$(this).blur();
 	var request = $.ajax({
 		url: href,
@@ -48,65 +55,78 @@ $(".load-feed-link").on("click", "a", function(e) {
 $("#feed-content").on("click", ".load-entry-link", function(e) {
 	e.preventDefault();	
 	var id = $(this).attr('data-id');
+	var href = $(this).data('href');
 	var $field = $(this);
 
 	if ($field.parent().hasClass('active')) {
 		$("#load-entry-div-" + id).hide();
 		$field.parent().removeClass('active')
 	} else {
-		var request = $.ajax({
-			url: 'entry/load/' + id,
-			type: "GET",
-			dataType: "html"
-		});
-		request.done(function(msg) {
-			$field.parent().addClass('read');
-			$('.load-entry-div').hide();
-			$('.load-entry-link').parent().removeClass('active');
-			$field.parent().addClass('active');
-			$("#load-entry-div-" + id).find('.entry-content').html(msg);		
-			$("#load-entry-div-" + id).show();
-			scrollToActiveEntry("load-entry-link-" + id);
-			updateCountForEntry(id);		
-		});
-		request.fail(function(jqXHR, textStatus) {
-			alert("Request failed: " + textStatus);
-		});
-	}
-	
+		openEntry(id, href);
+	}	
 });
+
+function openEntry(id, href)
+{
+	var $field = $('#load-entry-link-' + id);
+	$field.parent().addClass('read');
+	$('.load-entry-div').hide();
+	$('.load-entry-link').parent().removeClass('active');
+	$field.parent().addClass('active');	
+	$("#load-entry-div-" + id).show();
+	if (viewType == 'www')
+	{
+		openEntryAsFrame(id, href);
+	}
+	else if (viewType == 'rss')
+	{
+		openEntryAsSource(id);
+	}
+}
 
 // Show an entry inside an iframe
 $("#feed-content").on("click", ".iframe-link", function(e) {
-
 	e.preventDefault();
+	viewType = 'www';
 	var id = $(this).attr('data-id');
+	setFeedViewInFrame();
+	openEntryAsFrame(id, this.href);	
+});
+
+function openEntryAsFrame(id, href)
+{	
 	markEntryRead(id);
-	$(this).hide();
-	$("#load-entry-div-" + id).find('.source-link').show();	
+	$("#load-entry-div-" + id).find('.iframe-link').hide();
+	$("#load-entry-div-" + id).find('.source-link').show();
 	$("#load-entry-div-" + id).find('.entry-content').css('padding', 0);
-	$("#load-entry-div-" + id).find('.entry-content').html('<iframe src="' + this.href + '" width="100%" height="500px" '
+	$("#load-entry-div-" + id).find('.entry-content').html('<iframe src="' + href + '" width="100%" height="500px" '
 		+ 'sandbox="allow-same-origin" ></iframe>');
 	var containerHeight = $(window).height(),
 		metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 75;
 	$("#load-entry-div-" + id).find('iframe').height(containerHeight - metaHeight);
 	scrollToActiveEntry("load-entry-link-" + id);
-});
+}
 
 // Show the content of an entry from the source
 $("#feed-content").on("click", ".source-link", function(e) {
-
 	e.preventDefault();
+	viewType = 'rss';
 	var id = $(this).attr('data-id');
-	var $field = $(this);
+	setFeedViewAsSource();
+	openEntryAsSource(id);
+});
+
+function openEntryAsSource(id)
+{
+	
 	var request = $.ajax({
 		url: 'entry/load/' + id,
 		type: "GET",
 		dataType: "html"
 	});
 	request.done(function(msg) {
-		$field.hide();
 		markEntryRead(id);
+		$("#load-entry-div-" + id).find('.source-link').hide();
 		$("#load-entry-div-" + id).find('.iframe-link').show();
 		$("#load-entry-div-" + id).find('.entry-content').css('padding', 5);
 		$("#load-entry-div-" + id).find('.entry-content').html(msg);
@@ -115,8 +135,7 @@ $("#feed-content").on("click", ".source-link", function(e) {
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
 	});
-
-});
+}
 
 // Mark an entry as read
 $("#feed-content").on("click", ".read-link", function(e) {
@@ -393,6 +412,26 @@ function markEntryRead(id)
 		alert("Request failed: " + textStatus);
 	});
 	
+}
+
+function setFeedViewInFrame()
+{
+	$('#load-feed-link-' + feedId).data('viewtype', 'www');
+	var request = $.ajax({
+		url: 'feed/setviewframe/' + feedId,
+		type: "GET",
+		dataType: "html"
+	});
+}
+
+function setFeedViewAsSource()
+{
+	$('#load-feed-link-' + feedId).data('viewtype', 'rss');
+	var request = $.ajax({
+		url: 'feed/setviewsource/' + feedId,
+		type: "GET",
+		dataType: "html"
+	});
 }
 
 setInterval(function() {
