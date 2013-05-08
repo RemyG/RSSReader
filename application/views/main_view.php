@@ -388,7 +388,7 @@ setInterval(function() {
   	var id = $(this).data('id');
   	updateCountForFeed(id);
   });
-}, 1000 * 60 * 10); // where X is your every X minutes
+}, 1000 * 60 * 30); // where X is your every X minutes
 
 $(document.documentElement).keyup(function (event) {
 	event.preventDefault();
