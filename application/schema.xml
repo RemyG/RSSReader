@@ -16,7 +16,7 @@
 		</vendor>
 	</table>
 	<table name="feed" phpName="Feed">
-		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 		<column name="link" type="varchar" size="255" required="true" />
 		<column name="title" type="varchar" size="255" required="true" />
 		<column name="description" type="longvarchar" size="255" required="false" />
@@ -24,6 +24,7 @@
 		<column name="category_id" type="integer" required="true" />
 		<column name="valid" type="boolean" defaultValue="1" />
 		<column name="viewframe" type="boolean" defaultValue="0" />
+		<column name="cat_order" type="integer" phpName="catOrder" />
 		<foreign-key foreignTable="category" phpName="Category" refPhpName="Feed">
 			<reference local="category_id" foreign="id" />
 		</foreign-key>

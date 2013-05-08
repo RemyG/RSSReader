@@ -80,6 +80,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
     protected $viewframe;
 
     /**
+     * The value for the cat_order field.
+     * @var        int
+     */
+    protected $cat_order;
+
+    /**
      * @var        Category
      */
     protected $aCategory;
@@ -253,6 +259,17 @@ abstract class BaseFeed extends BaseObject implements Persistent
     {
 
         return $this->viewframe;
+    }
+
+    /**
+     * Get the [cat_order] column value.
+     *
+     * @return int
+     */
+    public function getcatOrder()
+    {
+
+        return $this->cat_order;
     }
 
     /**
@@ -446,6 +463,27 @@ abstract class BaseFeed extends BaseObject implements Persistent
     } // setViewframe()
 
     /**
+     * Set the value of [cat_order] column.
+     *
+     * @param int $v new value
+     * @return Feed The current object (for fluent API support)
+     */
+    public function setcatOrder($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->cat_order !== $v) {
+            $this->cat_order = $v;
+            $this->modifiedColumns[] = FeedPeer::CAT_ORDER;
+        }
+
+
+        return $this;
+    } // setcatOrder()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -493,6 +531,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->category_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
             $this->valid = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
             $this->viewframe = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->cat_order = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -502,7 +541,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = FeedPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = FeedPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Feed object", $e);
@@ -774,6 +813,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::VIEWFRAME)) {
             $modifiedColumns[':p' . $index++]  = '`viewframe`';
         }
+        if ($this->isColumnModified(FeedPeer::CAT_ORDER)) {
+            $modifiedColumns[':p' . $index++]  = '`cat_order`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `rss_feed` (%s) VALUES (%s)',
@@ -808,6 +850,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
                         break;
                     case '`viewframe`':
                         $stmt->bindValue($identifier, (int) $this->viewframe, PDO::PARAM_INT);
+                        break;
+                    case '`cat_order`':
+                        $stmt->bindValue($identifier, $this->cat_order, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -987,6 +1032,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             case 7:
                 return $this->getViewframe();
                 break;
+            case 8:
+                return $this->getcatOrder();
+                break;
             default:
                 return null;
                 break;
@@ -1024,6 +1072,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $keys[5] => $this->getCategoryId(),
             $keys[6] => $this->getValid(),
             $keys[7] => $this->getViewframe(),
+            $keys[8] => $this->getcatOrder(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aCategory) {
@@ -1090,6 +1139,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
             case 7:
                 $this->setViewframe($value);
                 break;
+            case 8:
+                $this->setcatOrder($value);
+                break;
         } // switch()
     }
 
@@ -1122,6 +1174,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setCategoryId($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setValid($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setViewframe($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setcatOrder($arr[$keys[8]]);
     }
 
     /**
@@ -1141,6 +1194,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::CATEGORY_ID)) $criteria->add(FeedPeer::CATEGORY_ID, $this->category_id);
         if ($this->isColumnModified(FeedPeer::VALID)) $criteria->add(FeedPeer::VALID, $this->valid);
         if ($this->isColumnModified(FeedPeer::VIEWFRAME)) $criteria->add(FeedPeer::VIEWFRAME, $this->viewframe);
+        if ($this->isColumnModified(FeedPeer::CAT_ORDER)) $criteria->add(FeedPeer::CAT_ORDER, $this->cat_order);
 
         return $criteria;
     }
@@ -1211,6 +1265,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $copyObj->setCategoryId($this->getCategoryId());
         $copyObj->setValid($this->getValid());
         $copyObj->setViewframe($this->getViewframe());
+        $copyObj->setcatOrder($this->getcatOrder());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1576,6 +1631,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $this->category_id = null;
         $this->valid = null;
         $this->viewframe = null;
+        $this->cat_order = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

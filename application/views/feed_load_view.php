@@ -68,7 +68,10 @@
 							<i class="icon-remove-sign"> </i>
 						</a>
 					</div>
-					<div id="load-entry-link-'.$entry->getId().'" class="load-entry-link" data-id="'.$entry->getId().'" data-href="'.$entry->getLink().'">
+					<div 	id="load-entry-link-'.$entry->getId().'" 
+							class="load-entry-link" 
+							data-id="'.$entry->getId().'" 
+							data-href="'.$entry->getLink().'">
 						<div class="title-wrapper">
 							<div class="title">'.$entry->getTitle().'</div>
 						</div>
@@ -76,13 +79,6 @@
 					</div>
 				</div>
 				<div class="load-entry-div" id="load-entry-div-'.$entry->getId().'">
-					<div class="entry-menu">
-						<a class="iframe-link" data-id="'.$entry->getId().'" href="'.$entry->getLink().'" title="View as website">WWW</a>
-						<a class="source-link" data-id="'.$entry->getId().'" href="'.$entry->getLink().'">RSS</a>
-						<a href="'.$entry->getLink().'" target="_blank" title="Open website in a new tab"><i class="icon-forward"> </i></a>
-						<a class="read-link" href="'.$entry->getLink().'" data-id="'.$entry->getId().'" title="Mark as read"><i class="icon-check"> </i></a>
-						<a class="unread-link" href="'.$entry->getLink().'" data-id="'.$entry->getId().'" title="Mark as unread"><i class="icon-check-empty"> </i></a>
-					</div>
 					<div class="entry-content"></div>
 				</div>
 			</div>';

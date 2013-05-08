@@ -149,6 +149,68 @@ class FeedController extends Controller {
 		$feed->save();
 	}
 
+	function order($feedId, $catId, $order)
+	{
+		$category = CategoryQuery::create()->findPK($catId);
+		$feed = FeedQuery::create()->findPK($feedId);
+		if ($feed->getCategory()->getId() == $catId)
+		{
+			$i = 0;
+			$movedBack = true;
+			foreach ($category->getFeeds() as $tmpFeed)
+			{
+				if ($i < $order)
+				{
+					if ($feedId == $tmpFeed->getId())
+					{
+						$tmpFeed->setcatOrder($order);
+						$movedBack = false;
+					}
+					else
+					{
+						$tmpFeed->setcatOrder($i);
+						$i++;
+					}
+				}
+				else if ($i >= $order)
+				{
+					if ($feedId == $tmpFeed->getId())
+					{
+						$tmpFeed->setcatOrder($order);
+					}
+					else
+					{
+						$tmpFeed->setcatOrder($i + 1);
+						$i++;
+					}
+				}
+				$tmpFeed->save();
+			}
+		}
+		else
+		{
+			$feed->setCategory($category);
+			$i = 0;
+			foreach ($category->getFeeds() as $tmpFeed)
+			{
+				if ($i < $order)
+				{
+					$tmpFeed->setcatOrder($i);
+					$tmpFeed->save();
+				}
+				else if ($i >= $order)
+				{					
+					$tmpFeed->setcatOrder($i + 1);
+					$tmpFeed->save();
+				}
+				$i++;
+			}
+			$feed->setcatOrder($order);
+			$feed->save();
+		}
+		
+	}
+
 	private function importFeed($feedUrl, $errors, $parentCat = null, $logFile = null)
 	{
 

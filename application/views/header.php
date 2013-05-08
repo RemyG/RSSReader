@@ -71,7 +71,7 @@
 
 			<div id="left-menu">
 
-				<ul class="nav nav-list">
+				<ul id="feed-list" class="nav nav-list">
 					<?php
 						if (isset($categoriesTree))
 						{
@@ -87,24 +87,53 @@
 								$i++;
 								echo '<li class="nav-header" data-cat-id="'.$category->getId().'">'.$category->getName().'</li>';
 								foreach ($category->getFeeds() as $feed) {
-									if ($feed->getValid() == 1 || $feed->countEntrys($c) > 0)
-									{
-										$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';
-										echo '
-											<li class="load-feed-link'.$empty.'" id="load-feed-link-'.$feed->getId().'" 
-												data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
-												data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'">
-												<a href="feed/load/'.$feed->getId().'">
-													<span class="feed-title">'.$feed->getTitle().'</span>
-													<span class="feed-count">'.$feed->countEntrys($c).'</span>
-												</a>
-											</li>';
-									}
-								}	
+									$valid = $feed->getValid() == 1 || $feed->countEntrys($c) > 0 ? '' : ' not-valid';
+									$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';
+									echo '
+										<li class="load-feed-link'.$empty.$valid.'" id="load-feed-link-'.$feed->getId().'" 
+											data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
+											data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'">
+											<a href="feed/load/'.$feed->getId().'">
+												<span class="feed-title">'.$feed->getTitle().'</span>
+												<span class="feed-count">'.$feed->countEntrys($c).'</span>
+											</a>
+										</li>';
+								}
 							}
 						}
 					?>
 				</ul>
+
+				<script type="text/javascript">
+				$(function() {
+					$( "#feed-list" ).sortable({
+						items: "li:not(.nav-header)",
+						update: function(event, ui)
+						{
+							// alert(ui.item.attr('id'));
+							// alert(ui.item.prevAll(".nav-header:first").html());
+							var feedId = ui.item.data('id');
+							var catId = ui.item.prevAll(".nav-header:first").data('cat-id');
+							var order = ui.item.prevUntil(ui.item.prevAll(".nav-header:first"), ".load-feed-link").size();
+							// alert(feedid + " - " + cat + " - " + order);
+							setNewOrder(feedId, catId, order);
+							// alert($('#feed-list').sortable('serialize'));
+						}
+					});
+				});
+				function setNewOrder(feedId, catId, order)
+				{
+					var request = $.ajax({
+						url: "feed/order/" + feedId + "/" + catId + "/" + order,
+						type: "GET",
+						dataType: "html"
+					});
+					request.done(function(msg) {
+					});
+					request.fail(function(jqXHR, textStatus) {
+					});
+				}
+				</script>
 				
 			</div>
 

@@ -14,6 +14,7 @@
  * @method FeedQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  * @method FeedQuery orderByValid($order = Criteria::ASC) Order by the valid column
  * @method FeedQuery orderByViewframe($order = Criteria::ASC) Order by the viewframe column
+ * @method FeedQuery orderBycatOrder($order = Criteria::ASC) Order by the cat_order column
  *
  * @method FeedQuery groupById() Group by the id column
  * @method FeedQuery groupByLink() Group by the link column
@@ -23,6 +24,7 @@
  * @method FeedQuery groupByCategoryId() Group by the category_id column
  * @method FeedQuery groupByValid() Group by the valid column
  * @method FeedQuery groupByViewframe() Group by the viewframe column
+ * @method FeedQuery groupBycatOrder() Group by the cat_order column
  *
  * @method FeedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method FeedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -46,6 +48,7 @@
  * @method Feed findOneByCategoryId(int $category_id) Return the first Feed filtered by the category_id column
  * @method Feed findOneByValid(boolean $valid) Return the first Feed filtered by the valid column
  * @method Feed findOneByViewframe(boolean $viewframe) Return the first Feed filtered by the viewframe column
+ * @method Feed findOneBycatOrder(int $cat_order) Return the first Feed filtered by the cat_order column
  *
  * @method array findById(int $id) Return Feed objects filtered by the id column
  * @method array findByLink(string $link) Return Feed objects filtered by the link column
@@ -55,6 +58,7 @@
  * @method array findByCategoryId(int $category_id) Return Feed objects filtered by the category_id column
  * @method array findByValid(boolean $valid) Return Feed objects filtered by the valid column
  * @method array findByViewframe(boolean $viewframe) Return Feed objects filtered by the viewframe column
+ * @method array findBycatOrder(int $cat_order) Return Feed objects filtered by the cat_order column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -162,7 +166,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `category_id`, `valid`, `viewframe` FROM `rss_feed` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `category_id`, `valid`, `viewframe`, `cat_order` FROM `rss_feed` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -519,6 +523,48 @@ abstract class BaseFeedQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FeedPeer::VIEWFRAME, $viewframe, $comparison);
+    }
+
+    /**
+     * Filter the query on the cat_order column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBycatOrder(1234); // WHERE cat_order = 1234
+     * $query->filterBycatOrder(array(12, 34)); // WHERE cat_order IN (12, 34)
+     * $query->filterBycatOrder(array('min' => 12)); // WHERE cat_order >= 12
+     * $query->filterBycatOrder(array('max' => 12)); // WHERE cat_order <= 12
+     * </code>
+     *
+     * @param     mixed $catOrder The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterBycatOrder($catOrder = null, $comparison = null)
+    {
+        if (is_array($catOrder)) {
+            $useMinMax = false;
+            if (isset($catOrder['min'])) {
+                $this->addUsingAlias(FeedPeer::CAT_ORDER, $catOrder['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($catOrder['max'])) {
+                $this->addUsingAlias(FeedPeer::CAT_ORDER, $catOrder['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(FeedPeer::CAT_ORDER, $catOrder, $comparison);
     }
 
     /**

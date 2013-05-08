@@ -25,6 +25,8 @@
 @header-bg-hover: #1b7e5a;
 @menu-width: 350px;
 
+@footer-menu-height: 30px;
+
 html, body {
 	padding: 0;
 	margin: 0;
@@ -92,6 +94,9 @@ body {
 			display: none;
 		}
 	}
+	&.not-valid {
+		display: none;
+	}
 }
 
 a, a:hover, a:focus {
@@ -124,14 +129,59 @@ a, a:hover, a:focus {
 	z-index: 99999;
 }
 
+#footer-menu {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: @menu-width;
+	height: @footer-menu-height;
+	background-color: #ddd;
+
+	#entry-meta-links,
+	#entry-navigation-links {
+		display: inline-block;
+		display: none;
+		a {
+			color: #232323;
+			font-size: 0.6em;
+			display: inline-block;
+			padding: 0px 8px;
+			margin: 0;
+			text-decoration: none;
+			font-weight: bold;
+			line-height: @footer-menu-height;
+			i {
+				font-size: inherit;
+			}
+			&:hover {
+				background-color: #ccc;
+			}
+			&.read-link {
+				display: none;
+			}
+		}
+	}
+
+	#entry-meta-links {
+		float: left;
+	}
+	#entry-navigation-links {
+		float: right;
+	}
+}
+
 #content {
 	position: fixed;
 	top: 45px;
 	right: 0;
-	bottom: 0;
-	left: @menu-width + 10;
+	bottom: @footer-menu-height;
+	left: @menu-width;
 	overflow: auto;
-	padding: 10px;
+
+	#feed-content {
+		margin: 5px;
+	}	
+
 	div.feed-title {
 		font-size: 1.4em;		
 		padding: 7px 5px;
@@ -238,29 +288,7 @@ a, a:hover, a:focus {
 				div.entry-menu {
 					/*background-color: #eeebe4;*/
 					padding: 0 5px;
-					a {
-						color: #232323;
-						font-size: 0.6em;
-						-webkit-border-radius: 5px;
-						-moz-border-radius: 5px;
-						border-radius: 5px;
-						display: inline-block;
-						padding: 4px 8px;
-						text-decoration: none;
-						font-weight: bold;
-						i {
-							font-size: inherit;
-						}
-						&:hover {
-							background-color: #ddd;
-						}
-						&.read-link {
-							display: none;
-						}
-					}
-					a.source-link {
-						display: none;
-					}
+					
 				}
 				div.entry-content {
 					padding: 5px;

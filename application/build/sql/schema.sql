@@ -38,6 +38,7 @@ CREATE TABLE `rss_feed`
     `category_id` INTEGER NOT NULL,
     `valid` TINYINT(1) DEFAULT 1,
     `viewframe` TINYINT(1) DEFAULT 0,
+    `cat_order` INTEGER,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `rss_feed_U_1` (`link`),
     INDEX `rss_feed_FI_1` (`category_id`),

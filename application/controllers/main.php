@@ -8,6 +8,10 @@ class MainController extends Controller {
 		$template->set('pageTitle', PROJECT_NAME);
 		$template->set('pageDescription', 'Welcome to PFP - Main page');	
 		$categories = CategoryQuery::create()->findByParentCategoryId(1);
+		foreach ($categories as $category)
+		{
+			$category->setFeeds($category->getFeeds(FeedQuery::create()->orderBycatOrder()));
+		}
   		$template->set('categoriesTree', $categories);
   		$template->render();
 	}
