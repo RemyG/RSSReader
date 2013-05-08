@@ -52,6 +52,11 @@ $(".load-feed-link").on("click", "a", function(e) {
 	});
 });
 
+// Open links in new tabs
+$('#feed-content').on('click', '.entry-content a', function(e) {
+	$(this).attr('target','_blank');
+});
+
 // Open an entry
 $("#feed-content").on("click", ".load-entry-link", function(e) {
 	e.preventDefault();	
