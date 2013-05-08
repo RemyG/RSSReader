@@ -42,12 +42,13 @@ $ git submodule update
 
 * Go to `http://your_url/installation.php` in a browser.
 * Fill the form with the correct infomation:
-** 
+	* Site Base URL: the base URL of the application
+	* DB Host: the database host URL
+	* DB Name: the database name
+	* DB Username: the database account username
+	* DB Password: the database account password	
 * Go to `BASE_URL` in a browser, and create the main user as asked.
 * You're good to go!
-
-## Utilisation
-
 
 ## License
 
@@ -63,4 +64,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Changelog
 
-**v0.1** First version of the project
+**v0.2.0**
+
+* jQueryMobile mobile website
+* jQueryUI sortable feeds list
+* preferences saving
+* keyboard navigation
+* old entries clean-up
+
+**v0.1**
+
+* First version of the project
