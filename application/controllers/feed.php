@@ -350,8 +350,8 @@ class FeedController extends Controller {
 			foreach ($feedSP->get_items() as $item)
 			{
 				$entryUpdated = $item->get_date('U');
-				if ($entryUpdated > $lastUpdate)
-				{
+				/*if ($entryUpdated > $lastUpdate)
+				{*/
 					$link = $item->get_link();
 					$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
 					if ($entry == null)
@@ -365,7 +365,7 @@ class FeedController extends Controller {
 					$entry->setTitle($item->get_title());
 					$entry->setContent($item->get_content());
 					$entry->save();
-				}
+				/*}*/
 			}
 
 			$feedSP = null;
