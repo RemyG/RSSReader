@@ -48,6 +48,13 @@ abstract class BaseCategory extends BaseObject implements Persistent
     protected $parent_category_id;
 
     /**
+     * The value for the cat_order field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $cat_order;
+
+    /**
      * @var        Category
      */
     protected $aParentCategory;
@@ -97,6 +104,27 @@ abstract class BaseCategory extends BaseObject implements Persistent
     protected $feedsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->cat_order = 0;
+    }
+
+    /**
+     * Initializes internal state of BaseCategory object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
+
+    /**
      * Get the [id] column value.
      *
      * @return int
@@ -127,6 +155,17 @@ abstract class BaseCategory extends BaseObject implements Persistent
     {
 
         return $this->parent_category_id;
+    }
+
+    /**
+     * Get the [cat_order] column value.
+     *
+     * @return int
+     */
+    public function getCatOrder()
+    {
+
+        return $this->cat_order;
     }
 
     /**
@@ -197,6 +236,27 @@ abstract class BaseCategory extends BaseObject implements Persistent
     } // setParentCategoryId()
 
     /**
+     * Set the value of [cat_order] column.
+     *
+     * @param int $v new value
+     * @return Category The current object (for fluent API support)
+     */
+    public function setCatOrder($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->cat_order !== $v) {
+            $this->cat_order = $v;
+            $this->modifiedColumns[] = CategoryPeer::CAT_ORDER;
+        }
+
+
+        return $this;
+    } // setCatOrder()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -206,6 +266,10 @@ abstract class BaseCategory extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->cat_order !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -231,6 +295,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->parent_category_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->cat_order = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -240,7 +305,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = CategoryPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = CategoryPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Category object", $e);
@@ -517,6 +582,9 @@ abstract class BaseCategory extends BaseObject implements Persistent
         if ($this->isColumnModified(CategoryPeer::PARENT_CATEGORY_ID)) {
             $modifiedColumns[':p' . $index++]  = '`parent_category_id`';
         }
+        if ($this->isColumnModified(CategoryPeer::CAT_ORDER)) {
+            $modifiedColumns[':p' . $index++]  = '`cat_order`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `rss_category` (%s) VALUES (%s)',
@@ -536,6 +604,9 @@ abstract class BaseCategory extends BaseObject implements Persistent
                         break;
                     case '`parent_category_id`':
                         $stmt->bindValue($identifier, $this->parent_category_id, PDO::PARAM_INT);
+                        break;
+                    case '`cat_order`':
+                        $stmt->bindValue($identifier, $this->cat_order, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -708,6 +779,9 @@ abstract class BaseCategory extends BaseObject implements Persistent
             case 2:
                 return $this->getParentCategoryId();
                 break;
+            case 3:
+                return $this->getCatOrder();
+                break;
             default:
                 return null;
                 break;
@@ -740,6 +814,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getName(),
             $keys[2] => $this->getParentCategoryId(),
+            $keys[3] => $this->getCatOrder(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aParentCategory) {
@@ -794,6 +869,9 @@ abstract class BaseCategory extends BaseObject implements Persistent
             case 2:
                 $this->setParentCategoryId($value);
                 break;
+            case 3:
+                $this->setCatOrder($value);
+                break;
         } // switch()
     }
 
@@ -821,6 +899,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setParentCategoryId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setCatOrder($arr[$keys[3]]);
     }
 
     /**
@@ -835,6 +914,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
         if ($this->isColumnModified(CategoryPeer::ID)) $criteria->add(CategoryPeer::ID, $this->id);
         if ($this->isColumnModified(CategoryPeer::NAME)) $criteria->add(CategoryPeer::NAME, $this->name);
         if ($this->isColumnModified(CategoryPeer::PARENT_CATEGORY_ID)) $criteria->add(CategoryPeer::PARENT_CATEGORY_ID, $this->parent_category_id);
+        if ($this->isColumnModified(CategoryPeer::CAT_ORDER)) $criteria->add(CategoryPeer::CAT_ORDER, $this->cat_order);
 
         return $criteria;
     }
@@ -900,6 +980,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
     {
         $copyObj->setName($this->getName());
         $copyObj->setParentCategoryId($this->getParentCategoryId());
+        $copyObj->setCatOrder($this->getCatOrder());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1489,10 +1570,12 @@ abstract class BaseCategory extends BaseObject implements Persistent
         $this->id = null;
         $this->name = null;
         $this->parent_category_id = null;
+        $this->cat_order = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

@@ -81,6 +81,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
     /**
      * The value for the cat_order field.
+     * Note: this column has a database default value of: 0
      * @var        int
      */
     protected $cat_order;
@@ -132,6 +133,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     {
         $this->valid = true;
         $this->viewframe = false;
+        $this->cat_order = 0;
     }
 
     /**
@@ -498,6 +500,10 @@ abstract class BaseFeed extends BaseObject implements Persistent
             }
 
             if ($this->viewframe !== false) {
+                return false;
+            }
+
+            if ($this->cat_order !== 0) {
                 return false;
             }
 

@@ -9,10 +9,12 @@
  * @method CategoryQuery orderById($order = Criteria::ASC) Order by the id column
  * @method CategoryQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method CategoryQuery orderByParentCategoryId($order = Criteria::ASC) Order by the parent_category_id column
+ * @method CategoryQuery orderByCatOrder($order = Criteria::ASC) Order by the cat_order column
  *
  * @method CategoryQuery groupById() Group by the id column
  * @method CategoryQuery groupByName() Group by the name column
  * @method CategoryQuery groupByParentCategoryId() Group by the parent_category_id column
+ * @method CategoryQuery groupByCatOrder() Group by the cat_order column
  *
  * @method CategoryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CategoryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -35,10 +37,12 @@
  *
  * @method Category findOneByName(string $name) Return the first Category filtered by the name column
  * @method Category findOneByParentCategoryId(int $parent_category_id) Return the first Category filtered by the parent_category_id column
+ * @method Category findOneByCatOrder(int $cat_order) Return the first Category filtered by the cat_order column
  *
  * @method array findById(int $id) Return Category objects filtered by the id column
  * @method array findByName(string $name) Return Category objects filtered by the name column
  * @method array findByParentCategoryId(int $parent_category_id) Return Category objects filtered by the parent_category_id column
+ * @method array findByCatOrder(int $cat_order) Return Category objects filtered by the cat_order column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -146,7 +150,7 @@ abstract class BaseCategoryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `parent_category_id` FROM `rss_category` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `name`, `parent_category_id`, `cat_order` FROM `rss_category` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -348,6 +352,48 @@ abstract class BaseCategoryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CategoryPeer::PARENT_CATEGORY_ID, $parentCategoryId, $comparison);
+    }
+
+    /**
+     * Filter the query on the cat_order column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCatOrder(1234); // WHERE cat_order = 1234
+     * $query->filterByCatOrder(array(12, 34)); // WHERE cat_order IN (12, 34)
+     * $query->filterByCatOrder(array('min' => 12)); // WHERE cat_order >= 12
+     * $query->filterByCatOrder(array('max' => 12)); // WHERE cat_order <= 12
+     * </code>
+     *
+     * @param     mixed $catOrder The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CategoryQuery The current query, for fluid interface
+     */
+    public function filterByCatOrder($catOrder = null, $comparison = null)
+    {
+        if (is_array($catOrder)) {
+            $useMinMax = false;
+            if (isset($catOrder['min'])) {
+                $this->addUsingAlias(CategoryPeer::CAT_ORDER, $catOrder['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($catOrder['max'])) {
+                $this->addUsingAlias(CategoryPeer::CAT_ORDER, $catOrder['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CategoryPeer::CAT_ORDER, $catOrder, $comparison);
     }
 
     /**

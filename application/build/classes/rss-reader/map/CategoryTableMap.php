@@ -41,6 +41,7 @@ class CategoryTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addForeignKey('parent_category_id', 'ParentCategoryId', 'INTEGER', 'rss_category', 'id', false, null, null);
+        $this->addColumn('cat_order', 'CatOrder', 'INTEGER', false, null, 0);
         // validators
     } // initialize()
 

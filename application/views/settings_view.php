@@ -8,11 +8,11 @@
 
 		<div class="span6">
 
-			<ul>
+			<ul id="category-list" class="nav nav-pills nav-stacked">
 				<?php
 					foreach ($categories as $category)
 					{
-						echo '<li>'.$category->getName().'</li>';
+						echo '<li data-id="'.$category->getId().'"><a href="#">'.$category->getName().'</a></li>';
 					}
 				?>
 			</ul>
@@ -46,3 +46,31 @@
 	<input type="hidden" name="action" value="update-user" />
 	<input type="submit" value="Update" />
 </form>
+
+<script type="text/javascript">
+$(function() {
+	$( "#category-list" ).sortable({
+		update: function(event, ui)
+		{
+			var catId = ui.item.data('id');
+			var order = ui.item.prevAll("li").size();
+			setNewOrder(catId, order);
+		}
+	});
+});
+function setNewOrder(catId, order)
+{
+	var request = $.ajax({
+		url: "category/order/" + catId + "/" + order,
+		type: "GET",
+		dataType: "html"
+	});
+	request.done(function(msg) {
+	});
+	request.fail(function(jqXHR, textStatus) {
+	});
+}
+$("#category-list").on("click", "a", function(e) {
+	e.preventDefault();
+});
+</script>

@@ -24,13 +24,13 @@ abstract class BaseCategoryPeer
     const TM_CLASS = 'CategoryTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
     const ID = 'rss_category.id';
@@ -40,6 +40,9 @@ abstract class BaseCategoryPeer
 
     /** the column name for the parent_category_id field */
     const PARENT_CATEGORY_ID = 'rss_category.parent_category_id';
+
+    /** the column name for the cat_order field */
+    const CAT_ORDER = 'rss_category.cat_order';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -60,12 +63,12 @@ abstract class BaseCategoryPeer
      * e.g. CategoryPeer::$fieldNames[CategoryPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'ParentCategoryId', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'parentCategoryId', ),
-        BasePeer::TYPE_COLNAME => array (CategoryPeer::ID, CategoryPeer::NAME, CategoryPeer::PARENT_CATEGORY_ID, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'PARENT_CATEGORY_ID', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'parent_category_id', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'ParentCategoryId', 'CatOrder', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'parentCategoryId', 'catOrder', ),
+        BasePeer::TYPE_COLNAME => array (CategoryPeer::ID, CategoryPeer::NAME, CategoryPeer::PARENT_CATEGORY_ID, CategoryPeer::CAT_ORDER, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'PARENT_CATEGORY_ID', 'CAT_ORDER', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'parent_category_id', 'cat_order', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -75,12 +78,12 @@ abstract class BaseCategoryPeer
      * e.g. CategoryPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'ParentCategoryId' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'parentCategoryId' => 2, ),
-        BasePeer::TYPE_COLNAME => array (CategoryPeer::ID => 0, CategoryPeer::NAME => 1, CategoryPeer::PARENT_CATEGORY_ID => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'PARENT_CATEGORY_ID' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'parent_category_id' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'ParentCategoryId' => 2, 'CatOrder' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'parentCategoryId' => 2, 'catOrder' => 3, ),
+        BasePeer::TYPE_COLNAME => array (CategoryPeer::ID => 0, CategoryPeer::NAME => 1, CategoryPeer::PARENT_CATEGORY_ID => 2, CategoryPeer::CAT_ORDER => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'PARENT_CATEGORY_ID' => 2, 'CAT_ORDER' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'parent_category_id' => 2, 'cat_order' => 3, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -157,10 +160,12 @@ abstract class BaseCategoryPeer
             $criteria->addSelectColumn(CategoryPeer::ID);
             $criteria->addSelectColumn(CategoryPeer::NAME);
             $criteria->addSelectColumn(CategoryPeer::PARENT_CATEGORY_ID);
+            $criteria->addSelectColumn(CategoryPeer::CAT_ORDER);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.parent_category_id');
+            $criteria->addSelectColumn($alias . '.cat_order');
         }
     }
 

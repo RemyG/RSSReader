@@ -7,7 +7,7 @@ class MainController extends Controller {
 		$template = $this->loadView('main_view');
 		$template->set('pageTitle', PROJECT_NAME);
 		$template->set('pageDescription', 'Welcome to PFP - Main page');	
-		$categories = CategoryQuery::create()->findByParentCategoryId(1);
+		$categories = CategoryQuery::create()->orderByCatOrder()->findByParentCategoryId(1);
 		foreach ($categories as $category)
 		{
 			$category->setFeeds($category->getFeeds(FeedQuery::create()->orderBycatOrder()));

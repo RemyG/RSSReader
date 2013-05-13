@@ -4,6 +4,7 @@
 		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 		<column name="name" type="varchar" size="255" required="true" />
 		<column name="parent_category_id" type="integer" required="false" />
+		<column name="cat_order" type="integer" phpName="CatOrder" defaultValue="0" />
 		<foreign-key foreignTable="category" phpName="ParentCategory" refPhpName="ChildrenCategory">
 			<reference local="parent_category_id" foreign="id" />
 		</foreign-key>
@@ -24,7 +25,7 @@
 		<column name="category_id" type="integer" required="true" />
 		<column name="valid" type="boolean" defaultValue="1" />
 		<column name="viewframe" type="boolean" defaultValue="0" />
-		<column name="cat_order" type="integer" phpName="catOrder" />
+		<column name="cat_order" type="integer" phpName="catOrder" defaultValue="0" />
 		<foreign-key foreignTable="category" phpName="Category" refPhpName="Feed">
 			<reference local="category_id" foreign="id" />
 		</foreign-key>
