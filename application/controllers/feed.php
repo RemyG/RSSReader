@@ -116,7 +116,8 @@ class FeedController extends Controller {
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
 		$count = $feed->countEntrys($c);
-		echo $count;
+		$catCount = $feed->getCategory()->countEntrys($c);
+		echo json_encode(array('feed' => $count, 'category' => $catCount));
 	}
 
 	function markRead($id)

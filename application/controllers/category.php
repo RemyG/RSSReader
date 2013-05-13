@@ -39,4 +39,40 @@ class CategoryController extends Controller {
 		}
 	}
 
+	function load($id, $all = null)
+	{
+		$category = CategoryQuery::create()->findPK($id);
+
+		if ($all == null || $all == 0)
+		{
+			$entries = EntryQuery::create()
+				->useFeedQuery()
+					->filterByCategoryId($id)
+				->endUse()
+			->orderByUpdated('desc')
+			->filterByRead(0)
+			->find();
+		}
+		else
+		{
+			$entries = EntryQuery::create()
+				->useFeedQuery()
+					->filterByCategoryId($id)
+				->endUse()
+			->orderByUpdated('desc')
+			->find();
+		}
+
+		$template = $this->loadView('category_load_view');
+		$template->set('category', $category);
+		$template->set('entries', $entries);
+		return $template->renderString();
+	}
+
+	function count($id)
+	{
+		$category = CategoryQuery::create()->findPK($id);
+		echo $category->countEntrys();
+	}
+
 }

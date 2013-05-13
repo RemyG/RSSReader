@@ -85,7 +85,14 @@
 									echo '<li class="divider"></li>';
 								}
 								$i++;
-								echo '<li class="nav-header" data-cat-id="'.$category->getId().'">'.$category->getName().'</li>';
+								echo '
+									<li class="nav-header" data-cat-id="'.$category->getId().'">
+										<i class="icon-collapse-alt"> </i>
+										<div>
+											'.$category->getName().'
+											<span class="category-count">'.$category->countEntrys().'</span>
+										</div>
+									</li>';
 								foreach ($category->getFeeds() as $feed) {
 									$valid = $feed->getValid() == 1 || $feed->countEntrys($c) > 0 ? '' : ' not-valid';
 									$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';

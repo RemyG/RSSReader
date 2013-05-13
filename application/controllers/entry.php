@@ -18,7 +18,9 @@ class EntryController extends Controller {
     	$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
     	$count = $entry->getFeed()->countEntrys($c);
-    	echo $count;
+    	$catCount = $entry->getFeed()->getCategory()->countEntrys($c);
+    	//echo $count.','.$catCount;
+    	echo json_encode(array('feed' => $count, 'category' => $catCount));
     }
 
     function markRead($id)
