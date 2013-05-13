@@ -19,7 +19,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/less-1.3.3.min.js"></script>
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-2.0.0.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/bootstrap.min.js"></script>
 
@@ -110,14 +110,10 @@
 						items: "li:not(.nav-header)",
 						update: function(event, ui)
 						{
-							// alert(ui.item.attr('id'));
-							// alert(ui.item.prevAll(".nav-header:first").html());
 							var feedId = ui.item.data('id');
 							var catId = ui.item.prevAll(".nav-header:first").data('cat-id');
 							var order = ui.item.prevUntil(ui.item.prevAll(".nav-header:first"), ".load-feed-link").size();
-							// alert(feedid + " - " + cat + " - " + order);
 							setNewOrder(feedId, catId, order);
-							// alert($('#feed-list').sortable('serialize'));
 						}
 					});
 				});
