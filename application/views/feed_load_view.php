@@ -19,16 +19,15 @@
 			<div class="title">'.$feed->getTitle().'</div>
 			<div class="meta">
 				<a href="feed/markread/'.$feed->getId().'" data-id="'.$feed->getId().'" class="feed-markread" title="Mark all items read"><i class="icon-check"> </i></a>
-				<a href="feed/update/'.$feed->getId().'" data-id="'.$feed->getId().'" class="feed-update" title="Update feed"><i class="icon-refresh"> </i></a>
-				    <span class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"> </i></a>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-							<li><a href="#" data-id="'.$feed->getId().'" class="show-all">Show all</a></li>
-							<li style="display: none;"><a href="#" data-id="'.$feed->getId().'" class="show-unread">Show unread</a></li>
-							<li class="divider"></li>
-							<li><a href="#" data-id="'.$feed->getId().'" class="delete-feed">Delete feed</a></li>
-						</ul>
-					</span>
+			    <span class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"> </i></a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li><a href="#" data-id="'.$feed->getId().'" class="show-all">Show all</a></li>
+						<li style="display: none;"><a href="#" data-id="'.$feed->getId().'" class="show-unread">Show unread</a></li>
+						<li class="divider"></li>
+						<li><a href="#" data-id="'.$feed->getId().'" class="delete-feed">Delete feed</a></li>
+					</ul>
+				</span>
 			</div>
 		</div>';
 	echo '<div class="list-entries">';

@@ -17,19 +17,73 @@ var viewType = 'rss';
 
 var feedId = 0;
 
-// Show / hide the feeds from a category
-$(".nav-list").on("click", ".nav-header", function(e) {
+// Click on button Refresh
+$('#header').on('click', '#button-refresh', function(e) {
 	e.preventDefault();
-	var catId = $(this).attr('data-cat-id');
-	$('.load-feed-link[data-cat-id="'+catId+'"]').toggle();
+	var href = $(this).data('href');
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Updating");
+	var id = $(this).attr('data-id');
+	var request = $.ajax({
+		url: href,
+		type: "GET",
+		dataType: "html"
+	});
+	request.done(function(msg) {
+		$("#feed-content").html(msg);
+		updateCountForFeed(id);
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		alert("Request failed: " + textStatus);
+	});
+});
+
+// Show / hide the feeds from a category
+$("#feed-list").on("click", "li.category div i", function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	$(this).parents('li.category').find('ul.feeds').toggle();
+	$(this).toggleClass('icon-expand-alt icon-collapse-alt');
+});
+
+// Open a category
+$("#feed-list").on("click", "li.category div", function(e) {
+	e.preventDefault();
+	$('#overlay-content').show();
+	var $field = $(this).parents('li.category');
+	var $id = $(this).parents('li.category').data('cat-id');
+	var request = $.ajax({
+		url: 'category/load/' + $id,
+		type: "GET",
+		dataType: "html"
+	});
+	request.done(function(msg) {
+		$('.load-feed-link').removeClass('active');
+		$('li.category').removeClass('active');
+		$('li.load-feed-link').removeClass('active');
+		$field.addClass('active');
+		$("#feed-content").html(msg);
+		scrollToActiveEntry('feed-content');
+		$('#entry-navigation-links').show();		
+		$('#button-refresh').show();
+		$('#button-refresh').attr('data-href', 'category/update/'+$id);
+		$('#button-refresh').attr('data-id', $id);
+		$('#overlay-content').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay-content').hide();
+		alert("Request failed: " + textStatus);
+	});
 });
 
 // Open a feed
 $(".load-feed-link").on("click", "a", function(e) {
 	e.preventDefault();
-	var $field = $(this).parent();
+	var $field = $(this).parents('li.load-feed-link');
 	viewType = $field.data('viewtype');
-	feedId = $field.data('id');
+	$feedId = $field.data('id');
 	$('#overlay-content').show();
 	var href = this.href;	
 	$(this).blur();
@@ -40,10 +94,15 @@ $(".load-feed-link").on("click", "a", function(e) {
 	});
 	request.done(function(msg) {
 		$('.load-feed-link').removeClass('active');
+		$('li.category').removeClass('active');
+		$('li.load-feed-link').removeClass('active');
 		$field.addClass('active');
 		$("#feed-content").html(msg);
 		scrollToActiveEntry('feed-content');
 		$('#entry-navigation-links').show();
+		$('#button-refresh').show();
+		$('#button-refresh').attr('data-href', 'feed/update/'+$feedId);
+		$('#button-refresh').attr('data-id', $feedId);
 		$('#overlay-content').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -63,7 +122,6 @@ $("#feed-content").on("click", ".load-entry-link", function(e) {
 	var id = $(this).attr('data-id');
 	var href = $(this).data('href');
 	var $field = $(this);
-
 	if ($field.parent().hasClass('active')) {
 		$("#load-entry-div-" + id).hide();
 		$field.parent().removeClass('active');
@@ -123,7 +181,7 @@ function openEntryAsSource(id)
 		markEntryRead(id);
 		$('#source-link').hide();
 		$('#iframe-link').show();
-		$("#load-entry-div-" + id).find('.entry-content').css('padding', 5);
+		$("#load-entry-div-" + id).find('.entry-content').css('padding', 10);
 		$("#load-entry-div-" + id).find('.entry-content').html(msg);
 		scrollToActiveEntry("load-entry-link-" + id);
 	});
@@ -300,18 +358,19 @@ function updateCountForEntry(id)
 	var request2 = $.ajax({
 		url: 'entry/count/' + id,
 		type: "GET",
-		dataType: "html"
+		dataType: "json",
 	});
-	request2.done(function(msg) {
-		if (msg == 0)
+	request2.done(function(data) {
+		if (data.feed == 0)
 		{
 			$('.load-feed-link.active').addClass('empty');
 		}
 		else
 		{
 			$('.load-feed-link.active').removeClass('empty');
-			$('.load-feed-link.active').find('.feed-count').html(msg);
+			$('.load-feed-link.active').find('.feed-count').html(data.feed);
 		}
+		$('.load-feed-link.active').prevAll('.nav-header:first').find('.category-count').html(data.category);
 	});
 }
 
@@ -320,19 +379,25 @@ function updateCountForFeed(id)
 	var request2 = $.ajax({
 		url: 'feed/count/' + id,
 		type: "GET",
-		dataType: "html"
+		dataType: "json"
 	});
-	request2.done(function(msg) {
-		if (msg == 0)
+	request2.done(function(data) {
+		if (data.feed == 0)
 		{
 			$('#load-feed-link-' + id).addClass('empty');
 		}
 		else
 		{
 			$('#load-feed-link-' + id).removeClass('empty');
-			$('#load-feed-link-' + id).find('.feed-count').html(msg);
+			$('#load-feed-link-' + id).find('.feed-count').html(data.feed);
 		}
+		$('#load-feed-link-' + id).prevAll('.nav-header:first').find('.category-count').html(data.category);
 	});
+}
+
+function updateCountForCategory(id)
+{
+
 }
 
 function scrollToActiveEntry(entryId)

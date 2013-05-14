@@ -1,9 +1,14 @@
-@title-font: 'Montserrat', sans-serif;
+@title-font: 'Dosis', Helvetica, Arial, sans-serif;
+@body-font: 'Gudea', sans-serif;
+
+@default-text-color: #444;
+
+@feed-link-bg-active: #FAE4D1;
 
 @feed-link-text: #ffffff;
 @feed-link-bg: #232323;
-@feed-link-bg-hover: #2e2e2e;
-@feed-link-bg-active: #2e2e2e;
+@feed-link-bg-hover: #FAE4D1;
+
 @feed-link-bg-active-marker: #1b7e5a;
 @feed-link-border: #2c2c2c;
 
@@ -11,7 +16,7 @@
 
 @entry-list-bg: #eeebe4;
 @entry-link-text: #ffffff;
-@entry-link-text-hover: #0088cc;
+@entry-link-text-hover: #e67e22;
 @entry-link-text-active: #0088cc;
 @entry-link-text-read: #bbb;
 @entry-link-bg: #232323;
@@ -21,8 +26,8 @@
 @entry-link-border: #2c2c2c;
 
 @header-height: 30px;
-@header-bg: #166549;
-@header-bg-hover: #1b7e5a;
+@header-bg: #e67e22;
+@header-bg-hover: #d35400;
 @menu-width: 350px;
 
 @footer-menu-height: 30px;
@@ -38,7 +43,13 @@ body {
 
 * {
 	/*font-family: 'Montserrat', sans-serif;*/
+	font-family: @body-font;
 }
+
+a:hover {
+	color: @header-bg;
+}
+
 
 .ajax-overlay {
 	background-color: #fff;
@@ -95,7 +106,8 @@ body {
 		}
 	}
 	&.not-valid {
-		display: none;
+		font-weight: normal;
+		font-style: italic;
 	}
 }
 
@@ -112,6 +124,29 @@ a, a:hover, a:focus {
 	margin: 0;
 }
 
+#header {
+	.navbar-inner {
+		background-color: @header-bg;
+		background-image: none;
+		border-width: 0;
+		box-shadow: none;
+		a {
+			text-shadow: none;
+			color: #fff;
+			&:hover {
+				background-color: @header-bg-hover;
+			}
+		}
+		a.brand {
+			font-family: @title-font;
+		}
+		b.caret {
+			border-top-color: #fff;
+			border-bottom-color: #fff;
+		}
+	}
+}
+
 #left-menu {
 	position: fixed;
 	top: 45px;
@@ -123,7 +158,6 @@ a, a:hover, a:focus {
 
 .ajax-overlay-content {
 	background-color: #fff;
-	opacity: 0.7;
 	position: fixed;
 	top: 45px;
 	left: @menu-width;
@@ -131,6 +165,73 @@ a, a:hover, a:focus {
 	bottom: 0;
 	display: none;
 	z-index: 99999;
+}
+
+#feed-list {
+	padding: 0;
+	margin: 0;	
+	ul {
+		padding: 0;
+		margin: 0;		
+	}
+	li {
+		list-style: none;
+		margin: 0;
+		line-height: 22px;
+	}
+	li.category {
+		border-bottom: 1px solid #ccc;
+		&:last-child {
+			border-bottom: none;
+		}
+		padding-bottom: 5px;
+		margin-bottom: 5px;
+		&.active {
+			div {
+				background-color: @feed-link-bg-hover;
+			}
+		}
+		div {
+			cursor: pointer;
+			padding: 2px 10px;
+			font-size: 14px;
+			font-weight: bold;
+			i {
+				float: left;
+				font-size: 14px;
+				padding: 3px;
+				margin-right: 5px;
+				vertical-align: middle;
+			}
+			.category-count {
+				display: inline;
+				&:before {
+					content: "(";
+				}
+				&:after {
+					content: ")";
+				}
+			}
+			&:hover {
+				background-color: @feed-link-bg-hover;
+			}
+		}
+		ul.feeds {
+			li.load-feed-link {
+				font-size: 14px;
+				a {
+					display: block;
+					padding: 2px 20px;
+					padding-right: 5px;
+					color: @default-text-color;
+				}
+				&.active, &:hover {
+					background-color: @feed-link-bg-hover;
+				}
+			}
+		}
+		
+	}
 }
 
 #footer-menu {
@@ -147,7 +248,7 @@ a, a:hover, a:focus {
 		display: none;
 		a {
 			color: #232323;
-			font-size: 0.6em;
+			font-size: 12px;
 			display: inline-block;
 			padding: 0px 8px;
 			margin: 0;
@@ -168,9 +269,15 @@ a, a:hover, a:focus {
 
 	#entry-meta-links {
 		float: left;
+		a {
+			font-size: 10px;
+		}
 	}
 	#entry-navigation-links {
 		float: right;
+		a {
+			font-size: 12px;
+		}
 	}
 }
 
@@ -186,15 +293,16 @@ a, a:hover, a:focus {
 		margin: 5px;
 	}	
 
-	div.feed-title {
+	div.feed-title, div.category-title {
 		font-size: 1.4em;		
 		padding: 7px 5px;
 		padding-bottom: 20px;
 		div.title {
 			display: inline-block;
 			color: inherit;
-			font-family: inherit;
-			font-variant: small-caps;
+			font-family: @title-font;
+			/*font-family: inherit;*/
+			/*font-variant: small-caps;*/
 		}
 		div.meta {
 			display: inline-block;
@@ -217,6 +325,7 @@ a, a:hover, a:focus {
 			}
 			span.dropdown {
 				font-variant: normal;
+				text-align: left;
 				ul.dropdown-menu {
 					right: 0;
 					left: inherit;
@@ -249,12 +358,12 @@ a, a:hover, a:focus {
 				> div:hover {
 					color: @entry-link-text-hover;
 				}
-				&.active {
-					color: @entry-link-text-active;
-				}
 				&.read {
 					color: @entry-link-text-read;
 				}
+				&.active {
+					color: @default-text-color;
+				}				
 				div.load-entry-link {
 					width: auto;
 					overflow: hidden;
@@ -295,8 +404,11 @@ a, a:hover, a:focus {
 					
 				}
 				div.entry-content {
-					padding: 5px;
+					padding: 10px;
 					background-color: white;
+					div.meta {
+						padding-bottom: 15px;
+					}
 				}
 			}
 		}

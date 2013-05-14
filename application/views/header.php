@@ -16,7 +16,8 @@
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap-responsive.min.css" />
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.less" type="text/less" media="screen" />
 
-	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Dosis:700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
 
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/less-1.3.3.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-2.0.0.min.js"></script>
@@ -32,6 +33,7 @@
 	</div>
 
 	<div id="overlay-content" class="ajax-overlay-content">
+		<div class="ajax-loader-text"></div>
 		<div class="ajax-loader">&nbsp;</div>
 	</div>
 
@@ -43,21 +45,12 @@
 					<div class="container-fluid">
 					<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
 				    <ul class="nav pull-right">
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								Settings
-								<b class="caret"> </b>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href="<?php echo BASE_URL; ?>feed/add"><i class="icon-plus-sign"> </i> New feed</a></li>
-								<li><a href="<?php echo BASE_URL; ?>feed/importopml"><i class="icon-download"> </i> Import OPML</a></li>
-								<li><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all"><i class="icon-repeat"> </i> Update all feeds</a></li>
-								<li class="divider"></li>
-								<li><a href="<?php echo BASE_URL; ?>settings"><i class="icon-cog"> </i> Settings</a></li>
-								<li class="divider"></li>
-								<li class="list-feed-action"><a href="<?php echo BASE_URL; ?>user/logout"><i class="icon-signout"> </i> Logout</a></li>
-							</ul>
-						</li>
+				    	<li><a href="#" title="Refresh" data-href="<?php echo BASE_URL; ?>feed/updateall" data-id="" id="button-refresh"><i class="icon-refresh"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>feed/add" title="Add new feed"><i class="icon-plus-sign"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" title="Import OPML file"><i class="icon-download"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>settings" title="Settings"><i class="icon-cog"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all" title="Update all feeds"><i class="icon-repeat"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>user/logout" title="Logout"><i class="icon-signout"> </i></a></li>
 					</ul>
 				</div>
 			</div>
@@ -71,7 +64,7 @@
 
 			<div id="left-menu">
 
-				<ul id="feed-list" class="nav nav-list">
+				<ul id="feed-list">
 					<?php
 						if (isset($categoriesTree))
 						{
@@ -80,21 +73,17 @@
 							$i = 0;
 							foreach ($categoriesTree as $category)
 							{
-								if ($i != 0)
-								{
-									echo '<li class="divider"></li>';
-								}
-								$i++;
 								echo '
-									<li class="nav-header" data-cat-id="'.$category->getId().'">
-										<i class="icon-collapse-alt"> </i>
+									<li class="category" data-cat-id="'.$category->getId().'">										
 										<div>
+											<i class="icon-collapse-alt"> </i>
 											'.$category->getName().'
 											<span class="category-count">'.$category->countEntrys().'</span>
 										</div>
-									</li>';
+										<ul class="feeds">';
+
 								foreach ($category->getFeeds() as $feed) {
-									$valid = $feed->getValid() == 1 || $feed->countEntrys($c) > 0 ? '' : ' not-valid';
+									$valid = $feed->getValid() == 1 ? '' : ' not-valid';
 									$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';
 									echo '
 										<li class="load-feed-link'.$empty.$valid.'" id="load-feed-link-'.$feed->getId().'" 
@@ -106,6 +95,10 @@
 											</a>
 										</li>';
 								}
+
+								echo '
+										</ul>
+									</li>';								
 							}
 						}
 					?>
@@ -113,13 +106,13 @@
 
 				<script type="text/javascript">
 				$(function() {
-					$( "#feed-list" ).sortable({
-						items: "li:not(.nav-header)",
+					$("#feed-list").sortable({
+						items: "li.load-feed-link",
 						update: function(event, ui)
 						{
 							var feedId = ui.item.data('id');
-							var catId = ui.item.prevAll(".nav-header:first").data('cat-id');
-							var order = ui.item.prevUntil(ui.item.prevAll(".nav-header:first"), ".load-feed-link").size();
+							var catId = ui.item.parents("li.category").data('cat-id');
+							var order = ui.item.prevAll("li.load-feed-link").size();
 							setNewOrder(feedId, catId, order);
 						}
 					});
