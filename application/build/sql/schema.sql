@@ -33,6 +33,7 @@ CREATE TABLE `rss_feed`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `link` VARCHAR(255) NOT NULL,
+    `base_link` VARCHAR(255) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT(255),
     `updated` DATETIME,
@@ -62,6 +63,7 @@ CREATE TABLE `rss_entry`
     `link` VARCHAR(255) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT,
+    `author` VARCHAR(255),
     `read` TINYINT NOT NULL,
     `content` TEXT,
     `feed_id` INTEGER NOT NULL,

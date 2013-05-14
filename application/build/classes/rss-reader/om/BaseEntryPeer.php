@@ -24,13 +24,13 @@ abstract class BaseEntryPeer
     const TM_CLASS = 'EntryTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the id field */
     const ID = 'rss_entry.id';
@@ -49,6 +49,9 @@ abstract class BaseEntryPeer
 
     /** the column name for the description field */
     const DESCRIPTION = 'rss_entry.description';
+
+    /** the column name for the author field */
+    const AUTHOR = 'rss_entry.author';
 
     /** the column name for the read field */
     const READ = 'rss_entry.read';
@@ -78,12 +81,12 @@ abstract class BaseEntryPeer
      * e.g. EntryPeer::$fieldNames[EntryPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Published', 'Updated', 'Link', 'Title', 'Description', 'Read', 'Content', 'FeedId', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'read', 'content', 'feedId', ),
-        BasePeer::TYPE_COLNAME => array (EntryPeer::ID, EntryPeer::PUBLISHED, EntryPeer::UPDATED, EntryPeer::LINK, EntryPeer::TITLE, EntryPeer::DESCRIPTION, EntryPeer::READ, EntryPeer::CONTENT, EntryPeer::FEED_ID, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PUBLISHED', 'UPDATED', 'LINK', 'TITLE', 'DESCRIPTION', 'READ', 'CONTENT', 'FEED_ID', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'read', 'content', 'feed_id', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Published', 'Updated', 'Link', 'Title', 'Description', 'Author', 'Read', 'Content', 'FeedId', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'author', 'read', 'content', 'feedId', ),
+        BasePeer::TYPE_COLNAME => array (EntryPeer::ID, EntryPeer::PUBLISHED, EntryPeer::UPDATED, EntryPeer::LINK, EntryPeer::TITLE, EntryPeer::DESCRIPTION, EntryPeer::AUTHOR, EntryPeer::READ, EntryPeer::CONTENT, EntryPeer::FEED_ID, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PUBLISHED', 'UPDATED', 'LINK', 'TITLE', 'DESCRIPTION', 'AUTHOR', 'READ', 'CONTENT', 'FEED_ID', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'author', 'read', 'content', 'feed_id', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -93,12 +96,12 @@ abstract class BaseEntryPeer
      * e.g. EntryPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Published' => 1, 'Updated' => 2, 'Link' => 3, 'Title' => 4, 'Description' => 5, 'Read' => 6, 'Content' => 7, 'FeedId' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'read' => 6, 'content' => 7, 'feedId' => 8, ),
-        BasePeer::TYPE_COLNAME => array (EntryPeer::ID => 0, EntryPeer::PUBLISHED => 1, EntryPeer::UPDATED => 2, EntryPeer::LINK => 3, EntryPeer::TITLE => 4, EntryPeer::DESCRIPTION => 5, EntryPeer::READ => 6, EntryPeer::CONTENT => 7, EntryPeer::FEED_ID => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PUBLISHED' => 1, 'UPDATED' => 2, 'LINK' => 3, 'TITLE' => 4, 'DESCRIPTION' => 5, 'READ' => 6, 'CONTENT' => 7, 'FEED_ID' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'read' => 6, 'content' => 7, 'feed_id' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Published' => 1, 'Updated' => 2, 'Link' => 3, 'Title' => 4, 'Description' => 5, 'Author' => 6, 'Read' => 7, 'Content' => 8, 'FeedId' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'author' => 6, 'read' => 7, 'content' => 8, 'feedId' => 9, ),
+        BasePeer::TYPE_COLNAME => array (EntryPeer::ID => 0, EntryPeer::PUBLISHED => 1, EntryPeer::UPDATED => 2, EntryPeer::LINK => 3, EntryPeer::TITLE => 4, EntryPeer::DESCRIPTION => 5, EntryPeer::AUTHOR => 6, EntryPeer::READ => 7, EntryPeer::CONTENT => 8, EntryPeer::FEED_ID => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PUBLISHED' => 1, 'UPDATED' => 2, 'LINK' => 3, 'TITLE' => 4, 'DESCRIPTION' => 5, 'AUTHOR' => 6, 'READ' => 7, 'CONTENT' => 8, 'FEED_ID' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'author' => 6, 'read' => 7, 'content' => 8, 'feed_id' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -178,6 +181,7 @@ abstract class BaseEntryPeer
             $criteria->addSelectColumn(EntryPeer::LINK);
             $criteria->addSelectColumn(EntryPeer::TITLE);
             $criteria->addSelectColumn(EntryPeer::DESCRIPTION);
+            $criteria->addSelectColumn(EntryPeer::AUTHOR);
             $criteria->addSelectColumn(EntryPeer::READ);
             $criteria->addSelectColumn(EntryPeer::CONTENT);
             $criteria->addSelectColumn(EntryPeer::FEED_ID);
@@ -188,6 +192,7 @@ abstract class BaseEntryPeer
             $criteria->addSelectColumn($alias . '.link');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.author');
             $criteria->addSelectColumn($alias . '.read');
             $criteria->addSelectColumn($alias . '.content');
             $criteria->addSelectColumn($alias . '.feed_id');

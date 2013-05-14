@@ -8,6 +8,7 @@
  *
  * @method FeedQuery orderById($order = Criteria::ASC) Order by the id column
  * @method FeedQuery orderByLink($order = Criteria::ASC) Order by the link column
+ * @method FeedQuery orderByBaseLink($order = Criteria::ASC) Order by the base_link column
  * @method FeedQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method FeedQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method FeedQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
@@ -18,6 +19,7 @@
  *
  * @method FeedQuery groupById() Group by the id column
  * @method FeedQuery groupByLink() Group by the link column
+ * @method FeedQuery groupByBaseLink() Group by the base_link column
  * @method FeedQuery groupByTitle() Group by the title column
  * @method FeedQuery groupByDescription() Group by the description column
  * @method FeedQuery groupByUpdated() Group by the updated column
@@ -42,6 +44,7 @@
  * @method Feed findOneOrCreate(PropelPDO $con = null) Return the first Feed matching the query, or a new Feed object populated from the query conditions when no match is found
  *
  * @method Feed findOneByLink(string $link) Return the first Feed filtered by the link column
+ * @method Feed findOneByBaseLink(string $base_link) Return the first Feed filtered by the base_link column
  * @method Feed findOneByTitle(string $title) Return the first Feed filtered by the title column
  * @method Feed findOneByDescription(string $description) Return the first Feed filtered by the description column
  * @method Feed findOneByUpdated(string $updated) Return the first Feed filtered by the updated column
@@ -52,6 +55,7 @@
  *
  * @method array findById(int $id) Return Feed objects filtered by the id column
  * @method array findByLink(string $link) Return Feed objects filtered by the link column
+ * @method array findByBaseLink(string $base_link) Return Feed objects filtered by the base_link column
  * @method array findByTitle(string $title) Return Feed objects filtered by the title column
  * @method array findByDescription(string $description) Return Feed objects filtered by the description column
  * @method array findByUpdated(string $updated) Return Feed objects filtered by the updated column
@@ -166,7 +170,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `link`, `title`, `description`, `updated`, `category_id`, `valid`, `viewframe`, `cat_order` FROM `rss_feed` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `link`, `base_link`, `title`, `description`, `updated`, `category_id`, `valid`, `viewframe`, `cat_order` FROM `rss_feed` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -324,6 +328,35 @@ abstract class BaseFeedQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FeedPeer::LINK, $link, $comparison);
+    }
+
+    /**
+     * Filter the query on the base_link column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByBaseLink('fooValue');   // WHERE base_link = 'fooValue'
+     * $query->filterByBaseLink('%fooValue%'); // WHERE base_link LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $baseLink The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterByBaseLink($baseLink = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($baseLink)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $baseLink)) {
+                $baseLink = str_replace('*', '%', $baseLink);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(FeedPeer::BASE_LINK, $baseLink, $comparison);
     }
 
     /**

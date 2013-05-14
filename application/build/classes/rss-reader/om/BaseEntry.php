@@ -66,6 +66,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
     protected $description;
 
     /**
+     * The value for the author field.
+     * @var        string
+     */
+    protected $author;
+
+    /**
      * The value for the read field.
      * @var        int
      */
@@ -233,6 +239,17 @@ abstract class BaseEntry extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [author] column value.
+     *
+     * @return string
+     */
+    public function getAuthor()
+    {
+
+        return $this->author;
+    }
+
+    /**
      * Get the [read] column value.
      *
      * @return int
@@ -396,6 +413,27 @@ abstract class BaseEntry extends BaseObject implements Persistent
     } // setDescription()
 
     /**
+     * Set the value of [author] column.
+     *
+     * @param string $v new value
+     * @return Entry The current object (for fluent API support)
+     */
+    public function setAuthor($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->author !== $v) {
+            $this->author = $v;
+            $this->modifiedColumns[] = EntryPeer::AUTHOR;
+        }
+
+
+        return $this;
+    } // setAuthor()
+
+    /**
      * Set the value of [read] column.
      *
      * @param int $v new value
@@ -500,9 +538,10 @@ abstract class BaseEntry extends BaseObject implements Persistent
             $this->link = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->title = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->description = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->read = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-            $this->content = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->feed_id = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->author = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->read = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->content = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->feed_id = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -512,7 +551,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = EntryPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = EntryPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Entry object", $e);
@@ -758,6 +797,9 @@ abstract class BaseEntry extends BaseObject implements Persistent
         if ($this->isColumnModified(EntryPeer::DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = '`description`';
         }
+        if ($this->isColumnModified(EntryPeer::AUTHOR)) {
+            $modifiedColumns[':p' . $index++]  = '`author`';
+        }
         if ($this->isColumnModified(EntryPeer::READ)) {
             $modifiedColumns[':p' . $index++]  = '`read`';
         }
@@ -795,6 +837,9 @@ abstract class BaseEntry extends BaseObject implements Persistent
                         break;
                     case '`description`':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+                        break;
+                    case '`author`':
+                        $stmt->bindValue($identifier, $this->author, PDO::PARAM_STR);
                         break;
                     case '`read`':
                         $stmt->bindValue($identifier, $this->read, PDO::PARAM_INT);
@@ -970,12 +1015,15 @@ abstract class BaseEntry extends BaseObject implements Persistent
                 return $this->getDescription();
                 break;
             case 6:
-                return $this->getRead();
+                return $this->getAuthor();
                 break;
             case 7:
-                return $this->getContent();
+                return $this->getRead();
                 break;
             case 8:
+                return $this->getContent();
+                break;
+            case 9:
                 return $this->getFeedId();
                 break;
             default:
@@ -1013,9 +1061,10 @@ abstract class BaseEntry extends BaseObject implements Persistent
             $keys[3] => $this->getLink(),
             $keys[4] => $this->getTitle(),
             $keys[5] => $this->getDescription(),
-            $keys[6] => $this->getRead(),
-            $keys[7] => $this->getContent(),
-            $keys[8] => $this->getFeedId(),
+            $keys[6] => $this->getAuthor(),
+            $keys[7] => $this->getRead(),
+            $keys[8] => $this->getContent(),
+            $keys[9] => $this->getFeedId(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aFeed) {
@@ -1074,12 +1123,15 @@ abstract class BaseEntry extends BaseObject implements Persistent
                 $this->setDescription($value);
                 break;
             case 6:
-                $this->setRead($value);
+                $this->setAuthor($value);
                 break;
             case 7:
-                $this->setContent($value);
+                $this->setRead($value);
                 break;
             case 8:
+                $this->setContent($value);
+                break;
+            case 9:
                 $this->setFeedId($value);
                 break;
         } // switch()
@@ -1112,9 +1164,10 @@ abstract class BaseEntry extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setLink($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setTitle($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setDescription($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setRead($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setContent($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setFeedId($arr[$keys[8]]);
+        if (array_key_exists($keys[6], $arr)) $this->setAuthor($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setRead($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setContent($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setFeedId($arr[$keys[9]]);
     }
 
     /**
@@ -1132,6 +1185,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
         if ($this->isColumnModified(EntryPeer::LINK)) $criteria->add(EntryPeer::LINK, $this->link);
         if ($this->isColumnModified(EntryPeer::TITLE)) $criteria->add(EntryPeer::TITLE, $this->title);
         if ($this->isColumnModified(EntryPeer::DESCRIPTION)) $criteria->add(EntryPeer::DESCRIPTION, $this->description);
+        if ($this->isColumnModified(EntryPeer::AUTHOR)) $criteria->add(EntryPeer::AUTHOR, $this->author);
         if ($this->isColumnModified(EntryPeer::READ)) $criteria->add(EntryPeer::READ, $this->read);
         if ($this->isColumnModified(EntryPeer::CONTENT)) $criteria->add(EntryPeer::CONTENT, $this->content);
         if ($this->isColumnModified(EntryPeer::FEED_ID)) $criteria->add(EntryPeer::FEED_ID, $this->feed_id);
@@ -1203,6 +1257,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
         $copyObj->setLink($this->getLink());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setDescription($this->getDescription());
+        $copyObj->setAuthor($this->getAuthor());
         $copyObj->setRead($this->getRead());
         $copyObj->setContent($this->getContent());
         $copyObj->setFeedId($this->getFeedId());
@@ -1327,6 +1382,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
         $this->link = null;
         $this->title = null;
         $this->description = null;
+        $this->author = null;
         $this->read = null;
         $this->content = null;
         $this->feed_id = null;

@@ -19,6 +19,7 @@
 	<table name="feed" phpName="Feed">
 		<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
 		<column name="link" type="varchar" size="255" required="true" />
+		<column name="base_link" type="varchar" size="255" required="true" phpName="BaseLink" />
 		<column name="title" type="varchar" size="255" required="true" />
 		<column name="description" type="longvarchar" size="255" required="false" />
 		<column name="updated" type="timestamp" required="false" />
@@ -44,6 +45,7 @@
 		<column name="link" type="varchar" size="255" required="true" />
 		<column name="title" type="varchar" size="255" required="true" />
 		<column name="description" type="longvarchar" required="false" />
+		<column name="author" type="varchar" size="255" required="false" />
 		<column name="read" type="tinyint" required="true" />
 		<column name="content" type="longvarchar" required="false" />
 		<column name="feed_id" type="integer" required="true" />

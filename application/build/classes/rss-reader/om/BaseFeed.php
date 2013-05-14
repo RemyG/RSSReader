@@ -42,6 +42,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
     protected $link;
 
     /**
+     * The value for the base_link field.
+     * @var        string
+     */
+    protected $base_link;
+
+    /**
      * The value for the title field.
      * @var        string
      */
@@ -166,6 +172,17 @@ abstract class BaseFeed extends BaseObject implements Persistent
     {
 
         return $this->link;
+    }
+
+    /**
+     * Get the [base_link] column value.
+     *
+     * @return string
+     */
+    public function getBaseLink()
+    {
+
+        return $this->base_link;
     }
 
     /**
@@ -315,6 +332,27 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
         return $this;
     } // setLink()
+
+    /**
+     * Set the value of [base_link] column.
+     *
+     * @param string $v new value
+     * @return Feed The current object (for fluent API support)
+     */
+    public function setBaseLink($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->base_link !== $v) {
+            $this->base_link = $v;
+            $this->modifiedColumns[] = FeedPeer::BASE_LINK;
+        }
+
+
+        return $this;
+    } // setBaseLink()
 
     /**
      * Set the value of [title] column.
@@ -531,13 +569,14 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->link = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->title = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->description = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->category_id = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->valid = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
-            $this->viewframe = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->cat_order = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->base_link = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->title = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->description = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->updated = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->category_id = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->valid = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->viewframe = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->cat_order = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -547,7 +586,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = FeedPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = FeedPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Feed object", $e);
@@ -801,6 +840,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
         if ($this->isColumnModified(FeedPeer::LINK)) {
             $modifiedColumns[':p' . $index++]  = '`link`';
         }
+        if ($this->isColumnModified(FeedPeer::BASE_LINK)) {
+            $modifiedColumns[':p' . $index++]  = '`base_link`';
+        }
         if ($this->isColumnModified(FeedPeer::TITLE)) {
             $modifiedColumns[':p' . $index++]  = '`title`';
         }
@@ -838,6 +880,9 @@ abstract class BaseFeed extends BaseObject implements Persistent
                         break;
                     case '`link`':
                         $stmt->bindValue($identifier, $this->link, PDO::PARAM_STR);
+                        break;
+                    case '`base_link`':
+                        $stmt->bindValue($identifier, $this->base_link, PDO::PARAM_STR);
                         break;
                     case '`title`':
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
@@ -1021,24 +1066,27 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 return $this->getLink();
                 break;
             case 2:
-                return $this->getTitle();
+                return $this->getBaseLink();
                 break;
             case 3:
-                return $this->getDescription();
+                return $this->getTitle();
                 break;
             case 4:
-                return $this->getUpdated();
+                return $this->getDescription();
                 break;
             case 5:
-                return $this->getCategoryId();
+                return $this->getUpdated();
                 break;
             case 6:
-                return $this->getValid();
+                return $this->getCategoryId();
                 break;
             case 7:
-                return $this->getViewframe();
+                return $this->getValid();
                 break;
             case 8:
+                return $this->getViewframe();
+                break;
+            case 9:
                 return $this->getcatOrder();
                 break;
             default:
@@ -1072,13 +1120,14 @@ abstract class BaseFeed extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getLink(),
-            $keys[2] => $this->getTitle(),
-            $keys[3] => $this->getDescription(),
-            $keys[4] => $this->getUpdated(),
-            $keys[5] => $this->getCategoryId(),
-            $keys[6] => $this->getValid(),
-            $keys[7] => $this->getViewframe(),
-            $keys[8] => $this->getcatOrder(),
+            $keys[2] => $this->getBaseLink(),
+            $keys[3] => $this->getTitle(),
+            $keys[4] => $this->getDescription(),
+            $keys[5] => $this->getUpdated(),
+            $keys[6] => $this->getCategoryId(),
+            $keys[7] => $this->getValid(),
+            $keys[8] => $this->getViewframe(),
+            $keys[9] => $this->getcatOrder(),
         );
         if ($includeForeignObjects) {
             if (null !== $this->aCategory) {
@@ -1128,24 +1177,27 @@ abstract class BaseFeed extends BaseObject implements Persistent
                 $this->setLink($value);
                 break;
             case 2:
-                $this->setTitle($value);
+                $this->setBaseLink($value);
                 break;
             case 3:
-                $this->setDescription($value);
+                $this->setTitle($value);
                 break;
             case 4:
-                $this->setUpdated($value);
+                $this->setDescription($value);
                 break;
             case 5:
-                $this->setCategoryId($value);
+                $this->setUpdated($value);
                 break;
             case 6:
-                $this->setValid($value);
+                $this->setCategoryId($value);
                 break;
             case 7:
-                $this->setViewframe($value);
+                $this->setValid($value);
                 break;
             case 8:
+                $this->setViewframe($value);
+                break;
+            case 9:
                 $this->setcatOrder($value);
                 break;
         } // switch()
@@ -1174,13 +1226,14 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setLink($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setTitle($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setDescription($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdated($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCategoryId($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setValid($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setViewframe($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setcatOrder($arr[$keys[8]]);
+        if (array_key_exists($keys[2], $arr)) $this->setBaseLink($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setTitle($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setDescription($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdated($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setCategoryId($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setValid($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setViewframe($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setcatOrder($arr[$keys[9]]);
     }
 
     /**
@@ -1194,6 +1247,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
         if ($this->isColumnModified(FeedPeer::ID)) $criteria->add(FeedPeer::ID, $this->id);
         if ($this->isColumnModified(FeedPeer::LINK)) $criteria->add(FeedPeer::LINK, $this->link);
+        if ($this->isColumnModified(FeedPeer::BASE_LINK)) $criteria->add(FeedPeer::BASE_LINK, $this->base_link);
         if ($this->isColumnModified(FeedPeer::TITLE)) $criteria->add(FeedPeer::TITLE, $this->title);
         if ($this->isColumnModified(FeedPeer::DESCRIPTION)) $criteria->add(FeedPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(FeedPeer::UPDATED)) $criteria->add(FeedPeer::UPDATED, $this->updated);
@@ -1265,6 +1319,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setLink($this->getLink());
+        $copyObj->setBaseLink($this->getBaseLink());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setUpdated($this->getUpdated());
@@ -1631,6 +1686,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->link = null;
+        $this->base_link = null;
         $this->title = null;
         $this->description = null;
         $this->updated = null;

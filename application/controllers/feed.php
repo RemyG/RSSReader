@@ -89,7 +89,7 @@ class FeedController extends Controller {
 	function updateAll()
 	{
 		$errors = array();
-		$feeds = FeedQuery::create()->find();
+		$feeds = FeedQuery::create()->filterByValid(1)->find();
 		foreach ($feeds as $feed)
 		{
 			$this->updateFeed($feed, $errors);
@@ -271,6 +271,7 @@ class FeedController extends Controller {
 			$feed->setUpdated(0);
 			$feed->setDescription($feedSP->get_description());
 			$feed->setLink((string)$feedUrl);
+			$feed->setBaseLink($feedSP->get_link());
 			$feed->setValid(1);
 			if ($parentCat != null)
 			{
@@ -316,6 +317,8 @@ class FeedController extends Controller {
 			return $errors;
 		}*/
 
+		set_time_limit(30);
+
 		$feedUrl = $feed->getLink();
 
 		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
@@ -346,6 +349,7 @@ class FeedController extends Controller {
 
 			$feed->setUpdated(new DateTime());
 			$feed->setDescription($feedSP->get_description());
+			$feed->setBaseLink($feedSP->get_link());
 			$feed->save();
 
 			foreach ($feedSP->get_items() as $item)
@@ -360,6 +364,10 @@ class FeedController extends Controller {
 						$entry = new Entry();
 						$entry->setLink($link);
 						$entry->setFeed($feed);
+					}
+					if ($item->get_author() != null)
+					{
+						$entry->setAuthor($item->get_author()->get_name());
 					}
 					$entry->setPublished($item->get_date('U'));
 					$entry->setUpdated($item->get_date('U'));

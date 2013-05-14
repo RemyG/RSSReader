@@ -12,6 +12,7 @@
  * @method EntryQuery orderByLink($order = Criteria::ASC) Order by the link column
  * @method EntryQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method EntryQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method EntryQuery orderByAuthor($order = Criteria::ASC) Order by the author column
  * @method EntryQuery orderByRead($order = Criteria::ASC) Order by the read column
  * @method EntryQuery orderByContent($order = Criteria::ASC) Order by the content column
  * @method EntryQuery orderByFeedId($order = Criteria::ASC) Order by the feed_id column
@@ -22,6 +23,7 @@
  * @method EntryQuery groupByLink() Group by the link column
  * @method EntryQuery groupByTitle() Group by the title column
  * @method EntryQuery groupByDescription() Group by the description column
+ * @method EntryQuery groupByAuthor() Group by the author column
  * @method EntryQuery groupByRead() Group by the read column
  * @method EntryQuery groupByContent() Group by the content column
  * @method EntryQuery groupByFeedId() Group by the feed_id column
@@ -42,6 +44,7 @@
  * @method Entry findOneByLink(string $link) Return the first Entry filtered by the link column
  * @method Entry findOneByTitle(string $title) Return the first Entry filtered by the title column
  * @method Entry findOneByDescription(string $description) Return the first Entry filtered by the description column
+ * @method Entry findOneByAuthor(string $author) Return the first Entry filtered by the author column
  * @method Entry findOneByRead(int $read) Return the first Entry filtered by the read column
  * @method Entry findOneByContent(string $content) Return the first Entry filtered by the content column
  * @method Entry findOneByFeedId(int $feed_id) Return the first Entry filtered by the feed_id column
@@ -52,6 +55,7 @@
  * @method array findByLink(string $link) Return Entry objects filtered by the link column
  * @method array findByTitle(string $title) Return Entry objects filtered by the title column
  * @method array findByDescription(string $description) Return Entry objects filtered by the description column
+ * @method array findByAuthor(string $author) Return Entry objects filtered by the author column
  * @method array findByRead(int $read) Return Entry objects filtered by the read column
  * @method array findByContent(string $content) Return Entry objects filtered by the content column
  * @method array findByFeedId(int $feed_id) Return Entry objects filtered by the feed_id column
@@ -162,7 +166,7 @@ abstract class BaseEntryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `read`, `content`, `feed_id` FROM `rss_entry` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `author`, `read`, `content`, `feed_id` FROM `rss_entry` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -464,6 +468,35 @@ abstract class BaseEntryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EntryPeer::DESCRIPTION, $description, $comparison);
+    }
+
+    /**
+     * Filter the query on the author column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAuthor('fooValue');   // WHERE author = 'fooValue'
+     * $query->filterByAuthor('%fooValue%'); // WHERE author LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $author The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EntryQuery The current query, for fluid interface
+     */
+    public function filterByAuthor($author = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($author)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $author)) {
+                $author = str_replace('*', '%', $author);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(EntryPeer::AUTHOR, $author, $comparison);
     }
 
     /**
