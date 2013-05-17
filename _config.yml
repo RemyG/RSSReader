@@ -4,6 +4,8 @@ permalink: /:year/:month/:day/:title
 
 markdown: kramdown
 
+url: http://remyg.github.io/RSSReader/
+
 title : RSS Reader
 author :
   name : Rémy Gardette
