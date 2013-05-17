@@ -1,11 +1,9 @@
-name: Your New Jekyll Site
 pygments: true
-permalink: /:year/:month/:day/:title 
+permalink: :year/:month/:day/:title 
 
 markdown: kramdown
 
-baseurl: /RSSReader/
-url: http://remyg.github.io/RSSReader/
+baseurl: /RSSReader
 
 title : RSS Reader
 author :
