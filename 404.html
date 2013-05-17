@@ -1,0 +1,27 @@
+---
+layout: page
+title: Page not found
+---
+
+<div id="404">
+	<div class="row">
+		<div class="large-12 columns">
+			<h2>{{ page.title }}</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-12 columns">
+			Sorry, but the page you were looking for does not exist. See below for what you can do about that.
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-6 columns">
+			<h3>Last posts
+			<ul class="posts">
+				{% for post in site.posts %}
+					<li><span class="date">{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>

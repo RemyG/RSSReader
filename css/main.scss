@@ -1,0 +1,24 @@
+@import "foundation";
+
+#copyright {
+    background: none repeat scroll 0 0 #3F3F3F;
+    color: #FFFFFF;
+    margin-top: 30px;
+    padding: 11px 0;
+    a {
+      color: #FFFFFF;
+      font-size: 14px;
+    }
+    p, ul {
+      margin-bottom: 0;
+    }
+}
+
+.row.full-width {
+    max-width: 100%;
+}
+footer.row.full-width {
+    border-top: 1px solid #DDDDDD;
+    font-size: 14px;
+    padding-top: 30px;
+}

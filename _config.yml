@@ -1,0 +1,13 @@
+name: Your New Jekyll Site
+pygments: true
+permalink: /:year/:month/:day/:title 
+
+markdown: kramdown
+
+title : RSS Reader
+author :
+  name : Rémy Gardette
+  email : remy.gardette@gmail.com
+  github : RemyG
+  twitter : remygardette
+  feedburner : feedname
