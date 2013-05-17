@@ -4,6 +4,7 @@ permalink: /:year/:month/:day/:title
 
 markdown: kramdown
 
+baseurl: /RSSReader/
 url: http://remyg.github.io/RSSReader/
 
 title : RSS Reader
