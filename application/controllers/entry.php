@@ -9,7 +9,13 @@ class EntryController extends Controller {
 		$entry->setRead(1);
 		$entry->save();
 		$template->set('entry', $entry);
-		return $template->renderString();
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		echo json_encode(array(
+			'feedId' => $entry->getFeed()->getId(), 
+			'html' => $template->renderString(), 
+			'feedCount' => $entry->getFeed()->countEntrys($c),
+			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
 	}
     
     function count($id)
@@ -28,6 +34,12 @@ class EntryController extends Controller {
     	$entry = EntryQuery::create()->findPK($id);
 		$entry->setRead(1);
 		$entry->save();
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		echo json_encode(array(
+			'feedId' => $entry->getFeed()->getId(), 
+			'feedCount' => $entry->getFeed()->countEntrys($c),
+			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
     }
 
     function markUnread($id)
@@ -35,6 +47,12 @@ class EntryController extends Controller {
     	$entry = EntryQuery::create()->findPK($id);
 		$entry->setRead(0);
 		$entry->save();
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		echo json_encode(array(
+			'feedId' => $entry->getFeed()->getId(), 
+			'feedCount' => $entry->getFeed()->countEntrys($c),
+			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
 	}
 }
 

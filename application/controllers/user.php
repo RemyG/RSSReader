@@ -6,6 +6,8 @@ class UserController extends Controller
 	{
 		$users = UserQuery::create()->find();
 
+		$errors = array();
+
 		if (count($users) > 0)
 		{
 			if (array_key_exists('password', $_POST) && array_key_exists('login', $_POST))
@@ -24,13 +26,19 @@ class UserController extends Controller
 						$sessionHelper->set('user-login', $user->getLogin());
 						$this->redirect('');
 					}
+					else
+					{
+						$errors[] = 'Wrong password for this username.';
+					}
+				}
+				else
+				{
+					$errors[] = 'Wrong username';
 				}
 			}
-			else
-			{
-				$template = $this->loadView('user_login_view');
-				$template->render();
-			}
+			$template = $this->loadView('user_login_view');
+			$template->set('errors', $errors);
+			$template->render();
 		}
 		else
 		{

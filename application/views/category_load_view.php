@@ -42,7 +42,9 @@
 					<div 	id="load-entry-link-'.$entry->getId().'" 
 							class="load-entry-link" 
 							data-id="'.$entry->getId().'" 
-							data-href="'.$entry->getLink().'">
+							data-href="'.$entry->getLink().'"
+							data-feed-id="'.$entry->getFeed()->getId().'"
+							data-viewtype="'.($entry->getFeed()->getViewFrame() == 0 ? 'rss' : 'www').'">
 						<div class="title-wrapper">
 							<div class="feed-title">'.$entry->getFeed()->getTitle().'</div>
 							<div class="title">'.$entry->getTitle().'</div>

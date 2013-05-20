@@ -1,8 +1,8 @@
 			</div>
 			<div id="footer-menu">
 				<div id="entry-meta-links">
-					<a id="iframe-link" 	class="entry-meta-link" data-id="" href="" title="View as website">WWW</a>
-					<a id="source-link" 	class="entry-meta-link" data-id="" href="" title="View RSS feed">RSS</a>
+					<a id="iframe-link" 	class="entry-meta-link" data-entry-id="" data-feed-id="" href="" title="View as website">WWW</a>
+					<a id="source-link" 	class="entry-meta-link" data-entry-id="" data-feed-id="" href="" title="View RSS feed">RSS</a>
 					<a id="open-new-tab" 	class="entry-meta-link" data-id="" href="" title="Open website in a new tab" target="_blank"><i class="icon-forward"> </i></a>
 					<a id="read-link" 		class="entry-meta-link" data-id="" href="" title="Mark as read"><i class="icon-check"> </i></a>
 					<a id="unread-link" 	class="entry-meta-link" data-id="" href="" title="Mark as unread"><i class="icon-check-empty"> </i></a>
@@ -17,8 +17,9 @@
 $("#entry-meta-links").on("click", '#source-link', function(e) {
 	e.preventDefault();
 	viewType = 'rss';
-	var id = $(this).data('id');
-	setFeedViewAsSource();
+	var id = $(this).attr('data-entry-id');
+	var feedId = $(this).attr('data-feed-id');
+	setFeedViewAsSource(feedId);
 	openEntryAsSource(id);
 });
 
@@ -26,8 +27,9 @@ $("#entry-meta-links").on("click", '#source-link', function(e) {
 $("#entry-meta-links").on("click", '#iframe-link', function(e) {
 	e.preventDefault();
 	viewType = 'www';
-	var id = $(this).data('id');
-	setFeedViewInFrame();
+	var id = $(this).attr('data-entry-id');
+	var feedId = $(this).attr('data-feed-id');
+	setFeedViewInFrame(feedId);
 	openEntryAsFrame(id, this.href);	
 });
 
@@ -35,40 +37,14 @@ $("#entry-meta-links").on("click", '#iframe-link', function(e) {
 $("#entry-meta-links").on('click', '#read-link', function(e) {
 	e.preventDefault();
 	var id = $(this).data('id');
-	var request = $.ajax({
-		url: 'entry/markread/' + id,
-		type: "GET",
-		dataType: "html"
-	});
-	request.done(function(msg) {
-		$("#load-entry-link-" + id).parent().addClass('read');
-		$('#unread-link').show();
-		$('#read-link').hide();
-		updateCountForEntry(id);
-	});
-	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
-	});
+	markEntryRead(id);
 });
 
 // Mark an entry as not read
 $("#entry-meta-links").on('click', '#unread-link', function(e) {
 	e.preventDefault();
 	var id = $(this).data('id');
-	var request = $.ajax({
-		url: 'entry/markunread/' + id,
-		type: "GET",
-		dataType: "html"
-	});
-	request.done(function(msg) {
-		$("#load-entry-link-" + id).parent().removeClass('read');
-		$('#read-link').show();
-		$('#unread-link').hide();
-		updateCountForEntry(id);
-	});
-	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
-	});
+	markEntryNotRead(id);
 });
 
 $("#entry-navigation-links").on("click", '#previous-entry-link', function(e) {

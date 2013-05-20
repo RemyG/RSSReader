@@ -1,14 +1,8 @@
-// rss or www
-var viewType = 'rss';
-
-var feedId = 0;
-
 /*** FUNCTIONS - FEEDS ***/
 
 function loadFeed(feedId)
 {
 	var href = 'feed/load/' + feedId;
-	viewType = $('#load-feed-link-' + feedId).data('viewtype');
 	$('#overlay-content').show();
 	var request = $.ajax({
 		url: href,
@@ -71,18 +65,18 @@ function updateCountForFeed(feedId)
 	});
 }
 
-function setCountForFeed(feedId, feedCount, catCount)
+function setCountForFeed(iFeedId, feedCount, catCount)
 {
 	if (feedCount == 0)
 	{
-		$('#load-feed-link-' + feedId).addClass('empty');
+		$('#load-feed-link-' + iFeedId).addClass('empty');
 	}
 	else
 	{
-		$('#load-feed-link-' + feedId).removeClass('empty');
-		$('#load-feed-link-' + feedId).find('.feed-count').html(feedCount);
+		$('#load-feed-link-' + iFeedId).removeClass('empty');
+		$('#load-feed-link-' + iFeedId).find('.feed-count').html(feedCount);
 	}
-	$('#load-feed-link-' + feedId).parents('li.category').find('.category-count').html(catCount);
+	$('#load-feed-link-' + iFeedId).parents('li.category').find('.category-count').html(catCount);
 }
 
 /*** END - FUNCTIONS - FEEDS ***/
@@ -177,7 +171,7 @@ $("#feed-list").on("click", "li.category div", function(e) {
 // Open a feed
 $("#feed-list").on("click", "li.load-feed-link", function(e) {
 	e.preventDefault();
-	feedId = $(this).attr('data-id');
+	var feedId = $(this).attr('data-id');
 	loadFeed(feedId);
 });
 
@@ -188,7 +182,7 @@ $('#feed-content').on('click', '.entry-content a', function(e) {
 
 // Open an entry
 $("#feed-content").on("click", ".load-entry-link", function(e) {
-	e.preventDefault();	
+	e.preventDefault();
 	var id = $(this).attr('data-id');
 	var href = $(this).data('href');
 	var $field = $(this);
@@ -204,16 +198,20 @@ $("#feed-content").on("click", ".load-entry-link", function(e) {
 function openEntry(id, href)
 {
 	var $field = $('#load-entry-link-' + id);
+	$('#iframe-link').attr('data-feed-id', $field.attr('data-feed-id'));
+	$('#source-link').attr('data-feed-id', $field.attr('data-feed-id'));
+	$('#iframe-link').attr('data-entry-id', id);
+	$('#source-link').attr('data-entry-id', id);
 	$field.parent().addClass('read');
 	$('.load-entry-div').hide();
 	$('.load-entry-link').parent().removeClass('active');
 	$field.parent().addClass('active');	
 	$("#load-entry-div-" + id).show();
-	if (viewType == 'www')
+	if ($field.attr('data-viewtype') == 'www')
 	{
 		openEntryAsFrame(id, href);
 	}
-	else if (viewType == 'rss')
+	else if ($field.attr('data-viewtype') == 'rss')
 	{
 		openEntryAsSource(id);
 	}
@@ -245,14 +243,15 @@ function openEntryAsSource(id)
 	var request = $.ajax({
 		url: 'entry/load/' + id,
 		type: "GET",
-		dataType: "html"
+		dataType: "json"
 	});
-	request.done(function(msg) {
+	request.done(function(data) {
 		markEntryRead(id);
 		$('#source-link').hide();
 		$('#iframe-link').show();
 		$("#load-entry-div-" + id).find('.entry-content').css('padding', 10);
-		$("#load-entry-div-" + id).find('.entry-content').html(msg);
+		
+		$("#load-entry-div-" + id).find('.entry-content').html(data.html);
 		scrollToActiveEntry("load-entry-link-" + id);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -386,7 +385,7 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayFeed(feedId, data.html, data.count, data.categorycount);
+		displayFeed(data.feedId, data.html, data.count, data.categorycount);
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -435,7 +434,7 @@ $("#feed-content").on("click", ".show-all", function(e) {
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayFeed(feedId, data.html, data.count, data.categorycount);
+		displayFeed(data.feedId, data.html, data.count, data.categorycount);
 		$('.show-unread').parent().show();
 		$('.show-all').parent().hide();
 		$('#overlay').hide();
@@ -508,34 +507,54 @@ function markEntryRead(id)
 	var request = $.ajax({
 		url: 'entry/markread/' + id,
 		type: "GET",
-		dataType: "html"
+		dataType: "json"
 	});
-	request.done(function(msg) {
+	request.done(function(data) {
 		$("#load-entry-link-" + id).parent().addClass('read');
 		$('#unread-link').show();
 		$('#read-link').hide();
-		updateCountForEntry(id);
+		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
 	});	
 }
 
-function setFeedViewInFrame()
+function markEntryNotRead(id)
 {
-	$('#load-feed-link-' + feedId).data('viewtype', 'www');
 	var request = $.ajax({
-		url: 'feed/setviewframe/' + feedId,
+		url: 'entry/markunread/' + id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		$("#load-entry-link-" + id).parent().removeClass('read');
+		$('#read-link').show();
+		$('#unread-link').hide();
+		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+}
+
+function setFeedViewInFrame(id)
+{
+	$('#load-feed-link-' + id).attr('data-viewtype', 'www');
+	$('.load-entry-link[data-feed-id=' + id + ']').attr('data-viewtype', 'www');
+	var request = $.ajax({
+		url: 'feed/setviewframe/' + id,
 		type: "GET",
 		dataType: "html"
 	});
 }
 
-function setFeedViewAsSource()
+function setFeedViewAsSource(id)
 {
-	$('#load-feed-link-' + feedId).data('viewtype', 'rss');
+	$('#load-feed-link-' + id).attr('data-viewtype', 'rss');
+	$('.load-entry-link[data-feed-id=' + id + ']').attr('data-viewtype', 'rss');
 	var request = $.ajax({
-		url: 'feed/setviewsource/' + feedId,
+		url: 'feed/setviewsource/' + id,
 		type: "GET",
 		dataType: "html"
 	});

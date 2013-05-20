@@ -49,6 +49,7 @@ class FeedController extends Controller {
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
 		return json_encode(array(
+			'feedId' => $feed->getId(),
 			'count' => $feed->countEntrys($c),
 			'categorycount' => $feed->getCategory()->countEntrys($c), 
 			'html' => $template->renderString()));
