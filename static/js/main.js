@@ -10,7 +10,7 @@ function loadFeed(feedId)
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayFeed(feedId, data.html, data.count, data.categorycount);
+		displayFeed(feedId, data.html, data.count, data.categorycount, data.valid);
 		$('#overlay-content').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -29,7 +29,7 @@ function updateFeed(feedId)
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayFeed(feedId, data.html, data.count, data.categorycount);
+		displayFeed(feedId, data.html, data.count, data.categorycount, data.valid);
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -38,11 +38,19 @@ function updateFeed(feedId)
 	});
 }
 
-function displayFeed(feedId, feedHtml, feedCount, categoryCount)
+function displayFeed(feedId, feedHtml, feedCount, categoryCount, valid)
 {
 	$('li.load-feed-link').removeClass('active');
 	$('li.category').removeClass('active');
 	$('#load-feed-link-' + feedId).addClass('active');
+	if (valid == true)
+	{
+		$('#load-feed-link-' + feedId).removeClass('not-valid');
+	}
+	else
+	{
+		$('#load-feed-link-' + feedId).addClass('not-valid');
+	}
 	$("#feed-content").html(feedHtml);
 	setCountForFeed(feedId, feedCount, categoryCount);
 	scrollToActiveEntry('feed-content');
@@ -385,7 +393,7 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayFeed(data.feedId, data.html, data.count, data.categorycount);
+		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -434,7 +442,7 @@ $("#feed-content").on("click", ".show-all", function(e) {
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayFeed(data.feedId, data.html, data.count, data.categorycount);
+		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
 		$('.show-unread').parent().show();
 		$('.show-all').parent().hide();
 		$('#overlay').hide();
@@ -451,10 +459,10 @@ $("#feed-content").on("click", ".show-unread", function(e) {
 	var request = $.ajax({
 		url: 'feed/load/' + id + '/0',
 		type: "GET",
-		dataType: "html"
+		dataType: "json"
 	});
-	request.done(function(msg) {
-		$("#feed-content").html(msg);
+	request.done(function(data) {
+		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
 		$('.show-unread').parent().hide();
 		$('.show-all').parent().show();
 		$('#overlay').hide();

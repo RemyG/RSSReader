@@ -27,7 +27,7 @@
 				<label for="category-name">Category name</label>
 				<input type="text" name="category-text" id="category-text" required />
 				<input type="hidden" name="action" value="new-category" />
-				<input type="submit" value="Create category" />
+				<button type="submit" class="btn">Create category</button>
 			</form>
 
 		</div>
@@ -44,7 +44,7 @@
 	<label for="password">Password</label>
 	<input type="password" name="password" id="password" required />
 	<input type="hidden" name="action" value="update-user" />
-	<input type="submit" value="Update" />
+	<button type="submit" class="btn">Update</button>
 </form>
 
 <script type="text/javascript">

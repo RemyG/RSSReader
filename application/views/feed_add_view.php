@@ -12,7 +12,7 @@
 			}
 		?>
 	</select>
-	<input type="submit" value="Add feed" />
+	<button type="submit" class="btn">Add feed</button>
 </form>
 
 <?php

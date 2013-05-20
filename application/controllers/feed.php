@@ -52,7 +52,9 @@ class FeedController extends Controller {
 			'feedId' => $feed->getId(),
 			'count' => $feed->countEntrys($c),
 			'categorycount' => $feed->getCategory()->countEntrys($c), 
-			'html' => $template->renderString()));
+			'valid' => $feed->getValid(),
+			'html' => $template->renderString()
+			));
 	}
 
 	function importOpml()

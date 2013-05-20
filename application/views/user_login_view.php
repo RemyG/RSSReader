@@ -23,5 +23,5 @@ if (count($errors) > 0)
 	<input type="email" name="login" id="login" required />
 	<label for="password">Password</label>
 	<input type="password" name="password" id="password" required />
-	<input type="submit" value="Sign in" class="button" />
+	<button type="submit" class="btn">Sign in</button>
 </form>
