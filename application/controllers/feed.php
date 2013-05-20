@@ -46,7 +46,12 @@ class FeedController extends Controller {
 		}		
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
-		return $template->renderString();
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		return json_encode(array(
+			'count' => $feed->countEntrys($c),
+			'categorycount' => $feed->getCategory()->countEntrys($c), 
+			'html' => $template->renderString()));
 	}
 
 	function importOpml()
@@ -212,6 +217,32 @@ class FeedController extends Controller {
 		
 	}
 
+	function edit($id)
+	{
+		if (array_key_exists('feed-id', $_POST)
+			&& array_key_exists('feed-title', $_POST)
+			&& array_key_exists('feed-link', $_POST)
+			&& array_key_exists('feed-base-link', $_POST)
+			)
+		{
+			$feed = FeedQuery::create()->findPK($_POST['feed-id']);
+			if ($feed != null)
+			{
+				$feed->setTitle($_POST['feed-title']);
+				$feed->setLink($_POST['feed-link']);
+				$feed->setBaseLink($_POST['feed-base-link']);
+				$feed->save();
+			}
+			return json_encode(array('result' => '1', 'feedtitle' => $feed->getTitle(), 'message' => 'Feed saved'));
+		}
+		$feed = FeedQuery::create()->findPK($id);
+		return json_encode(array('result' => ''
+							, 'feedid' => $feed->getId()
+							, 'feedtitle' => $feed->getTitle()
+							, 'feedlink' => $feed->getLink()
+							, 'feedbaselink' => $feed->getBaseLink()));
+	}
+
 	private function importFeed($feedUrl, $errors, $parentCat = null, $logFile = null)
 	{
 
@@ -335,6 +366,9 @@ class FeedController extends Controller {
 				$feed->setValid(false);
 				$feed->save();
 				return $errors;
+			}
+			else {
+				$feed->setValid(true);
 			}
 
 			if ($feed->getUpdated(null) != null)

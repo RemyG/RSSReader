@@ -44,6 +44,7 @@
 							data-id="'.$entry->getId().'" 
 							data-href="'.$entry->getLink().'">
 						<div class="title-wrapper">
+							<div class="feed-title">'.$entry->getFeed()->getTitle().'</div>
 							<div class="title">'.$entry->getTitle().'</div>
 						</div>
 						<div class="date">'.$entry->getUpdated('Y-m-d').'</div>

@@ -45,7 +45,8 @@
 					<div class="container-fluid">
 					<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
 				    <ul class="nav pull-right">
-				    	<li><a href="#" title="Refresh" data-href="<?php echo BASE_URL; ?>feed/updateall" data-id="" id="button-refresh"><i class="icon-refresh"> </i></a></li>
+				    	<li><a href="#" title="Refresh" data-href="<?php echo BASE_URL; ?>feed/updateall" 
+				    		data-id="" data-type="all" id="button-refresh"><i class="icon-refresh"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>feed/add" title="Add new feed"><i class="icon-plus-sign"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" title="Import OPML file"><i class="icon-download"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>settings" title="Settings"><i class="icon-cog"> </i></a></li>

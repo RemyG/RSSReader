@@ -66,7 +66,9 @@ class CategoryController extends Controller {
 		$template = $this->loadView('category_load_view');
 		$template->set('category', $category);
 		$template->set('entries', $entries);
-		return $template->renderString();
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c)));
 	}
 
 	function count($id)

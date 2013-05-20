@@ -3,11 +3,12 @@
 
 @default-text-color: #444;
 
-@feed-link-bg-active: #FAE4D1;
+@feed-link-bg-active: #EDA15E;
+@feed-link-bg-hover: #FAE4D1;
 
 @feed-link-text: #ffffff;
 @feed-link-bg: #232323;
-@feed-link-bg-hover: #FAE4D1;
+
 
 @feed-link-bg-active-marker: #1b7e5a;
 @feed-link-border: #2c2c2c;
@@ -169,7 +170,7 @@ a, a:hover, a:focus {
 
 #feed-list {
 	padding: 0;
-	margin: 0;	
+	margin: 0;
 	ul {
 		padding: 0;
 		margin: 0;		
@@ -177,7 +178,7 @@ a, a:hover, a:focus {
 	li {
 		list-style: none;
 		margin: 0;
-		line-height: 22px;
+		line-height: 22px;		
 	}
 	li.category {
 		border-bottom: 1px solid #ccc;
@@ -185,12 +186,7 @@ a, a:hover, a:focus {
 			border-bottom: none;
 		}
 		padding-bottom: 5px;
-		margin-bottom: 5px;
-		&.active {
-			div {
-				background-color: @feed-link-bg-hover;
-			}
-		}
+		margin-bottom: 5px;		
 		div {
 			cursor: pointer;
 			padding: 2px 10px;
@@ -225,12 +221,19 @@ a, a:hover, a:focus {
 					padding-right: 5px;
 					color: @default-text-color;
 				}
-				&.active, &:hover {
+				&:hover {
 					background-color: @feed-link-bg-hover;
+				}
+				&.active {
+					background-color: @feed-link-bg-active;
 				}
 			}
 		}
-		
+		&.active {
+			div {
+				background-color: @feed-link-bg-active;
+			}
+		}
 	}
 }
 
@@ -291,6 +294,15 @@ a, a:hover, a:focus {
 
 	#feed-content {
 		margin: 5px;
+		h1 {
+			font-size: 20px;
+		}
+		h2 {
+			font-size: 18px;			
+		}
+		h3, h4, h5, h6 {
+			font-size: 16px;
+		}
 	}	
 
 	div.feed-title, div.category-title {
@@ -371,9 +383,23 @@ a, a:hover, a:focus {
 					div.title-wrapper {
 						float: left;
 						width: 100%;
+						div.feed-title {
+							float: left;
+							width: 200px;
+							font-size: inherit;
+							padding: 0;
+							overflow: hidden;
+							white-space: nowrap;
+							text-overflow: clip ellipsis;
+							margin-right: 20px;
+						}
 						div.title {
 							margin-right: 100px;
+							overflow: hidden;
+							white-space: nowrap;
+							text-overflow: clip ellipsis;
 						}
+
 					}				
 					div.date {
 						width: 100px;
