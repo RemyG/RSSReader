@@ -1,7 +1,7 @@
 
 <div id="modal-from-dom" class="modal hide fade">
 	<div class="modal-header">
-		<a href="#" class="close">&times;</a>
+		<a href="#" class="cancel-delete">&times;</a>
 		<h3>Delete URL</h3>
 	</div>
 	<div class="modal-body">
@@ -68,8 +68,8 @@
 		echo '
 			<div class="entry-container" id="entry-container-'.$entry->getId().'">
 				<div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').'">
-					<div class="remove">
-						<a href="#" class="remove-entry" data-id="'.$entry->getId().'" title="Remove this entry">
+					<div class="remove-entry" data-id="'.$entry->getId().'">
+						<a href="#" data-id="'.$entry->getId().'" title="Remove this entry">
 							<i class="icon-remove-sign"> </i>
 						</a>
 					</div>

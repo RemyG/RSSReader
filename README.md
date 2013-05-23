@@ -1,6 +1,6 @@
 # RSS Reader
 
-This application is a self-hosted RSS agregator and reader.
+This application is a self-hosted RSS aggregator and reader.
 
 ## Requirements
 

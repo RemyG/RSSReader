@@ -1,3 +1,11 @@
+<script type="text/javascript">
+
+if (screen.width <= 699) {
+document.location = "<?php echo BASE_URL; ?>m/user/login";
+}
+
+</script>
+
 <?php
 
 if (count($errors) > 0)

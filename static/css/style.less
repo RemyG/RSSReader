@@ -26,7 +26,7 @@
 @entry-link-bg-read: #2e2e2e;
 @entry-link-border: #2c2c2c;
 
-@header-height: 30px;
+@header-height: 40px;
 @header-bg: #e67e22;
 @header-bg-hover: #d35400;
 @menu-width: 350px;
@@ -39,7 +39,7 @@ html, body {
 }
 
 body {
-	padding-top: 50px;
+	/*padding-top: 50px;*/
 }
 
 * {
@@ -47,10 +47,12 @@ body {
 	font-family: @body-font;
 }
 
-a:hover {
-	color: @header-bg;
+a {
+	color: @default-text-color;
+	&:hover {
+		color: @header-bg;
+	}
 }
-
 
 .ajax-overlay {
 	background-color: #fff;
@@ -125,7 +127,192 @@ a, a:hover, a:focus {
 	margin: 0;
 }
 
+form {
+	fieldset {
+		border: 0;
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input, select {
+			display: block;
+			margin-bottom: 15px;
+			min-width: 300px;
+		}
+	}
+}
+
+.dropdown-menu {
+	border: 1px solid #ccc;
+	padding: 0;
+	margin: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 130%;
+    right: 0;
+    width: 100px;
+    height: auto;
+    /*opacity: 0;*/
+    transition: all 0.1s;
+    background: #fff;
+    li {
+		float: none;
+		list-style-type: none;
+		a {
+			display: block;
+			line-height: 25px;
+			padding: 0 10px;
+		}
+		&.divider {
+			border-bottom: 1px solid #ccc;
+		}
+	}
+}
+span.dropdown {
+	position: relative;
+}
+
+span.dropdown:hover .dropdown-menu {
+	visibility: visible;
+	top: 110%;
+	opacity: 1;
+}
+
+div.modal {
+	display: none;
+	background-clip: padding-box;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    left: 50%;
+    margin-left: -280px;
+    outline: 0 none;
+    position: fixed;
+    top: 10%;
+    width: 560px;
+    z-index: 1050;
+	&.fade {
+		transition: opacity 0.3s linear 0s, top 0.3s ease-out 0s;
+		opacity: 1;
+	}
+	div.modal-header {
+		border-bottom: 1px solid #EEEEEE;
+		padding: 9px 15px;
+		h3 {
+			line-height: 30px;
+			margin: 0;
+		}
+		.close {
+			color: #000000;
+			float: right;
+			font-size: 20px;
+			font-weight: bold;
+			line-height: 30px;
+			opacity: 0.2;
+			text-shadow: 0 1px 0 #FFFFFF;
+		}
+	}
+	div.modal-body {
+		max-height: 400px;
+		overflow-y: auto;
+		padding: 15px;
+		position: relative;
+	}
+	div.modal-footer {
+		background-color: #F5F5F5;
+		border-radius: 0 0 6px 6px;
+		border-top: 1px solid #DDDDDD;
+		box-shadow: 0 1px 0 #FFFFFF inset;
+		margin-bottom: 0;
+		padding: 14px 15px 15px;
+		text-align: right;
+	}
+}
+
+.modal-backdrop {
+	display: none;
+	background-color: #000000;
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1040;
+	opacity: 0.8;
+}
+
+.btn {
+	background-color: #F5F5F5;
+	border-color: #ddd;
+	border-style: solid;
+	border-width: 1px;
+	color: #333333;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: 0;
+	padding: 4px 12px;
+	text-align: center;
+	vertical-align: middle;
+	&:hover {
+		border-color: #aaa;
+		color: @default-text-color;
+	}
+	&.btn-primary {
+		background-color: @header-bg;
+		color: #fff;
+		border: 0;
+		&:hover {
+			background-color: @header-bg-hover;
+			color: #fff;
+		}
+	}
+}
+
 #header {
+	height: @header-height;
+	line-height: @header-height;
+	background-color: @header-bg;
+	* {
+		line-height: @header-height;
+	}
+	a {
+		color: #fff;
+		&:hover {
+			background-color: @header-bg-hover;
+		}
+	}
+	a.brand {
+		display: block;
+		float: left;
+		line-height: inherit;
+		padding: 0 15px;
+		font-size: 20px;
+		font-family: @title-font;
+	}
+	ul {
+		float: left;
+		display: inline-block;
+		padding: 0;
+		margin: 0;
+		&.pull-right {
+			float: right;
+		}
+		li {
+			float: left;
+			list-style-type: none;
+			position: relative;
+			a {
+				display: block;
+				line-height: inherit;
+				padding: 0 15px;
+			}
+		}
+	}
+
+/*
 	.navbar-inner {
 		background-color: @header-bg;
 		background-image: none;
@@ -146,6 +333,7 @@ a, a:hover, a:focus {
 			border-bottom-color: #fff;
 		}
 	}
+	*/
 }
 
 #left-menu {
@@ -180,7 +368,6 @@ a, a:hover, a:focus {
 		margin: 0;
 		line-height: 22px;
 		div, a span.feed-title {
-			margin-right: 5px;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: clip ellipsis;
@@ -229,6 +416,7 @@ a, a:hover, a:focus {
 					overflow: hidden;
 					span.feed-title {
 						max-width: @menu-width - 90px;
+						margin-right: 5px;
 						display: block;
 						float: left;
 					}
@@ -375,9 +563,10 @@ a, a:hover, a:focus {
 			margin-bottom: 15px;
 			div.entry-link-container {
 				overflow: hidden;
-				padding: 5px;
+				/*padding: 5px;*/
+				font-size: 14px;
 				> div {
-					padding: 5px;
+					padding: 10px;
 				}
 				> div:hover {
 					color: @entry-link-text-hover;
@@ -421,10 +610,11 @@ a, a:hover, a:focus {
 					}
 
 				}
-				div.remove {
+				div.remove-entry {
 					float: right;
 					width: 25px;
 					text-align: center;
+					cursor: pointer;
 					a {
 						color: inherit;
 						text-decoration: none;

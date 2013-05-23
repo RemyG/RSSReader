@@ -223,9 +223,9 @@ function openEntry(id, href)
 	{
 		openEntryAsSource(id);
 	}
-	$('a.entry-meta-link').attr('data-id', id);
+	$('a.entry-meta-link').attr('data-entry-id', id);
 	$('a.entry-meta-link').attr('href', href);
-	$('#read-link').hide();
+	$('#read-link').hide();	
 	$('#unread-link').show();
 	$('#entry-meta-links').show();
 }
@@ -307,7 +307,8 @@ $("#feed-content").on("click", "a.feed-edit", function(e) {
 		$('#modal-edit').find('input[name=feed-title]').val(data.feedtitle);
 		$('#modal-edit').find('input[name=feed-link]').val(data.feedlink);
 		$('#modal-edit').find('input[name=feed-base-link]').val(data.feedbaselink);
-		$('#modal-edit').modal('show');
+		$(".modal-backdrop").show();
+		$('#modal-edit').show();
 	});
 	request.fail(function(jqXHR, textStatus) {
 		$('#overlay').hide();
@@ -318,7 +319,8 @@ $("#feed-content").on("click", "a.feed-edit", function(e) {
 // Close the feed deletion modal
 $("#modal-edit").on("click", ".cancel-edit-feed", function(e) {
 	e.preventDefault();
-	$("#modal-edit").modal("hide");
+	$("#modal-edit").hide();
+	$(".modal-backdrop").hide();
 });
 
 // Delete a feed (and its entries)
@@ -330,7 +332,8 @@ $("#modal-edit").on("click", ".confirm-edit-feed", function(e) {
 			{
 				$('#load-feed-link-' + $id).find('span.feed-title').html(data.feedtitle);
 				// $('#feed-content').find('.feed-title').html(data.feedtitle);
-				$("#modal-edit").modal("hide");
+				$("#modal-edit").hide();
+				$(".modal-backdrop").hide();
 				$('#button-refresh').click();
 			}
 		}, "json");
@@ -405,14 +408,16 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 
 // Show the modal to Delete a feed (and its entries)
 $("#feed-content").on("click", ".delete-feed", function(e) {
-	e.preventDefault();	
-	$('#modal-from-dom').modal('show');
+	e.preventDefault();
+	$(".modal-backdrop").show();
+	$('#modal-from-dom').show();
 });
 
 // Close the feed deletion modal
 $("#feed-content").on("click", ".cancel-delete", function(e) {
 	e.preventDefault();
-	$("#modal-from-dom").modal("hide");
+	$("#modal-from-dom").hide();
+	$(".modal-backdrop").hide();
 });
 
 // Delete a feed (and its entries)
@@ -420,7 +425,8 @@ $("#feed-content").on("click", ".confirm-delete", function(e) {
 	e.preventDefault();
 	var id = $(this).data("id");
 	$("#load-feed-link-"+id).hide();	
-	$("#modal-from-dom").modal("hide");
+	$("#modal-from-dom").hide();
+	$(".modal-backdrop").hide();
 	$("#feed-content").html("");
 	var request = $.ajax({
 		url: 'feed/delete/' + id,

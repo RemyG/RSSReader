@@ -12,8 +12,7 @@
 
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/jquery-ui.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/font-awesome.min.css" type="text/css" media="screen" />
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap-responsive.min.css" />
+	<!--<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap.min.css" />-->
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.less" type="text/less" media="screen" />
 
 	<link href='http://fonts.googleapis.com/css?family=Dosis:700' rel='stylesheet' type='text/css'>
@@ -22,10 +21,18 @@
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/less-1.3.3.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-2.0.0.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/bootstrap.min.js"></script>
+	<!--<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/bootstrap.min.js"></script>-->
 
 </head>
 <body>
+
+	<script type="text/javascript">
+	<!--
+	if (screen.width < 980) {
+	window.location = "<?php echo BASE_URL; ?>m";
+	}
+	//-->
+	</script>
 
 	<div id="overlay" class="ajax-overlay">
 		<div class="ajax-loader-text"></div>
@@ -37,7 +44,9 @@
 		<div class="ajax-loader">&nbsp;</div>
 	</div>
 
-	<div id="header" class="navbar navbar-fixed-top">
+	<div class="modal-backdrop"></div>
+
+	<nav id="header" class="navbar navbar-fixed-top">
 		
 		    <div class="navbar">
 
@@ -45,7 +54,7 @@
 					<div class="container-fluid">
 					<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
 				    <ul class="nav pull-right">
-				    	<li><a href="#" title="Refresh" data-href="<?php echo BASE_URL; ?>feed/updateall" 
+				    	<li style="display: none;"><a href="#" title="Refresh" data-href="<?php echo BASE_URL; ?>feed/updateall" 
 				    		data-id="" data-type="all" id="button-refresh"><i class="icon-refresh"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>feed/add" title="Add new feed"><i class="icon-plus-sign"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" title="Import OPML file"><i class="icon-download"> </i></a></li>
@@ -56,7 +65,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</nav>
 
 
 	<div class="container-fluid">

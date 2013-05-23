@@ -10,7 +10,8 @@
 
 </div>
 
-<div id="modal-edit" class="modal hide fade">
+<!--<div id="modal-edit" class="modal hide fade">-->
+<div id="modal-edit" class="modal fade">
 	<div class="modal-header">
 		<a href="#" class="close cancel-edit-feed">&times;</a>
 		<h3>Edit feed</h3>
@@ -33,5 +34,9 @@
 		<a href="#" class="btn cancel-edit-feed">Cancel</a>
 	</div>
 </div>
+
+<script type="text/javascript">
+$('#button-refresh').parent('li').show();
+</script>
 
 <script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.js"></script>
