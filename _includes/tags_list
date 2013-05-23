@@ -1,0 +1,10 @@
+{% if tags_list.first[0] == null %}
+  {% for tag in tags_list %} 
+  	<li>{{ tag }}</li>
+  {% endfor %}
+{% else %}
+  {% for tag in tags_list %} 
+  	<li>{{ tag[0] }}</li>
+  {% endfor %}
+{% endif %}
+{% assign tags_list = nil %}

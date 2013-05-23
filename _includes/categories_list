@@ -1,0 +1,10 @@
+{% if categories_list.first[0] == null %}
+    {% for category in categories_list %} 
+        <li>{{ category | join: "/" }}</li>
+    {% endfor %}
+{% else %}
+    {% for category in categories_list %} 
+        <li>{{ category[0] | join: "/" }}</li>
+    {% endfor %}
+{% endif %}
+{% assign categories_list = nil %}

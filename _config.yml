@@ -1,13 +1,12 @@
 pygments: true
 permalink: :year/:month/:day/:title 
 
-markdown: kramdown
-
 baseurl: /RSSReader
 
 title : RSS Reader
 author :
   name : Rémy Gardette
+  website: http://remyg.fr
   email : remy.gardette@gmail.com
   github : RemyG
   twitter : remygardette
