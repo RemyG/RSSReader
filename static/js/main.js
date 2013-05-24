@@ -241,7 +241,7 @@ function openEntryAsFrame(id, href)
 	// var containerHeight = $(window).height();
 	var containerHeight = $('#content').height();
 	// var metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 75;
-	var metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 30;
+	var metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 15;
 	$("#load-entry-div-" + id).find('iframe').height(containerHeight - metaHeight);
 	scrollToActiveEntry("load-entry-link-" + id);
 }
@@ -512,7 +512,7 @@ function scrollToActiveEntry(entryId)
 	var container = $("#content"),
 		scrollTo = $("#" + entryId);
 	container.scrollTop(
-		scrollTo.offset().top - container.offset().top + container.scrollTop() - 10
+		scrollTo.offset().top - container.offset().top + container.scrollTop() - 5
 	);
 }
 
@@ -575,12 +575,21 @@ function setFeedViewAsSource(id)
 }
 
 setInterval(function() {
-  //your jQuery ajax code
-  $(".load-feed-link").each(function () {
-  	var id = $(this).data('id');
-  	updateCountForFeed(id);
-  });
-}, 1000 * 60 * 30); // where X is your every X minutes
+	//your jQuery ajax code
+	var request = $.ajax({
+		url: 'feed/countAll',
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data)
+	{
+		for(var i = 0 ; i < data.length ; i++)
+		{
+			var obj = data[i];
+			setCountForFeed(obj['feedId'], obj['feedCount'], obj['categoryCount']);
+		}
+	});
+}, 1000 * 60 * 10); // where X is your every X minutes
 
 $(document.documentElement).keyup(function (event) {
 	event.preventDefault();

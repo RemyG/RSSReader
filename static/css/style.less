@@ -78,18 +78,6 @@ a {
 	color: black;
 }
 
-/*#header {
-	padding: 15px 0;
-	h1.title {
-		font-size: 2em;
-		padding: 0;
-		margin: 0;
-	}
-	div.links {
-		text-align: right;
-	}
-}*/
-
 .load-feed-link {
 	.feed-count {
 		display: inline;
@@ -311,34 +299,11 @@ div.modal {
 			}
 		}
 	}
-
-/*
-	.navbar-inner {
-		background-color: @header-bg;
-		background-image: none;
-		border-width: 0;
-		box-shadow: none;
-		a {
-			text-shadow: none;
-			color: #fff;
-			&:hover {
-				background-color: @header-bg-hover;
-			}
-		}
-		a.brand {
-			font-family: @title-font;
-		}
-		b.caret {
-			border-top-color: #fff;
-			border-bottom-color: #fff;
-		}
-	}
-	*/
 }
 
 #left-menu {
 	position: fixed;
-	top: 45px;
+	top: @header-height + 5;
 	left: 0;
 	bottom: 0;
 	overflow: auto;
@@ -486,7 +451,7 @@ div.modal {
 
 #content {
 	position: fixed;
-	top: 45px;
+	top: @header-height;
 	right: 0;
 	bottom: @footer-menu-height;
 	left: @menu-width;

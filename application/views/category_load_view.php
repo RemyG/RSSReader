@@ -34,8 +34,8 @@
 		echo '
 			<div class="entry-container" id="entry-container-'.$entry->getId().'">
 				<div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').'">
-					<div class="remove">
-						<a href="#" class="remove-entry" data-id="'.$entry->getId().'" title="Remove this entry">
+					<div class="remove-entry" data-id="'.$entry->getId().'">
+						<a href="#" data-id="'.$entry->getId().'" title="Remove this entry">
 							<i class="icon-remove-sign"> </i>
 						</a>
 					</div>

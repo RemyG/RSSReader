@@ -128,6 +128,26 @@ class FeedController extends Controller {
 		echo json_encode(array('feed' => $count, 'category' => $catCount));
 	}
 
+	function countAll()
+	{
+		$categories = CategoryQuery::create()->find();
+		$result = array();
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		foreach ($categories as $category)
+		{
+			foreach ($category->getFeeds() as $feed)
+			{
+				$result[] = array(
+					'feedId' => $feed->getId(),
+					'feedCount' => $feed->countEntrys($c), 
+					'valid' => $feed->getValid(),
+					'categoryCount' => $category->countEntrys($c));
+			}
+		}
+		echo json_encode($result);
+	}
+
 	function markRead($id)
 	{		
 		$feed = FeedQuery::create()->findPK($id);
