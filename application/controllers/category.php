@@ -68,7 +68,19 @@ class CategoryController extends Controller {
 		$template->set('entries', $entries);
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
-		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c)));
+		echo json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c)));
+	}
+
+	function update($id)
+	{
+		$category = CategoryQuery::create()->findPK($id);
+		require_once('feed.php');
+		$feedController = new FeedController();
+		foreach ($category->getFeeds() as $feed)
+		{
+			$feedController->update($feed->getId());
+		}
+		$this->load($id);
 	}
 
 	function count($id)
