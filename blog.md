@@ -22,7 +22,7 @@ title: Blog Posts
 			</div>
 			<div class="comments-heading right">
 				<i class="icon-comments"> </i>
-				<a href="{{ post.url }}/#disqus_thread">Comments</a>
+				<a href="{{ site.baseurl }}{{ post.url }}/#disqus_thread">Comments</a>
 			</div>
 		</div>
 	</header>

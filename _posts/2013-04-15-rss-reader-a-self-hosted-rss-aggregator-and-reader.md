@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "RSS Reader"
-tagline: "A self-hosted RSS agregator and reader"
+tagline: "A self-hosted RSS aggregator and reader"
 description: ""
 tags: [v0.1] 
 categories: 
@@ -12,7 +12,7 @@ A few weeks ago, Google announced they would stop their service [Google Reader](
 
 But this announce has made me think. Every now and then, we hear about another service being shut down. Google, which regroups a huge part of the webapps used in the world, has his traditionnal Spring Cleaning. Other companies have closed worldwide-used websites. You can never know how long you'll be able to use a specific service.
 
-This is the reason I've decided to develop my own RSS agregator and reader, to allow me to take control over my personnal data.
+This is the reason I've decided to develop my own RSS aggregator and reader, to allow me to take control over my personnal data.
 
 The project is named RSS Reader (not very original). It's a PHP based project, that you can deploy on a personnal server, or self-hosting service. It's released under the [MIT License](http://www.opensource.org/licenses/MIT). It uses 2 external libraries: [Propel ORM](http://propelorm.org/) (an open source ORM for PHP5, released under the MIT License), and [SimplePie](http://simplepie.org/) (an open source feed parser, released under the BSD License).
 

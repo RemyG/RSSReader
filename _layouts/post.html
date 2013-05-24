@@ -1,9 +1,58 @@
 ---
 layout: default
 ---
-<h2>{{ page.title }}</h2>
-<p class="meta">{{ page.date | date_to_string }}</p>
 
-<div id="post">
-{{ content }}
-</div>
+<article class="post">
+	<header>
+		<div class="post-title">
+			<h1>
+				{{ page.title }}{% if page.tagline %}<small> - {{page.tagline}}</small>{% endif %}
+			</h1>
+		</div>
+		<div class="post-meta">
+			<div class="post-date">
+				<i class="icon-time"> </i>
+				{{ page.date | date:"%Y-%m-%d" }}
+			</div>
+		</div>
+	</header>
+	<div id="post">
+		{{ content }}
+	</div>
+	<div class="meta-info">
+		{% unless page.tags == empty %}
+		<div>
+			<ul class="tag_box inline-list valign-middle">
+				<li><i class="icon-tags valign-middle float-left"> </i></li>
+				{% assign tags_list = page.tags %}
+				{% include tags_list %}
+			</ul>
+		</div>
+		{% endunless %}
+		{% unless page.categories == empty %}
+		<div>
+			<ul class="tag_box inline-list valign-middle">
+				<li><i class="icon-folder-open valign-middle float-left"> </i></li>
+				{% assign categories_list = page.categories %}
+				{% include categories_list %}
+			</ul>
+		</div>
+		{% endunless %}
+	</div>
+</article>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'remyggithub'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
