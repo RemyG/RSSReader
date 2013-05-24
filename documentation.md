@@ -14,7 +14,6 @@ To run this application, you need:
 * PHP 5.1 or greater with support of PDO
 * MySql drivers for PDO
 * the Mod_Rewrite module for Apache
-* the php5-tidy package
 
 ## Installation
 
