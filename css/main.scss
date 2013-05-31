@@ -73,14 +73,31 @@ a {
     }
 }
 
+#github-banner {
+    img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 0;
+    }
+    @media (max-width:1024px) { 
+        img {
+            position: absolute;
+            right: 0;
+            top: $header-height;
+            border: 0;
+        }
+    }
+}
+
 nav.top-bar {
-    height: $header-height;
+    /*height: $header-height;*/
     line-height: $header-height;
     background-color: $header-bg;
     * {
         line-height: $header-height;
     }
-    a {
+    a, i {
         color: #fff;
         &:hover {
             background-color: $header-bg-hover;
@@ -104,11 +121,55 @@ nav.top-bar {
             float: left;
             list-style-type: none;
             position: relative;
-            a {
+            a, i {
                 display: block;
                 line-height: inherit;
                 padding: 0 15px;
             }
+            i {
+                font-size: 22px;
+                cursor: pointer;
+            }
+        }
+    }
+    @media (max-width: 767px) { 
+        section.top-bar-list {
+            display: none;
+        }
+        section.top-bar-menu {
+            display: block;
+            position: relative;
+            li.sub-menu-link:hover ul.sub-menu {
+                visibility: visible;
+                top: 100%;
+                opacity: 1;
+            }
+            ul.sub-menu {
+                z-index: 100;
+                border: 1px solid #ccc;
+                padding: 0;
+                margin: 0;
+                visibility: hidden;
+                position: absolute;
+                top: 130%;
+                right: 0;
+                width: 200px;
+                height: auto;
+                transition: all 0.1s;
+                background: #fff;
+                li {
+                    float: none;
+                    display: block;
+                }
+            }
+        }
+    }
+    @media (min-width: 768px) { 
+        section.top-bar-list {
+            display: block;
+        }
+        section.top-bar-menu {
+            display: none;
         }
     }
 }

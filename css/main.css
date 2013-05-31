@@ -387,15 +387,27 @@ a {
   a:hover {
     color: #e67e22; }
 
+#github-banner img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0; }
+@media (max-width: 1024px) {
+  #github-banner img {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    border: 0; } }
+
 nav.top-bar {
-  height: 40px;
+  /*height: $header-height;*/
   line-height: 40px;
   background-color: #e67e22; }
   nav.top-bar * {
     line-height: 40px; }
-  nav.top-bar a {
+  nav.top-bar a, nav.top-bar i {
     color: #fff; }
-    nav.top-bar a:hover {
+    nav.top-bar a:hover, nav.top-bar i:hover {
       background-color: #d35400; }
   nav.top-bar ul.title-area a {
     font-size: 20px;
@@ -411,10 +423,44 @@ nav.top-bar {
       float: left;
       list-style-type: none;
       position: relative; }
-      nav.top-bar ul li a {
+      nav.top-bar ul li a, nav.top-bar ul li i {
         display: block;
         line-height: inherit;
         padding: 0 15px; }
+      nav.top-bar ul li i {
+        font-size: 22px;
+        cursor: pointer; }
+  @media (max-width: 767px) {
+    nav.top-bar section.top-bar-list {
+      display: none; }
+    nav.top-bar section.top-bar-menu {
+      display: block;
+      position: relative; }
+      nav.top-bar section.top-bar-menu li.sub-menu-link:hover ul.sub-menu {
+        visibility: visible;
+        top: 100%;
+        opacity: 1; }
+      nav.top-bar section.top-bar-menu ul.sub-menu {
+        z-index: 100;
+        border: 1px solid #ccc;
+        padding: 0;
+        margin: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 130%;
+        right: 0;
+        width: 200px;
+        height: auto;
+        transition: all 0.1s;
+        background: #fff; }
+        nav.top-bar section.top-bar-menu ul.sub-menu li {
+          float: none;
+          display: block; } }
+  @media (min-width: 768px) {
+    nav.top-bar section.top-bar-list {
+      display: block; }
+    nav.top-bar section.top-bar-menu {
+      display: none; } }
 
 footer.copyright {
   background: none repeat scroll 0 0 #3F3F3F;
