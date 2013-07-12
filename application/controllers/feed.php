@@ -102,7 +102,6 @@ class FeedController extends Controller {
 		{
 			$this->updateFeed($feed, $errors);
 		}
-		$this->cleanOldEntries();
 		$feeds = FeedQuery::create()->find();
 		$template = $this->loadView('feed_updateall_view');
 		$template->set('feeds', $feeds);
@@ -442,6 +441,8 @@ class FeedController extends Controller {
 			$feed->setValid(false);
 			$feed->save();
 		}
+		
+		$this->cleanOldEntries($feed);
 
 		return $errors;
 		
@@ -509,27 +510,22 @@ class FeedController extends Controller {
 		// close file
 		fclose($fd);
 	}
-
-	private function cleanOldEntries()
+	
+	private function cleanOldEntries($feed)
 	{
-		$feeds = FeedQuery::create()->find();
-		foreach ($feeds as $feed)
+		$all = 0;
+		$read = 0;
+		$entries = EntryQuery::create()->filterByFeed($feed)->orderByUpdated('desc')->find();
+		foreach ($entries as $entry)
 		{
-			$all = 0;
-			$read = 0;
-			$entries = EntryQuery::create()->filterByFeed($feed)->orderByUpdated('desc')->find();
-			foreach ($entries as $entry)
+			$all++;
+			if ($entry->getRead() == 1)
 			{
-				$all++;
-				if ($entry->getRead() == 1)
-				{
-					$read++;
-				}
-				if ($all > 300 || ($read > 100 && $entry->getRead() == 1))
-				{
-					$entry->delete();
-				}
-
+				$read++;
+			}
+			if ($all > 200 || ($read > 50 && $entry->getRead() == 1))
+			{
+				$entry->delete();
 			}
 
 		}
