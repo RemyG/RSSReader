@@ -12,15 +12,12 @@
 
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/font-awesome.min.css" type="text/css" media="screen" />
 
-	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/less-1.3.3.min.js"></script>
-
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/mobile.css" />
 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/jquery.mobile-1.3.1.min.css" />
+	
+	<script src="<?php echo BASE_URL; ?>static/js/jquery-2.0.0.min.js"></script>
+	<script src="<?php echo BASE_URL; ?>static/js/jquery.mobile-1.3.1.min.js"></script>
 
 </head>
 <body>
