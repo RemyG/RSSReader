@@ -10,6 +10,7 @@ class MobileEntryController extends Controller {
 		$entry->save();
 		$template->set('entry', $entry);
 		$template->set('backUrl', '/m/feed/load/'.$entry->getFeed()->getId());
+		$template->set('entryId', $id);
 		$template->renderMobile();
 	}
     

@@ -15,7 +15,7 @@
 			foreach ($entries as $entry) {
 				
 				echo '
-					<li><a href="/m/entry/load/'.$entry->getId().'"'.($entry->getRead() == 1 ? ' class="read"' : '').'>'.$entry->getTitle().'</a></li>';
+					<li><a href="/m/entry/load/'.$entry->getId().'"'.($entry->getRead() == 1 ? ' class="read"' : '').' data-ajax="false">'.$entry->getTitle().'</a></li>';
 			}
 
 			?>
