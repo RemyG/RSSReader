@@ -126,7 +126,7 @@ class FeedController extends Controller {
 		$feeds = FeedQuery::create()->find();
 		foreach ($feeds as $feed)
 		{
-			$this->updateFeed($feed, $errors);
+			$this->updateFeed($feed, $errors, false);
 		}
 		$feeds = FeedQuery::create()->find();
 		$template = $this->loadView('feed_updateall_view');
@@ -388,14 +388,15 @@ class FeedController extends Controller {
 
 	}
 
-	private function updateFeed($feed, $errors)
+	/**
+	 * Update a feed.
+	 * @param Feed $feed The feed to update
+	 * @param mixed $errors A list of strings for the current errors.
+	 * @param bool $invalidate If true, when a feed cannot be updated, mark the feed as not valid.
+	 * @return mixed A list of strings for the current errors.
+	 */
+	private function updateFeed($feed, $errors, $invalidate = true)
 	{
-
-		/*if (!$feed->getValid())
-		{
-			return $errors;
-		}*/
-
 		set_time_limit(30);
 
 		$feedUrl = $feed->getLink();
@@ -404,15 +405,17 @@ class FeedController extends Controller {
 
 		try
 		{
-
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url($feedUrl);
 			$valid = $feedSP->init();
 
 			if(!$valid)
 			{
-				$feed->setValid(false);
-				$feed->save();
+				if ($invalidate)
+				{
+					$feed->setValid(false);
+					$feed->save();
+				}
 				return $errors;
 			}
 			else {
@@ -427,7 +430,6 @@ class FeedController extends Controller {
 			{
 				$lastUpdate = 0;
 			}
-			
 
 			$feed->setUpdated(new DateTime());
 			$feed->setDescription($feedSP->get_description());
@@ -464,14 +466,16 @@ class FeedController extends Controller {
 		catch (Exception $e)
 		{
 			$errors[] = 'Error when updating feed '.$feedUrl.': '.$e->getMessage();
-			$feed->setValid(false);
-			$feed->save();
+			if ($invalidate)
+			{
+				$feed->setValid(false);
+				$feed->save();
+			}
 		}
 		
 		$this->cleanOldEntries($feed);
 
 		return $errors;
-		
 	}
 
 	private function recursiveOpmlImport($xmlNode, $errors, $parentCat, $logFile = null)
