@@ -94,10 +94,36 @@ class FeedController extends Controller {
 		$template->render();
 	}
 
+	/**
+	 * Update all the valid feeds.
+	 * 
+	 * @return string
+	 */
 	function updateAll()
 	{
 		$errors = array();
 		$feeds = FeedQuery::create()->filterByValid(1)->find();
+		foreach ($feeds as $feed)
+		{
+			$this->updateFeed($feed, $errors);
+		}
+		$feeds = FeedQuery::create()->find();
+		$template = $this->loadView('feed_updateall_view');
+		$template->set('feeds', $feeds);
+		$template->set('errors', $errors);
+		return $template->renderString();
+	}
+	
+	/**
+	 * Force the update of all the feeds (valid or invalid).
+	 * Should be called once a day, to re-check all the feeds.
+	 * 
+	 * @return string
+	 */
+	function forceUpdateAll()
+	{
+		$errors = array();
+		$feeds = FeedQuery::create()->find();
 		foreach ($feeds as $feed)
 		{
 			$this->updateFeed($feed, $errors);
