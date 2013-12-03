@@ -2,37 +2,20 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-
+	<meta name="viewport" content=" width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
 	<meta name="description" content="<?php echo isset($pageDescription) ? $pageDescription : DEFAULT_DESCRIPTION; ?>">
 	<meta name="author" content="<?php echo isset($pageAuthor) ? $pageAuthor : DEFAULT_AUTHOR; ?>">
-
-	<meta name="viewport" content=" width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
 
 	<title><?php echo isset($pageTitle) ? $pageTitle : DEFAULT_TITLE; ?></title>
 
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/jquery-ui.min.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/font-awesome.min.css" type="text/css" media="screen" />
-	<!--<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/bootstrap.min.css" />-->
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.less" type="text/less" media="screen" />
+	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.css" type="text/css" media="screen" />
 
 	<link href='http://fonts.googleapis.com/css?family=Dosis:700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
-
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/less-1.3.3.min.js"></script>
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-2.0.0.min.js"></script>
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/jquery-ui.min.js"></script>
-	<!--<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/bootstrap.min.js"></script>-->
-
 </head>
 <body>
-
-	<script type="text/javascript">
-	<!--
-	if (screen.width < 980) {
-	window.location = "<?php echo BASE_URL; ?>m";
-	}
-	//-->
-	</script>
 
 	<div id="overlay" class="ajax-overlay">
 		<div class="ajax-loader-text"></div>
@@ -99,7 +82,8 @@
 									echo '
 										<li class="load-feed-link'.$empty.$valid.'" id="load-feed-link-'.$feed->getId().'" 
 											data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
-											data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'">
+											data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'"
+    										data-baselink="'.$feed->getBaseLink().'">
 											<a href="feed/load/'.$feed->getId().'">
 												<span class="feed-title">'.$feed->getTitle().'</span>
 												<span class="feed-count">'.$feed->countEntrys($c).'</span>
@@ -115,33 +99,6 @@
 					?>
 				</ul>
 
-				<script type="text/javascript">
-				$(function() {
-					$("#feed-list").sortable({
-						items: "li.load-feed-link",
-						update: function(event, ui)
-						{
-							var feedId = ui.item.data('id');
-							var catId = ui.item.parents("li.category").data('cat-id');
-							var order = ui.item.prevAll("li.load-feed-link").size();
-							setNewOrder(feedId, catId, order);
-						}
-					});
-				});
-				function setNewOrder(feedId, catId, order)
-				{
-					var request = $.ajax({
-						url: "feed/order/" + feedId + "/" + catId + "/" + order,
-						type: "GET",
-						dataType: "html"
-					});
-					request.done(function(msg) {
-					});
-					request.fail(function(jqXHR, textStatus) {
-					});
-				}
-				</script>
-				
 			</div>
 
 			<div id="content">

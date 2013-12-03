@@ -1,37 +1,37 @@
-@title-font: 'Dosis', Helvetica, Arial, sans-serif;
-@body-font: 'Gudea', sans-serif;
+$title-font: 'Dosis', Helvetica, Arial, sans-serif;
+$body-font: 'Gudea', sans-serif;
 
-@default-text-color: #444;
+$default-text-color: #444;
 
-@feed-link-bg-active: #EDA15E;
-@feed-link-bg-hover: #FAE4D1;
+$feed-link-bg-active: #EDA15E;
+$feed-link-bg-hover: #FAE4D1;
 
-@feed-link-text: #ffffff;
-@feed-link-bg: #232323;
+$feed-link-text: #ffffff;
+$feed-link-bg: #232323;
 
 
-@feed-link-bg-active-marker: #1b7e5a;
-@feed-link-border: #2c2c2c;
+$feed-link-bg-active-marker: #1b7e5a;
+$feed-link-border: #2c2c2c;
 
-@link-color: #2BA6CB;
+$link-color: #2BA6CB;
 
-@entry-list-bg: #eeebe4;
-@entry-link-text: #ffffff;
-@entry-link-text-hover: #e67e22;
-@entry-link-text-active: #0088cc;
-@entry-link-text-read: #bbb;
-@entry-link-bg: #232323;
-@entry-link-bg-hover: #2e2e2e;
-@entry-link-bg-active: #2e2e2e;
-@entry-link-bg-read: #2e2e2e;
-@entry-link-border: #2c2c2c;
+$entry-list-bg: #eeebe4;
+$entry-link-text: #ffffff;
+$entry-link-text-hover: #e67e22;
+$entry-link-text-active: #0088cc;
+$entry-link-text-read: #bbb;
+$entry-link-bg: #232323;
+$entry-link-bg-hover: #2e2e2e;
+$entry-link-bg-active: #2e2e2e;
+$entry-link-bg-read: #2e2e2e;
+$entry-link-border: #2c2c2c;
 
-@header-height: 40px;
-@header-bg: #e67e22;
-@header-bg-hover: #d35400;
-@menu-width: 350px;
+$header-height: 40px;
+$header-bg: #e67e22;
+$header-bg-hover: #d35400;
+$menu-width: 350px;
 
-@footer-menu-height: 30px;
+$footer-menu-height: 30px;
 
 html, body {
 	padding: 0;
@@ -44,14 +44,20 @@ body {
 
 * {
 	/*font-family: 'Montserrat', sans-serif;*/
-	font-family: @body-font;
+	font-family: $body-font;
 }
 
 a {
-	color: @default-text-color;
+	color: $default-text-color;
 	&:hover {
-		color: @header-bg;
+		color: $header-bg;
 	}
+}
+
+img {
+	max-width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .ajax-overlay {
@@ -246,30 +252,30 @@ div.modal {
 	vertical-align: middle;
 	&:hover {
 		border-color: #aaa;
-		color: @default-text-color;
+		color: $default-text-color;
 	}
 	&.btn-primary {
-		background-color: @header-bg;
+		background-color: $header-bg;
 		color: #fff;
 		border: 0;
 		&:hover {
-			background-color: @header-bg-hover;
+			background-color: $header-bg-hover;
 			color: #fff;
 		}
 	}
 }
 
 #header {
-	height: @header-height;
-	line-height: @header-height;
-	background-color: @header-bg;
+	height: $header-height;
+	line-height: $header-height;
+	background-color: $header-bg;
 	* {
-		line-height: @header-height;
+		line-height: $header-height;
 	}
 	a {
 		color: #fff;
 		&:hover {
-			background-color: @header-bg-hover;
+			background-color: $header-bg-hover;
 		}
 	}
 	a.brand {
@@ -278,7 +284,7 @@ div.modal {
 		line-height: inherit;
 		padding: 0 15px;
 		font-size: 20px;
-		font-family: @title-font;
+		font-family: $title-font;
 	}
 	ul {
 		float: left;
@@ -303,18 +309,18 @@ div.modal {
 
 #left-menu {
 	position: fixed;
-	top: @header-height + 5;
+	top: $header-height + 5;
 	left: 0;
 	bottom: 0;
 	overflow: auto;
-	width: @menu-width;
+	width: $menu-width;
 }
 
 .ajax-overlay-content {
 	background-color: #fff;
 	position: fixed;
 	top: 45px;
-	left: @menu-width;
+	left: $menu-width;
 	right: 0;
 	bottom: 0;
 	display: none;
@@ -367,7 +373,7 @@ div.modal {
 				}
 			}
 			&:hover {
-				background-color: @feed-link-bg-hover;
+				background-color: $feed-link-bg-hover;
 			}
 		}
 		ul.feeds {
@@ -377,26 +383,26 @@ div.modal {
 					display: block;
 					padding: 2px 20px;
 					padding-right: 5px;
-					color: @default-text-color;
+					color: $default-text-color;
 					overflow: hidden;
 					span.feed-title {
-						max-width: @menu-width - 90px;
+						max-width: $menu-width - 90px;
 						margin-right: 5px;
 						display: block;
 						float: left;
 					}
 				}
 				&:hover {
-					background-color: @feed-link-bg-hover;
+					background-color: $feed-link-bg-hover;
 				}
 				&.active {
-					background-color: @feed-link-bg-active;
+					background-color: $feed-link-bg-active;
 				}
 			}
 		}
 		&.active {
 			div {
-				background-color: @feed-link-bg-active;
+				background-color: $feed-link-bg-active;
 			}
 		}
 	}
@@ -406,8 +412,8 @@ div.modal {
 	position: fixed;
 	right: 0;
 	bottom: 0;
-	left: @menu-width;
-	height: @footer-menu-height;
+	left: $menu-width;
+	height: $footer-menu-height;
 	background-color: #ddd;
 
 	#entry-meta-links,
@@ -422,7 +428,7 @@ div.modal {
 			margin: 0;
 			text-decoration: none;
 			font-weight: bold;
-			line-height: @footer-menu-height;
+			line-height: $footer-menu-height;
 			i {
 				font-size: inherit;
 			}
@@ -451,10 +457,10 @@ div.modal {
 
 #content {
 	position: fixed;
-	top: @header-height;
+	top: $header-height;
 	right: 0;
-	bottom: @footer-menu-height;
-	left: @menu-width;
+	bottom: $footer-menu-height;
+	left: $menu-width;
 	overflow: auto;
 
 	#feed-content {
@@ -477,7 +483,7 @@ div.modal {
 		div.title {
 			display: inline-block;
 			color: inherit;
-			font-family: @title-font;
+			font-family: $title-font;
 			/*font-family: inherit;*/
 			/*font-variant: small-caps;*/
 		}
@@ -496,7 +502,7 @@ div.modal {
 					padding: 8px 8px;
 					&:hover {
 						/*background-color: #eee;*/
-						color: @entry-link-text-hover;
+						color: $entry-link-text-hover;
 					}
 				}
 			}
@@ -534,13 +540,13 @@ div.modal {
 					padding: 10px;
 				}
 				> div:hover {
-					color: @entry-link-text-hover;
+					color: $entry-link-text-hover;
 				}
 				&.read {
-					color: @entry-link-text-read;
+					color: $entry-link-text-read;
 				}
 				&.active {
-					color: @default-text-color;
+					color: $default-text-color;
 				}				
 				div.load-entry-link {
 					width: auto;
@@ -589,7 +595,7 @@ div.modal {
 			div.load-entry-div {
 				display: none;
 				p {
-					margin: 0;
+					margin: 15px 0;
 				}
 				div.entry-menu {
 					/*background-color: #eeebe4;*/
@@ -610,7 +616,7 @@ div.modal {
 	form.feed-form,
 	form.settings-form {
 		* {
-			font-family: @body-font;
+			font-family: $body-font;
 		}
 		label {
 			display: block;

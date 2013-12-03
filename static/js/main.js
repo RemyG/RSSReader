@@ -1,6 +1,6 @@
 /*** FUNCTIONS - FEEDS ***/
 
-function loadFeed(feedId)
+function loadFeed(feedId, feedHref)
 {
 	var href = 'feed/load/' + feedId;
 	$('#overlay-content').show();
@@ -11,6 +11,15 @@ function loadFeed(feedId)
 	});
 	request.done(function(data) {
 		displayFeed(feedId, data.html, data.count, data.categorycount, data.valid);
+
+		$('#entry-meta-links').show();
+		$('#iframe-link').hide();
+		$('#source-link').hide();
+		$('#open-new-tab').show();
+		$('#open-new-tab').attr('href', feedHref);
+		$('#read-link').hide();
+		$('#unread-link').hide();
+		
 		$('#overlay-content').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -198,7 +207,8 @@ $("#feed-list").on("click", "li.category div", function(e) {
 $("#feed-list").on("click", "li.load-feed-link", function(e) {
 	e.preventDefault();
 	var feedId = $(this).attr('data-id');
-	loadFeed(feedId);
+	var feedHref = $(this).attr('data-baselink');
+	loadFeed(feedId, feedHref);
 });
 
 // Open links in new tabs
@@ -359,12 +369,12 @@ $("#feed-content").on("click", ".remove-entry", function(e) {
 
 	e.preventDefault();
 	var id = $(this).attr('data-id');
-	$('#entry-container-'+id).hide();
 	if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
-		&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
+			&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
 	{
-		$('#entry-container-'+id).prevAll(".entries-date:first").hide();
-	}	
+		$('#entry-container-'+id).prevAll(".entries-date:first").remove();
+	}
+	$('#entry-container-'+id).remove();
 	var request = $.ajax({
 		url: "entry/markread/" + id,
 		type: "GET",
@@ -624,7 +634,7 @@ function openPreviousEntry()
 	var $currentEntryLinkContainer = $('.entry-link-container.active');
 	if ($currentEntryLinkContainer.length > 0)
 	{
-		var $currentEntryContainer = $currentEntryLinkContainer.parent();    	
+		var $currentEntryContainer = $currentEntryLinkContainer.parent();
 		var $nextEntryContainer = $currentEntryContainer.prevAll(".entry-container:first");
 	}
 	else

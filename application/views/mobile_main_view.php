@@ -2,7 +2,7 @@
 
 	<div data-role="header" data-position="fixed">
 		<h1>Categories</h1>
-		<a href="/">Desktop</a>
+		<a href="/" data-ajax="false">Desktop</a>
 		<a href="/m/user/logout" data-icon="delete" class="ui-btn-right">Logout</a>
 	</div>
 

@@ -35,8 +35,3 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-$('#button-refresh').parent('li').show();
-</script>
-
-<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.js"></script>
