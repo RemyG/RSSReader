@@ -4,12 +4,6 @@
 
 <h2>Categories</h2>
 
-<div class="container-fluid">
-
-	<div class="row-fluid">
-
-		<div class="span6">
-
 			<ul id="category-list" class="nav nav-pills nav-stacked">
 				<?php
 					foreach ($categories as $category)
@@ -19,10 +13,6 @@
 				?>
 			</ul>
 
-		</div>
-
-		<div class="span6">
-
 			<h3>New category</h3>
 
 			<form method="post" class="settings-form">
@@ -31,12 +21,6 @@
 				<input type="hidden" name="action" value="new-category" />
 				<button type="submit" class="btn">Create category</button>
 			</form>
-
-		</div>
-
-	</div>
-
-</div>
 
 <h2>Update user</h2>
 

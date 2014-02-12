@@ -34,21 +34,17 @@
 	<div id="main-container">
 
 		<nav id="header" class="navbar navbar-fixed-top">
-			
-			    <div class="navbar">
-	
-					<div class="navbar-inner">
-						<div class="container-fluid">
-						<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
-					    <ul class="nav pull-right">
-					    	<li><a href="<?php echo BASE_URL; ?>feed/add" id="add-new-feed" title="Add new feed"><i class="icon-plus-sign"> </i></a></li>
-					    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" title="Import OPML file"><i class="icon-download"> </i></a></li>
-					    	<li><a href="<?php echo BASE_URL; ?>settings" title="Settings"><i class="icon-cog"> </i></a></li>
-					    	<li><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all" title="Update all feeds"><i class="icon-repeat"> </i></a></li>
-					    	<li><a href="<?php echo BASE_URL; ?>m" title="Go to mobile version"><i class="icon-mobile-phone"> </i></a></li>
-					    	<li><a href="<?php echo BASE_URL; ?>user/logout" title="Logout"><i class="icon-signout"> </i></a></li>
-						</ul>
-					</div>
+			<div class="navbar">
+				<div class="navbar-inner">
+					<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
+				    <ul class="nav pull-right">
+				    	<li><a href="<?php echo BASE_URL; ?>feed/add" id="add-new-feed" title="Add new feed"><i class="icon-plus-sign"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" title="Import OPML file"><i class="icon-download"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>settings" title="Settings"><i class="icon-cog"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all" title="Update all feeds"><i class="icon-repeat"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>m" title="Go to mobile version"><i class="icon-mobile-phone"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>user/logout" title="Logout"><i class="icon-signout"> </i></a></li>
+					</ul>
 				</div>
 			</div>
 		</nav>

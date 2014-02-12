@@ -157,13 +157,13 @@ function positionFeedEntries() {
 	{
 		$("#feed-content").find(".feed-title").offset({left: $("#feed-content").offset().left});
 		$("#feed-content").find(".list-entries").offset({top: $("#feed-content").find(".feed-title").offset().top + $("#feed-content").find(".feed-title").outerHeight()});
-		$("#feed-content").find(".list-entries").height($('div#footer-menu').offset().top - $("#feed-content").find(".list-entries").offset().top);
+		$("#feed-content").find(".list-entries").height($(window).height() - $("#feed-content").find(".list-entries").offset().top - 1);
 	}
 	else if ($("#feed-content").children(".category-title").length)
 	{
 		$("#feed-content").find(".category-title").offset({left: $("#feed-content").offset().left});
 		$("#feed-content").find(".list-entries").offset({top: $("#feed-content").find(".category-title").offset().top + $("#feed-content").find(".category-title").outerHeight()});
-		$("#feed-content").find(".list-entries").height($('div#footer-menu').offset().top - $("#feed-content").find(".list-entries").offset().top);
+		$("#feed-content").find(".list-entries").height($(window).height() - $("#feed-content").find(".list-entries").offset().top - 1);
 	}
 }
 
@@ -276,7 +276,9 @@ function openEntry(id, href)
 	$field.parent().addClass('read');
 	$('.load-entry-div').hide();
 	$('.load-entry-link').parent().removeClass('active');
+	$('.load-entry-link').parents('div.entry-container').removeClass('active');
 	$field.parent().addClass('active');	
+	$field.parents('div.entry-container').addClass('active');
 	$("#load-entry-div-" + id).show();
 	if ($field.attr('data-viewtype') == 'www')
 	{
