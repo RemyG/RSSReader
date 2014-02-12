@@ -305,7 +305,7 @@ div#left-menu {
 	*/
 	white-space: nowrap;
 	display: table-cell;
-	overflow-y: scroll;
+	/*overflow-y: scroll;*/
 	position: relative;
 	vertical-align: top;
 	z-index: 14;
@@ -322,7 +322,13 @@ div#content {
 	z-index: 10;
 }
 
+div#left-menu-inner {
+	position: relative;
+	width: $menu-width;
+}
+
 div#feed-list-container {
+	overflow-y: scroll;
 	position: absolute;
 	top: 0px;
 	bottom: 0px;

@@ -17,10 +17,10 @@
 <div id="footer-menu">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.min.js"></script>
 	
 	<script type="text/javascript">
-		$('#button-refresh').parent('li').show();
+		//$('#button-refresh').parent('li').show();
 	</script>
 	
 	<script type="text/javascript">

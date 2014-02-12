@@ -11,15 +11,6 @@ function loadFeed(feedId, feedHref)
 	});
 	request.done(function(data) {
 		displayFeed(feedId, data.html, data.count, data.categorycount, data.valid);
-
-		$('#entry-meta-links').show();
-		$('#iframe-link').hide();
-		$('#source-link').hide();
-		$('#open-new-tab').show();
-		$('#open-new-tab').attr('href', feedHref);
-		$('#read-link').hide();
-		$('#unread-link').hide();
-		
 		$('#overlay-content').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -274,7 +265,6 @@ $("#feed-content").on("click", ".load-entry-link", function(e) {
 	if ($field.parent().hasClass('active')) {
 		$("#load-entry-div-" + id).hide();
 		$field.parent().removeClass('active');
-		$('#entry-meta-links').hide();
 	} else {
 		openEntry(id, href);
 	}
@@ -283,10 +273,6 @@ $("#feed-content").on("click", ".load-entry-link", function(e) {
 function openEntry(id, href)
 {
 	var $field = $('#load-entry-link-' + id);
-	$('#iframe-link').attr('data-feed-id', $field.attr('data-feed-id'));
-	$('#source-link').attr('data-feed-id', $field.attr('data-feed-id'));
-	$('#iframe-link').attr('data-entry-id', id);
-	$('#source-link').attr('data-entry-id', id);
 	$field.parent().addClass('read');
 	$('.load-entry-div').hide();
 	$('.load-entry-link').parent().removeClass('active');
@@ -300,11 +286,6 @@ function openEntry(id, href)
 	{
 		openEntryAsSource(id);
 	}
-	$('a.entry-meta-link').attr('data-entry-id', id);
-	$('a.entry-meta-link').attr('href', href);
-	$('#read-link').hide();	
-	$('#unread-link').show();
-	$('#entry-meta-links').show();
 }
 
 function openEntryAsFrame(id, href)
@@ -424,31 +405,6 @@ $("#modal-edit").on("click", ".confirm-edit-feed", function(e) {
 });
 
 // Remove an entry
-$("#feed-content").on("click", ".remove-entry", function(e) {
-
-	e.preventDefault();
-	var id = $(this).attr('data-id');
-	if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
-			&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
-	{
-		$('#entry-container-'+id).prevAll(".entries-date:first").remove();
-	}
-	$('#entry-container-'+id).remove();
-	var request = $.ajax({
-		url: "entry/markread/" + id,
-		type: "GET",
-		dataType: "html"
-	});
-	request.done(function(msg) {
-		updateCountForEntry(id);
-	});
-	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
-	});
-
-});
-
-//Remove an entry
 $("#feed-content").on("click", ".remove-entry", function(e) {
 
 	e.preventDefault();
@@ -631,8 +587,6 @@ function updateCountForEntry(id)
 	});
 }
 
-
-
 function updateCountForCategory(id)
 {
 
@@ -677,7 +631,6 @@ function markEntryRead(id)
 	});
 	request.done(function(data) {
 		$("#load-entry-link-" + id).parent().addClass('read');
-//		$("#load-entry-link-" + id).parent().find('.toggle-read').toggle();
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -694,8 +647,6 @@ function markEntryNotRead(id)
 	});
 	request.done(function(data) {
 		$("#load-entry-link-" + id).parent().removeClass('read');
-//		$('#read-link').show();
-//		$('#unread-link').hide();
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -857,3 +808,14 @@ function addNewFeed(catId, feedId, feedName, feedCount, feedUrl)
 	
 	cat.append(template);
 }
+
+//Bind to the resize event of the window object
+$(window).on("resize", function () {
+    // Set .right's width to the window width minus 480 pixels
+	var height = $(window).height() - $('div#left-menu').offset().top;
+    $('div#left-menu').height(height);
+    $('div#left-menu-inner').height(height);
+    $('div#feed-list-container').height(height);
+    positionFeedEntries();
+// Invoke the resize event immediately
+}).resize();

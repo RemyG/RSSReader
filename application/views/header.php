@@ -129,49 +129,53 @@
 		
 				<div id="left-menu">
 				
-					<div id="feed-list-container">
-	
-						<ul id="feed-list">
-							<?php
-								if (isset($categoriesTree))
-								{
-									$c = new Criteria();
-									$c->add(EntryPeer::READ, 0);
-									$i = 0;
-									foreach ($categoriesTree as $category)
+					<div id="left-menu-inner">
+				
+						<div id="feed-list-container">
+		
+							<ul id="feed-list">
+								<?php
+									if (isset($categoriesTree))
 									{
-										echo '
-											<li class="category" data-cat-id="'.$category->getId().'">										
-												<div>
-													<i class="icon-collapse-alt"> </i>
-													<span class="category-title">'.$category->getName().'</span>
-													<span class="category-count">'.$category->countEntrys().'</span>
-												</div>
-												<ul class="feeds">';
-		
-										foreach ($category->getFeeds() as $feed) {
-											$valid = $feed->getValid() == 1 ? '' : ' not-valid';
-											$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';
+										$c = new Criteria();
+										$c->add(EntryPeer::READ, 0);
+										$i = 0;
+										foreach ($categoriesTree as $category)
+										{
 											echo '
-												<li class="load-feed-link'.$empty.$valid.'" id="load-feed-link-'.$feed->getId().'" 
-													data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
-													data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'"
-		    										data-baselink="'.$feed->getBaseLink().'">
-													<a href="feed/load/'.$feed->getId().'">
-														<span class="feed-title">'.$feed->getTitle().'</span>
-														<span class="feed-count">'.$feed->countEntrys($c).'</span>
-													</a>
-												</li>';
+												<li class="category" data-cat-id="'.$category->getId().'">										
+													<div>
+														<i class="icon-collapse-alt"> </i>
+														<span class="category-title">'.$category->getName().'</span>
+														<span class="category-count">'.$category->countEntrys().'</span>
+													</div>
+													<ul class="feeds">';
+			
+											foreach ($category->getFeeds() as $feed) {
+												$valid = $feed->getValid() == 1 ? '' : ' not-valid';
+												$empty = $feed->countEntrys($c) == 0 ? ' empty' : '';
+												echo '
+													<li class="load-feed-link'.$empty.$valid.'" id="load-feed-link-'.$feed->getId().'" 
+														data-href="feed/load/'.$feed->getId().'" data-cat-id="'.$category->getId().'"
+														data-id="'.$feed->getId().'" data-viewtype="'.($feed->getViewFrame() == 0 ? 'rss' : 'www').'"
+			    										data-baselink="'.$feed->getBaseLink().'">
+														<a href="feed/load/'.$feed->getId().'">
+															<span class="feed-title">'.$feed->getTitle().'</span>
+															<span class="feed-count">'.$feed->countEntrys($c).'</span>
+														</a>
+													</li>';
+											}
+			
+											echo '
+													</ul>
+												</li>';								
 										}
-		
-										echo '
-												</ul>
-											</li>';								
 									}
-								}
-							?>
-						</ul>
-					
+								?>
+							</ul>
+						
+						</div>
+						
 					</div>
 	
 				</div>
