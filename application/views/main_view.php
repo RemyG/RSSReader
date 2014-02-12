@@ -1,3 +1,5 @@
+<div id="content">
+
 <div id="feed-content">
 
 	<?php 
@@ -10,28 +12,42 @@
 
 </div>
 
-<!--<div id="modal-edit" class="modal hide fade">-->
-<div id="modal-edit" class="modal fade">
-	<div class="modal-header">
-		<a href="#" class="close cancel-edit-feed">&times;</a>
-		<h3>Edit feed</h3>
-	</div>
-	<div class="modal-body">
-		<form id="form-edit">
-			<fieldset>
-				<input type="hidden" name="feed-id">
-				<label>Feed title</label>
-				<input type="text" name="feed-title">
-				<label>Feed link</label>
-				<input type="url" name="feed-link">
-				<label>Feed base link</label>
-				<input type="url" name="feed-base-link">
-			</fieldset>
-		</form>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn btn-primary confirm-edit-feed">Save</a>
-		<a href="#" class="btn cancel-edit-feed">Cancel</a>
-	</div>
 </div>
 
+<div id="footer-menu">
+
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.js"></script>
+	
+	<script type="text/javascript">
+		$('#button-refresh').parent('li').show();
+	</script>
+	
+	<script type="text/javascript">
+		$(function() {
+			$("#feed-list").sortable({
+				items: "li.load-feed-link",
+				update: function(event, ui)
+				{
+					var feedId = ui.item.data('id');
+					var catId = ui.item.parents("li.category").data('cat-id');
+					var order = ui.item.prevAll("li.load-feed-link").size();
+					setNewOrder(feedId, catId, order);
+				}
+			});
+		});
+		function setNewOrder(feedId, catId, order)
+		{
+			var request = $.ajax({
+				url: "feed/order/" + feedId + "/" + catId + "/" + order,
+				type: "GET",
+				dataType: "html"
+			});
+			request.done(function(msg) {
+			});
+			request.fail(function(jqXHR, textStatus) {
+			});
+		}
+	</script>
+
+</div>

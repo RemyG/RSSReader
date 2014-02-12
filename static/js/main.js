@@ -61,6 +61,7 @@ function displayFeed(feedId, feedHtml, feedCount, categoryCount, valid)
 		$('#load-feed-link-' + feedId).addClass('not-valid');
 	}
 	$("#feed-content").html(feedHtml);
+	positionFeedEntries();
 	setCountForFeed(feedId, feedCount, categoryCount);
 	scrollToActiveEntry('feed-content');
 	$('#entry-navigation-links').show();
@@ -125,6 +126,7 @@ function displayCategory(catId, catHtml, catCount)
 	$('li.load-feed-link').removeClass('active');
 	$('li.category[data-cat-id=' + catId + ']').addClass('active');
 	$("#feed-content").html(catHtml);
+	positionFeedEntries();
 	setCountForCategory(catId, catCount);
 	scrollToActiveEntry('feed-content');
 	$('#entry-navigation-links').show();		
@@ -159,6 +161,21 @@ function updateCategory(catId)
 
 /*** END - FUNCTIONS - CATEGORIES ***/
 
+function positionFeedEntries() {
+	if ($("#feed-content").children(".feed-title").length)
+	{
+		$("#feed-content").find(".feed-title").offset({left: $("#feed-content").offset().left});
+		$("#feed-content").find(".list-entries").offset({top: $("#feed-content").find(".feed-title").offset().top + $("#feed-content").find(".feed-title").outerHeight()});
+		$("#feed-content").find(".list-entries").height($('div#footer-menu').offset().top - $("#feed-content").find(".list-entries").offset().top);
+	}
+	else if ($("#feed-content").children(".category-title").length)
+	{
+		$("#feed-content").find(".category-title").offset({left: $("#feed-content").offset().left});
+		$("#feed-content").find(".list-entries").offset({top: $("#feed-content").find(".category-title").offset().top + $("#feed-content").find(".category-title").outerHeight()});
+		$("#feed-content").find(".list-entries").height($('div#footer-menu').offset().top - $("#feed-content").find(".list-entries").offset().top);
+	}
+}
+
 /*** FUNCTIONS - ALL ***/
 
 function updateAll()
@@ -167,6 +184,38 @@ function updateAll()
 }
 
 /*** END - FUNCTIONS - ALL ***/
+
+//Show the content of an entry from the source
+$("#feed-content").on("click", '.source-link', function(e) {
+	e.preventDefault();
+	viewType = 'rss';
+	var id = $(this).attr('data-entry-id');
+	var feedId = $(this).attr('data-feed-id');
+	setFeedViewAsSource(feedId);
+	openEntryAsSource(id);
+});
+
+// Show an entry inside an iframe
+$("#feed-content").on("click", '.iframe-link', function(e) {
+	e.preventDefault();
+	viewType = 'www';
+	var id = $(this).attr('data-entry-id');
+	var feedId = $(this).attr('data-feed-id');
+	setFeedViewInFrame(feedId);
+	openEntryAsFrame(id, this.href);	
+});
+
+$("#feed-content").on("click", "a.feed-refresh", function(e) {
+	e.preventDefault();
+	var id = $(this).attr('data-id');
+	updateFeed(id);
+});
+
+$("#feed-content").on("click", "a.category-refresh", function(e) {
+	e.preventDefault();
+	var id = $(this).attr('data-id');
+	updateCategory(id);
+});
 
 // Click on button Refresh
 $('#header').on('click', '#button-refresh', function(e) {
@@ -260,20 +309,31 @@ function openEntry(id, href)
 
 function openEntryAsFrame(id, href)
 {	
-	markEntryRead(id);
-	$('#iframe-link').hide();
-	$('#source-link').show();
-	$("#load-entry-div-" + id).find('.entry-content').css('padding', 0);
-	$("#load-entry-div-" + id).find('.entry-content').html('<iframe src="' + href + '" width="100%" height="500px" '
-		+ 'sandbox="allow-same-origin" ></iframe>');
-	var containerHeight = $('#content').height();
-	var metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 15;
-	$("#load-entry-div-" + id).find('iframe').height(containerHeight - metaHeight);
-	scrollToActiveEntry("load-entry-link-" + id);
+	var request = $.ajax({
+		url: 'entry/loadframe/' + id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		markEntryRead(id);
+		$("#load-entry-div-" + id).find('.entry-content').addClass('frame');
+		$("#load-entry-div-" + id).find('.entry-content').html(data.html);
+		$("#load-entry-div-" + id).find('.entry-content-text').html('<iframe src="' + href + '" width="100%" height="500px" '
+				+ 'sandbox="allow-same-origin" ></iframe>');
+		var containerHeight = $('#content').height();
+		var metaHeight = $("#load-entry-link-" + id).outerHeight() + $("#load-entry-div-" + id).find('.entry-menu').outerHeight() + 15;
+		$("#load-entry-div-" + id).find('iframe').height(containerHeight - metaHeight);
+		$('#feed-content').find('a.source-link').show();
+		$('#feed-content').find('a.iframe-link').hide();
+		scrollToActiveEntry("load-entry-link-" + id);
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
 }
 
 function openEntryAsSource(id)
-{	
+{
 	var request = $.ajax({
 		url: 'entry/load/' + id,
 		type: "GET",
@@ -281,11 +341,10 @@ function openEntryAsSource(id)
 	});
 	request.done(function(data) {
 		markEntryRead(id);
-		$('#source-link').hide();
-		$('#iframe-link').show();
-		$("#load-entry-div-" + id).find('.entry-content').css('padding', 10);
-		
+		$("#load-entry-div-" + id).find('.entry-content').removeClass('frame');
 		$("#load-entry-div-" + id).find('.entry-content').html(data.html);
+		$('#feed-content').find('a.source-link').hide();
+		$('#feed-content').find('a.iframe-link').show();
 		scrollToActiveEntry("load-entry-link-" + id);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -389,6 +448,31 @@ $("#feed-content").on("click", ".remove-entry", function(e) {
 
 });
 
+//Remove an entry
+$("#feed-content").on("click", ".remove-entry", function(e) {
+
+	e.preventDefault();
+	var id = $(this).attr('data-id');
+	if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
+			&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
+	{
+		$('#entry-container-'+id).prevAll(".entries-date:first").remove();
+	}
+	$('#entry-container-'+id).remove();
+	var request = $.ajax({
+		url: "entry/markread/" + id,
+		type: "GET",
+		dataType: "html"
+	});
+	request.done(function(msg) {
+		updateCountForEntry(id);
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+
+});
+
 // Update all feeds
 $('.link-update-all').click(function(e) {
 	e.preventDefault();
@@ -431,22 +515,44 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 
 });
 
+$("#feed-content").on("click", ".feed-marknotread", function(e) {
+
+	e.preventDefault();
+	var id = $(this).attr('data-id');
+	var request = $.ajax({
+		url: 'feed/marknotread/'+id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		alert("Request failed: " + textStatus);
+	});
+
+});
+
 // Show the modal to Delete a feed (and its entries)
 $("#feed-content").on("click", ".delete-feed", function(e) {
 	e.preventDefault();
+	var dataId = $(this).attr('data-id');
+	$('#modal-from-dom').find('a.confirm-delete').attr('data-id', dataId);
 	$(".modal-backdrop").show();
 	$('#modal-from-dom').show();
 });
 
 // Close the feed deletion modal
-$("#feed-content").on("click", ".cancel-delete", function(e) {
+$("#modal-from-dom").on("click", ".cancel-delete", function(e) {
 	e.preventDefault();
 	$("#modal-from-dom").hide();
 	$(".modal-backdrop").hide();
 });
 
 // Delete a feed (and its entries)
-$("#feed-content").on("click", ".confirm-delete", function(e) {
+$("#modal-from-dom").on("click", ".confirm-delete", function(e) {
 	e.preventDefault();
 	var id = $(this).data("id");
 	$("#load-feed-link-"+id).hide();	
@@ -534,11 +640,32 @@ function updateCountForCategory(id)
 
 function scrollToActiveEntry(entryId)
 {
-	var container = $("#content"),
+	var container = $('#feed-content').find(".list-entries"),
 		scrollTo = $("#" + entryId);
 	container.scrollTop(
-		scrollTo.offset().top - container.offset().top + container.scrollTop() - 5
+		scrollTo.offset().top - container.offset().top + container.scrollTop()
 	);
+}
+
+//Mark an entry as read
+$("#feed-content").on('click', '.toggle-read a', function(e) {
+	e.preventDefault();
+	var id = $(this).attr('data-id');
+	toggleEntryRead(id);
+});
+
+function toggleEntryRead(id)
+{
+	var read = $("#load-entry-link-" + id).parent().hasClass('read');
+	if (read)
+	{
+		markEntryNotRead(id);
+	}
+	else
+	{
+		markEntryRead(id);
+	}
+	
 }
 
 function markEntryRead(id)
@@ -550,8 +677,7 @@ function markEntryRead(id)
 	});
 	request.done(function(data) {
 		$("#load-entry-link-" + id).parent().addClass('read');
-		$('#unread-link').show();
-		$('#read-link').hide();
+//		$("#load-entry-link-" + id).parent().find('.toggle-read').toggle();
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -568,8 +694,8 @@ function markEntryNotRead(id)
 	});
 	request.done(function(data) {
 		$("#load-entry-link-" + id).parent().removeClass('read');
-		$('#read-link').show();
-		$('#unread-link').hide();
+//		$('#read-link').show();
+//		$('#unread-link').hide();
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -615,6 +741,16 @@ setInterval(function() {
 		}
 	});
 }, 1000 * 60 * 10); // where X is your every X minutes
+
+$("#feed-content").on("click", '#previous-entry-link', function(e) {
+	e.preventDefault();
+	openPreviousEntry();	
+});
+
+$("#feed-content").on("click", '#next-entry-link', function(e) {
+	e.preventDefault();
+	openNextEntry();	
+});
 
 $(document.documentElement).keyup(function (event) {
 	event.preventDefault();
@@ -663,4 +799,61 @@ function openNextEntry()
 	{
 		$nextEntryContainer.find('.load-entry-link').click();
 	}
+}
+
+// Add new feed
+
+//Show the modal to Add a feed
+$("#header").on("click", "#add-new-feed", function(e) {
+	e.preventDefault();
+	$(".modal-backdrop").show();
+	$('#modal-new-feed').show();
+});
+
+// Close the feed deletion modal
+$("#modal-new-feed").on("click", ".cancel-new-feed", function(e) {
+	e.preventDefault();
+	$("#modal-new-feed").hide();
+	$(".modal-backdrop").hide();
+});
+
+// Delete a feed (and its entries)
+$("#modal-new-feed").on("click", ".confirm-new-feed", function(e) {
+	e.preventDefault();
+	var form = $(this).closest("#modal-new-feed").find("form.feed-form");
+	var feedUrlValue = form.find("#feed-url").val();
+	var catIdValue = form.find("#feed-category").val();
+	
+	var request = $.ajax({
+		url: 'feed/add',
+		type: "POST",
+		dataType: "json",
+		data: {feedUrl: feedUrlValue, feedCategory: catIdValue}
+	});
+	request.done(function(data, textStatus, jqXHR) {
+		addNewFeed(data.catId, data.feedId, data.feedName, data.feedCount, data.feedUrl);
+		$("#modal-new-feed").hide();
+		$(".modal-backdrop").hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+});
+
+function addNewFeed(catId, feedId, feedName, feedCount, feedUrl)
+{
+	var template = $("<li class='load-feed-link empty not-valid' id='load-feed-link-1' data-href='feed/load/1' data-cat-id='2' data-id='1' data-viewtype='rss' data-baselink='http://friendfeed.com/'>"
+			+ "<a href='feed/load/1'><span class='feed-title'>Title</span><span class='feed-count'></span></a></li>");
+	
+	template.find('li').attr('id', 'load-feed-link-' + feedId);
+	template.find('li').attr('data-href', 'feed/load/' + feedId);
+	template.find('li').attr('data-cat-id', catId);
+	template.find('li').attr('data-id', feedId);
+	template.find('li').attr('data-baselink', feedUrl);
+	template.find('a').attr('href', 'feed/load/' + feedId);
+	template.find('span.feed-title').html(feedName);
+	
+	var cat = $('li.category[data-cat-id="' + catId + '"]').find("ul.feeds");
+	
+	cat.append(template);
 }

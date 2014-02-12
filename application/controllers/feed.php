@@ -17,16 +17,35 @@ class FeedController extends Controller {
 		$template->set('pageDescription', 'New feed');
 		$categories = CategoryQuery::create()->findByParentCategoryId(1);
 		$template->set('categories', $categories);
-		if (array_key_exists('feed-url', $_POST))
+		$errors = array();
+		$feed = null;
+		if (array_key_exists('feedUrl', $_POST) && array_key_exists('feedCategory', $_POST))
 		{
-			$errors = array();
-			$feedUrl = $_POST['feed-url'];
-			$feedCategoryId = $_POST['feed-category'];
+			$feedUrl = $_POST['feedUrl'];
+			$feedCategoryId = $_POST['feedCategory'];
 			$feedCategory = CategoryQuery::create()->findPK($feedCategoryId);
-			$this->importFeed($feedUrl, $errors, $feedCategory);
+			$feed = $this->importFeed($feedUrl, $errors, $feedCategory);
 			$template->set('errors', $errors);
 		}
-  		$template->render();
+		else
+		{
+			$errors[] = "Feed URL or Category not set.";
+		}
+		
+		if ($feed != null)
+		{
+			$return = array("catId" => $feed->getCategoryId(), "feedId" => $feed->getId(), "feedName" => $feed->getTitle(), "feedCount" => 0, "feedUrl" => $feed->getBaseLink());
+			echo json_encode($return);
+		}
+		else
+		{
+			foreach ($errors as $error)
+			{
+				echo $error;
+			}
+		}
+		
+//   		$template->render();
 	}
 
 	function load($id, $all = null)
@@ -56,7 +75,7 @@ class FeedController extends Controller {
 			'html' => $template->renderString()
 			));
 	}
-
+	
 	function importOpml()
 	{
 		$template = $this->loadView('feed_importopml_view');
@@ -181,6 +200,17 @@ class FeedController extends Controller {
 			$entry->setRead(1);
 			$entry->save();
 		}		
+		return $this->load($id);
+	}
+	
+	function markNotRead($id)
+	{
+		$feed = FeedQuery::create()->findPK($id);
+		foreach ($feed->getEntrys() as $entry)
+		{
+			$entry->setRead(0);
+			$entry->save();
+		}
 		return $this->load($id);
 	}
 
@@ -375,17 +405,14 @@ class FeedController extends Controller {
 				*/
 			/*}*/
 			$this->logToFile($logFile, 'Feed imported: '.$feedUrl);
+			return $feed;
 		}
 		catch (Exception $e)
 		{
 			$errors[] = 'Error when importing feed '.$feedUrl.': '.$e->getMessage();
 			$this->logToFile($logFile, '[Error] Error when importing feed '.$feedUrl.': '.$e->getMessage());
+			return null;
 		}
-
-		$feedSP = null;
-
-		return $errors;
-
 	}
 
 	/**

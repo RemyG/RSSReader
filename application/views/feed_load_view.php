@@ -1,36 +1,27 @@
-
-<div id="modal-from-dom" class="modal hide fade">
-	<div class="modal-header">
-		<a href="#" class="cancel-delete">&times;</a>
-		<h3>Delete URL</h3>
-	</div>
-	<div class="modal-body">
-		<p>You are about to delete this feed, this procedure is irreversible.</p>
-		<p>Do you want to proceed?</p>
-	</div>
-	<div class="modal-footer">
-		<a href="#" data-id="<?php echo $feed->getId(); ?>" class="btn danger confirm-delete">Yes</a>
-		<a href="#" class="btn secondary cancel-delete">No</a>
-	</div>
-</div>
-
 <?php
 	echo '
 		<div class="feed-title">
-			<div class="title">'.$feed->getTitle().'</div>
+			<div class="title"><a href="'.$feed->getBaseLink().'">'.$feed->getTitle().'</a></div>
 			<div class="meta">
-				<a href="feed/markread/'.$feed->getId().'" data-id="'.$feed->getId().'" class="feed-markread" title="Mark all items read">
-					<i class="icon-check"> </i>
-				</a>
-				<a href="feed/edit/'.$feed->getId().'" data-id="'.$feed->getId().'" class="feed-edit" title="Edit the feed">
-					<i class="icon-edit"> </i>
-				</a>
+				<a id="previous-entry-link" class="entry-navigation-link" href="" data-id="" title="Go to the previous entry"><i class="icon-caret-up"> </i></a>
+				<a id="next-entry-link" class="entry-navigation-link" href="" data-id="" title="Go to the next entry"><i class="icon-caret-down"> </i></a>
+				<a href="#" title="Refresh" data-id="'.$feed->getId().'" class="feed-refresh"><i class="icon-refresh"> </i></a>
+				<span class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-check"> </i></a>
+					<ul class="dropdown-menu" role="menu" aria-lebelledby="dLabel">
+						<li><a href="#" data-id="'.$feed->getId().'" class="feed-markread" title="Mark all items as read">Mark all as read</a></li>
+						<li class="divider"></li>
+						<li><a href="#" data-id="'.$feed->getId().'" class="feed-marknotread" title="Mark all items as not read">Mark all as not read</a></li>
+					</ul>
+				</span>
 			    <span class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog"> </i></a>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 						<li><a href="#" data-id="'.$feed->getId().'" class="show-all">Show all</a></li>
 						<li style="display: none;"><a href="#" data-id="'.$feed->getId().'" class="show-unread">Show unread</a></li>
 						<li class="divider"></li>
+						<li><a href="feed/edit/'.$feed->getId().'" data-id="'.$feed->getId().'" class="feed-edit" title="Edit the feed">Edit feed</a></li>
+						<li class="divider"></li>				
 						<li><a href="#" data-id="'.$feed->getId().'" class="delete-feed">Delete feed</a></li>
 					</ul>
 				</span>
@@ -68,12 +59,20 @@
 		echo '
 			<div class="entry-container" id="entry-container-'.$entry->getId().'">
 				<div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').'">
-					<div class="remove-entry" data-id="'.$entry->getId().'">
-						<a href="#" data-id="'.$entry->getId().'" title="Remove this entry">
-							<i class="icon-remove-sign"> </i>
+					<div class="toggle-read">
+						<a href="#" class="mark-read" data-id="'.$entry->getId().'" title="Mark read">
+							<i class="icon-check"> </i>
 						</a>
-					</div>
-					<div 	id="load-entry-link-'.$entry->getId().'" 
+						<a href="#" class="mark-unread" data-id="'.$entry->getId().'" title="Mark unread">
+							<i class="icon-check-empty"> </i>
+						</a>
+					</div>'.
+// 					<div class="remove-entry" data-id="'.$entry->getId().'">
+// 						<a href="#" data-id="'.$entry->getId().'" title="Remove this entry">
+// 							<i class="icon-remove-sign"> </i>
+// 						</a>
+// 					</div>
+					'<div 	id="load-entry-link-'.$entry->getId().'" 
 							class="load-entry-link" 
 							data-id="'.$entry->getId().'" 
 							data-href="'.$entry->getLink().'"

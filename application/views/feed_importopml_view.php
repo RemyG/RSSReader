@@ -1,3 +1,5 @@
+<div id="content">
+
 <h1>Import feeds from an OPML file</h1>
 
 <form class="feed-form" method="post" enctype="multipart/form-data" id="import-opml-form" name="import-opml-form">
@@ -43,3 +45,5 @@ $('#submit-opml').click(function(e) {
 	});
 });
 </script>
+
+</div>

@@ -4,19 +4,32 @@ class EntryController extends Controller {
 
 	function load($id)
 	{
-		$template = $this->loadView('entry_load_view');
+		echo $this->loadWithTemplate($id, 'entry_load_view');
+	}
+	
+	function loadFrame($id)
+	{
+		echo $this->loadWithTemplate($id, 'entry_load_frame_view');
+	}
+	
+	function loadWithTemplate($id, $templateName)
+	{
+		$template = $this->loadView($templateName);
 		$entry = EntryQuery::create()->findPK($id);
-		$entry->setRead(1);
-		$entry->save();
+		if ($entry->getRead() == 0)
+		{
+			$entry->setRead(1);
+			$entry->save();
+		}
 		$template->set('entry', $entry);
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
-		echo json_encode(array(
-			'feedId' => $entry->getFeed()->getId(), 
-			'html' => $template->renderString(), 
-			'feedCount' => $entry->getFeed()->countEntrys($c),
-			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
-	}
+		return json_encode(array(
+				'feedId' => $entry->getFeed()->getId(),
+				'html' => $template->renderString(),
+				'feedCount' => $entry->getFeed()->countEntrys($c),
+				'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
+	}	
     
     function count($id)
     {

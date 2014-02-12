@@ -6,6 +6,8 @@ document.location = "<?php echo BASE_URL; ?>m/user/login";
 
 </script>
 
+<div id="content">
+
 <?php
 
 if (count($errors) > 0)
@@ -33,3 +35,5 @@ if (count($errors) > 0)
 	<input type="password" name="password" id="password" required />
 	<button type="submit" class="btn">Sign in</button>
 </form>
+
+</div>

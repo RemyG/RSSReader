@@ -1,3 +1,5 @@
+<div id="content">
+
 <h1>Settings</h1>
 
 <h2>Categories</h2>
@@ -12,7 +14,7 @@
 				<?php
 					foreach ($categories as $category)
 					{
-						echo '<li data-id="'.$category->getId().'"><a href="#">'.$category->getName().'</a></li>';
+						echo '<li class="ui-state-default" data-id="'.$category->getId().'"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>'.$category->getName().'</li>';
 					}
 				?>
 			</ul>
@@ -47,6 +49,8 @@
 	<button type="submit" class="btn">Update</button>
 </form>
 
+</div>
+
 <script type="text/javascript">
 $(function() {
 	$( "#category-list" ).sortable({
@@ -54,11 +58,11 @@ $(function() {
 		{
 			var catId = ui.item.data('id');
 			var order = ui.item.prevAll("li").size();
-			setNewOrder(catId, order);
+			setNewCatOrder(catId, order);
 		}
 	});
 });
-function setNewOrder(catId, order)
+function setNewCatOrder(catId, order)
 {
 	var request = $.ajax({
 		url: "category/order/" + catId + "/" + order,
