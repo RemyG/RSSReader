@@ -2,10 +2,19 @@
 
 class CategoryController extends Controller {
 
+	/**
+	 * Re-order the categories by setting a specific position to a categorie, and
+	 * moving the other categories if required.
+	 * 
+	 * @param int $catId
+	 * 		The category id.
+	 * @param int $order
+	 * 		The new position for this category.
+	 */
 	function order($catId, $order)
 	{
 		$category = CategoryQuery::create()->findPK($catId);
-		$categories = CategoryQuery::create()->orderByCatOrder()->findByParentCategoryId(1);
+		$categories = CategoryQuery::create()->orderByCatOrder('asc')->findByParentCategoryId(1);
 		$i = 0;
 		$movedBack = true;
 		foreach ($categories as $tmpCat)
@@ -39,6 +48,18 @@ class CategoryController extends Controller {
 		}
 	}
 
+	/**
+	 * Open a category and all of its entries, and display it in the view <code>category_load_view</code>.
+	 * 
+	 * @param int $id 
+	 * 		The category id.
+	 * @param int $all 
+	 * 		1 if we want to display all the entries, null or 0 if we want to display only the un-read entries.
+	 * 
+	 * @return
+	 * 		A json object containing 2 keys: 'html' for the HTML representation of the entries list, and 'count'
+	 * 		for the number of entries of this category.
+	 */
 	function load($id, $all = null)
 	{
 		$category = CategoryQuery::create()->findPK($id);
@@ -68,9 +89,54 @@ class CategoryController extends Controller {
 		$template->set('entries', $entries);
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
-		echo json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c)));
+		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c)));
+	}
+	
+	/**
+	 * Create a new category.
+	 *  
+	 * @return string A json array containing either the 'id' and 'name' of the new category,
+	 * 		or the 'error' that happened.
+	 */
+	function create()
+	{
+		if (array_key_exists('categoryName', $_POST))
+		{
+			try
+			{
+				$catName = $_POST['categoryName'];
+				$category = new Category();
+				$category->setName($catName);
+				$category->setParentCategoryId(1);
+				$catOrder = CategoryQuery::create()
+					->select('Category.ParentCategoryId')
+					->withColumn('MAX(Category.CatOrder)', 'MaxCatOrder')
+					->groupBy('Category.ParentCategoryId')
+					->having('Category.ParentCategoryId', 1)
+					->findOne();
+				$category->setCatOrder($catOrder['MaxCatOrder'] + 1);
+				$category->save();
+				return json_encode(array('id' => $category->getId(), 'name' => $category->getName()));
+			}
+			catch (Exception $e)
+			{
+				return json_encode(array('error' => $e->getMessage()));
+			}
+		}
+		else
+		{
+			return json_encode(array('error' => "Category name not set."));
+		}
 	}
 
+	/**
+	 * Update every feed of this category, and return the result of $this->load.
+	 * 
+	 * @param int $id 
+	 * 		The category id.
+	 * 
+	 * @return The result of $this->load.
+	 */
 	function update($id)
 	{
 		$category = CategoryQuery::create()->findPK($id);
@@ -80,13 +146,21 @@ class CategoryController extends Controller {
 		{
 			$feedController->update($feed->getId());
 		}
-		$this->load($id);
+		return $this->load($id);
 	}
 
+	/**
+	 * Return the number of un-read entries for this category.
+	 * 
+	 * @param int $id
+	 * 		The category id.
+	 * 
+	 * @returns The number of un-read entries.
+	 */
 	function count($id)
 	{
 		$category = CategoryQuery::create()->findPK($id);
-		echo $category->countEntrys();
+		return $category->countEntrys();
 	}
 
 }
