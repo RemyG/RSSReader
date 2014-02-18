@@ -1,7 +1,7 @@
 <?php
 	echo '
 		<div class="feed-title">
-			<div class="title"><a href="'.$feed->getBaseLink().'">'.$feed->getTitle().'</a></div>
+			<div class="title"><a href="'.$feed->getBaseLink().'" target="_blank">'.$feed->getTitle().'</a></div>
 			<div class="meta">
 				<a id="previous-entry-link" class="entry-navigation-link" href="" data-id="" title="Go to the previous entry"><i class="icon-caret-up"> </i></a>
 				<a id="next-entry-link" class="entry-navigation-link" href="" data-id="" title="Go to the next entry"><i class="icon-caret-down"> </i></a>
@@ -25,6 +25,65 @@
 						<li><a href="#" data-id="'.$feed->getId().'" class="delete-feed">Delete feed</a></li>
 					</ul>
 				</span>
+			</div>
+		</div>';
+	echo '<div id="slider-edit-feed" class="slider">
+			<div class="slider-header">
+				<a href="#" class="close cancel-edit-feed">&times;</a>
+				<h3 class="title">Edit feed</h3>
+			</div>
+			<div class="slider-body">
+				<form id="form-edit">
+					<fieldset>
+						<input type="hidden" name="feed-id" value="'.$feed->getId().'">
+						<div class="field-group">
+							<label>Feed title</label>
+							<input type="text" name="feed-title" value="'.$feed->getTitle().'">
+						</div>
+						<div class="field-group">
+							<label>Feed link</label>
+							<input type="url" name="feed-link" value="'.$feed->getLink().'">
+						</div>
+						<div class="field-group">
+							<label>Feed base link</label>
+							<input type="url" name="feed-base-link" value="'.$feed->getBaseLink().'">
+						</div>
+						<div class="field-group">
+							<label for="feed-category">Category</label>
+							<select name="feed-category" id="feed-category">';
+	foreach ($categories as $category)
+	{
+		if ($category->getId() == $feed->getCategory()->getId())
+		{
+			echo '<option value="'.$category->getId().'" selected="selected">'.$category->getName().'</option>';
+		}
+		else
+		{
+			echo '<option value="'.$category->getId().'">'.$category->getName().'</option>';
+		}
+	}
+	echo '</select>
+						</div>		
+					</fieldset>
+				</form>
+			</div>
+			<div class="slider-footer">
+				<a href="#" class="btn btn-primary confirm-edit-feed">Save</a>
+				<a href="#" class="btn cancel-edit-feed">Cancel</a>
+			</div>
+		</div>';
+	echo '<div id="slider-delete-feed" class="slider">
+			<div class="slider-header">
+				<a href="#" class="close cancel-delete-feed">&times;</a>
+				<h3 class="title">Delete Feed</h3>
+			</div>
+			<div class="slider-body">
+				<p>You are about to delete this feed, this procedure is irreversible.</p>
+				<p>Do you want to proceed?</p>
+			</div>
+			<div class="slider-footer">
+				<a href="#" data-id="'.$feed->getId().'" class="btn danger confirm-delete-feed">Yes</a>
+				<a href="#" class="btn secondary cancel-delete-feed">No</a>
 			</div>
 		</div>';
 	echo '<div class="list-entries">';
@@ -66,13 +125,8 @@
 						<a href="#" class="mark-unread" data-id="'.$entry->getId().'" title="Mark unread">
 							<i class="icon-check-empty"> </i>
 						</a>
-					</div>'.
-// 					<div class="remove-entry" data-id="'.$entry->getId().'">
-// 						<a href="#" data-id="'.$entry->getId().'" title="Remove this entry">
-// 							<i class="icon-remove-sign"> </i>
-// 						</a>
-// 					</div>
-					'<div 	id="load-entry-link-'.$entry->getId().'" 
+					</div>
+					<div 	id="load-entry-link-'.$entry->getId().'" 
 							class="load-entry-link" 
 							data-id="'.$entry->getId().'" 
 							data-href="'.$entry->getLink().'"
