@@ -4,23 +4,23 @@
 
 <h2>Categories</h2>
 
-			<ul id="category-list" class="nav nav-pills nav-stacked">
-				<?php
-					foreach ($categories as $category)
-					{
-						echo '<li class="ui-state-default" data-id="'.$category->getId().'"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>'.$category->getName().'</li>';
-					}
-				?>
-			</ul>
+<ul id="category-list" class="nav nav-pills nav-stacked">
+<?php
+	foreach ($categories as $category)
+	{
+		echo '<li class="ui-state-default" data-id="'.$category->getId().'">'.$category->getName().'</li>';
+	}
+?>
+</ul>
 
-			<h3>New category</h3>
+<h3>New category</h3>
 
-			<form method="post" class="settings-form">
-				<label for="category-name">Category name</label>
-				<input type="text" name="category-text" id="category-text" required />
-				<input type="hidden" name="action" value="new-category" />
-				<button type="submit" class="btn">Create category</button>
-			</form>
+<form method="post" id="form-create-category" class="settings-form">
+	<label for="category-name">Category name</label>
+	<input type="text" name="category-name" id="category-name" required />
+	<input type="hidden" name="action" value="new-category" />
+	<a href="#" class="btn btn-primary create-category">Create category</a>
+</form>
 
 <h2>Update user</h2>
 
@@ -61,4 +61,24 @@ function setNewCatOrder(catId, order)
 $("#category-list").on("click", "a", function(e) {
 	e.preventDefault();
 });
+
+$("form#form-create-category").on("click", "a.create-category", function(e) {
+	e.preventDefault();
+	var name = $("form#form-create-category").find("input#category-name").val();
+	var request = $.ajax({
+		url: "category/create",
+		type: "POST",
+		dataType: "json",
+		data: { categoryName: name }
+	});
+	request.done(function(data) {
+		var template = $('<li class="ui-state-default" data-id=""></li>');
+		template.attr('data-id', data.id);
+		template.html(data.name);
+		$('ul#category-list').append(template);
+	});
+	request.fail(function(jqXHR, textStatus) {
+	});
+});
+
 </script>
