@@ -14,8 +14,7 @@
 
 </div>
 
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.js"></script>
 	
 	<script type="text/javascript">
 		//$('#button-refresh').parent('li').show();
@@ -23,8 +22,10 @@
 	
 	<script type="text/javascript">
 		$(function() {
-			$("#feed-list").sortable({
+			$("ul.feeds").sortable({
 				items: "li.load-feed-link",
+				connectWith: "ul.feeds",
+				placeholder: "feed-link-placeholder",
 				update: function(event, ui)
 				{
 					var feedId = ui.item.data('id');
