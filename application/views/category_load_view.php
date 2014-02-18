@@ -37,9 +37,12 @@
 		echo '
 			<div class="entry-container" id="entry-container-'.$entry->getId().'">
 				<div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').'">
-					<div class="remove-entry" data-id="'.$entry->getId().'">
-						<a href="#" data-id="'.$entry->getId().'" title="Remove this entry">
-							<i class="icon-remove-sign"> </i>
+					<div class="toggle-read">
+						<a href="#" class="mark-read" data-id="'.$entry->getId().'" title="Mark read">
+							<i class="icon-check"> </i>
+						</a>
+						<a href="#" class="mark-unread" data-id="'.$entry->getId().'" title="Mark unread">
+							<i class="icon-check-empty"> </i>
 						</a>
 					</div>
 					<div 	id="load-entry-link-'.$entry->getId().'" 
