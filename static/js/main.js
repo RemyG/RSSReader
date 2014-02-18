@@ -1,9 +1,10 @@
 /*** FUNCTIONS - FEEDS ***/
 
-function loadFeed(feedId, feedHref)
+function loadFeed(feedId)
 {
 	var href = 'feed/load/' + feedId;
 	$('#overlay-content').show();
+	$('#overlay-content').find('.ajax-loader-text').text("Loading feed entries.");
 	var request = $.ajax({
 		url: href,
 		type: "GET",
@@ -23,6 +24,7 @@ function updateFeed(feedId)
 {
 	var href = 'feed/update/' + feedId;
 	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Updating feed.");
 	var request = $.ajax({
 		url: href,
 		type: "GET",
@@ -55,11 +57,6 @@ function displayFeed(feedId, feedHtml, feedCount, categoryCount, valid)
 	positionFeedEntries();
 	setCountForFeed(feedId, feedCount, categoryCount);
 	scrollToActiveEntry('feed-content');
-	$('#entry-navigation-links').show();
-	$('#button-refresh').show();
-	$('#button-refresh').attr('data-href', 'feed/update/' + feedId);
-	$('#button-refresh').attr('data-type', 'feed');
-	$('#button-refresh').attr('data-id', feedId);
 }
 
 function updateCountForFeed(feedId)
@@ -121,10 +118,6 @@ function displayCategory(catId, catHtml, catCount)
 	setCountForCategory(catId, catCount);
 	scrollToActiveEntry('feed-content');
 	$('#entry-navigation-links').show();		
-	$('#button-refresh').show();
-	$('#button-refresh').attr('data-href', 'category/update/' + catId);
-	$('#button-refresh').attr('data-type', 'category');
-	$('#button-refresh').attr('data-id', catId);
 }
 
 function setCountForCategory(catId, catCount)
@@ -208,25 +201,6 @@ $("#feed-content").on("click", "a.category-refresh", function(e) {
 	updateCategory(id);
 });
 
-// Click on button Refresh
-$('#header').on('click', '#button-refresh', function(e) {
-	e.preventDefault();
-	var updateType = $(this).attr('data-type');
-	var id = $(this).attr('data-id');
-	if (updateType == 'feed')
-	{
-		updateFeed(id);
-	}
-	else if (updateType == 'category')
-	{
-		updateCategory(id);
-	}
-	else if (updateType == 'all')
-	{
-		updateAll();
-	}
-});
-
 // Show / hide the feeds from a category
 $("#feed-list").on("click", "li.category div i", function(e) {
 	e.preventDefault();
@@ -247,8 +221,7 @@ $("#feed-list").on("click", "li.category div", function(e) {
 $("#feed-list").on("click", "li.load-feed-link", function(e) {
 	e.preventDefault();
 	var feedId = $(this).attr('data-id');
-	var feedHref = $(this).attr('data-baselink');
-	loadFeed(feedId, feedHref);
+	loadFeed(feedId);
 });
 
 // Open links in new tabs
@@ -256,7 +229,7 @@ $('#feed-content').on('click', '.entry-content a', function(e) {
 	$(this).attr('target','_blank');
 });
 
-// Open an entry
+// Open / Close an entry
 $("#feed-content").on("click", ".load-entry-link", function(e) {
 	e.preventDefault();
 	var id = $(this).attr('data-id');
@@ -360,75 +333,54 @@ $("#feed-content").on("click", ".feed-update", function(e) {
 
 });
 
-// Edit a feed
+// Click on "Edit a feed"
 $("#feed-content").on("click", "a.feed-edit", function(e) {
 	e.preventDefault();
-	var id = $(this).attr('data-id');
-	var hrefEdit = $(this).attr('href');
+	$("#feed-content").find("div#slider-edit-feed").slideToggle();
+});
+
+// Close the feed edition slider
+$("#feed-content").on("click", "div#slider-edit-feed a.cancel-edit-feed", function(e) {
+	e.preventDefault();
+	$("#feed-content").find("div#slider-edit-feed").slideUp();
+});
+
+// Confirm the edition of a feed
+$("#feed-content").on("click", "div#slider-edit-feed a.confirm-edit-feed", function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Editing this feed.");
 	var request = $.ajax({
-		url: hrefEdit,
-		type: "GET",
-		dataType: "json"
+		url: "feed/edit",
+		type: "POST",
+		dataType: "json",
+		data: $("#feed-content").find("#form-edit").serialize()
 	});
 	request.done(function(data) {
-		$('#modal-edit').find('input[name=feed-id]').val(data.feedid);
-		$('#modal-edit').find('input[name=feed-title]').val(data.feedtitle);
-		$('#modal-edit').find('input[name=feed-link]').val(data.feedlink);
-		$('#modal-edit').find('input[name=feed-base-link]').val(data.feedbaselink);
-		$(".modal-backdrop").show();
-		$('#modal-edit').show();
-	});
-	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
-		alert("Request failed: " + textStatus);
-	});	
-});
-
-// Close the feed deletion modal
-$("#modal-edit").on("click", ".cancel-edit-feed", function(e) {
-	e.preventDefault();
-	$("#modal-edit").hide();
-	$(".modal-backdrop").hide();
-});
-
-// Delete a feed (and its entries)
-$("#modal-edit").on("click", ".confirm-edit-feed", function(e) {
-	e.preventDefault();
-	var $id = $('a.feed-edit').data("id");
-	$.post($('a.feed-edit').attr('href'), $("#form-edit").serialize(), function(data) {
-			if (data.result == '1')
+		if (data.result == '1')
+		{
+			$('#load-feed-link-' + data.feedid).find('span.feed-title').html(data.feedtitle);
+			if (data.newcat)
 			{
-				$('#load-feed-link-' + $id).find('span.feed-title').html(data.feedtitle);
-				$("#modal-edit").hide();
-				$(".modal-backdrop").hide();
-				$('#button-refresh').click();
+				var el = $('#load-feed-link-' + data.feedid).detach();
+				el.attr('data-cat-id', data.newcat);
+				$('li.category[data-cat-id="' + data.newcat + '"]').find('ul.feeds').prepend(el);
 			}
-		}, "json");
-});
-
-// Remove an entry
-$("#feed-content").on("click", ".remove-entry", function(e) {
-
-	e.preventDefault();
-	var id = $(this).attr('data-id');
-	if ($('#entry-container-'+id).prevUntil(".entries-date", ":visible").length == 0
-			&& $('#entry-container-'+id).nextUntil(".entries-date", ":visible").length == 0)
-	{
-		$('#entry-container-'+id).prevAll(".entries-date:first").remove();
-	}
-	$('#entry-container-'+id).remove();
-	var request = $.ajax({
-		url: "entry/markread/" + id,
-		type: "GET",
-		dataType: "html"
-	});
-	request.done(function(msg) {
-		updateCountForEntry(id);
+			$("#feed-content").find("div#slider-edit-feed").slideUp;
+			$("#feed-content").find("a.feed-refresh").click();
+		}
+		else if (data.errors)
+		{
+			$.each(data.errors, function(i, item) {
+				$("#feed-content").find("#slider-edit-feed").find("div.errors").append('<div class="error-message">' + item + '</div>');
+			});
+		}
+		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
+		$("#feed-content").find("#slider-edit-feed").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
+		$('#overlay').hide();
 	});
-
 });
 
 // Update all feeds
@@ -437,7 +389,7 @@ $('.link-update-all').click(function(e) {
 	$('#overlay').show();
 	$('#overlay').find('.ajax-loader-text').text("Updating all feeds");
 	var request = $.ajax({
-		url: 'feed/updateall',
+		url: 'feed/forceupdateall',
 		type: "GET",
 		dataType: "html"
 	});
@@ -454,8 +406,9 @@ $('.link-update-all').click(function(e) {
 
 // Mark all entries from a feed as read
 $("#feed-content").on("click", ".feed-markread", function(e) {
-
 	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Marking this feed as read.");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'feed/markread/'+id,
@@ -474,8 +427,9 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 });
 
 $("#feed-content").on("click", ".feed-marknotread", function(e) {
-
 	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Marking this feed as not read.");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'feed/marknotread/'+id,
@@ -496,40 +450,52 @@ $("#feed-content").on("click", ".feed-marknotread", function(e) {
 // Show the modal to Delete a feed (and its entries)
 $("#feed-content").on("click", ".delete-feed", function(e) {
 	e.preventDefault();
-	var dataId = $(this).attr('data-id');
-	$('#modal-from-dom').find('a.confirm-delete').attr('data-id', dataId);
-	$(".modal-backdrop").show();
-	$('#modal-from-dom').show();
+	$("#feed-content").find("#slider-delete-feed").slideToggle();
 });
 
 // Close the feed deletion modal
-$("#modal-from-dom").on("click", ".cancel-delete", function(e) {
+$("#feed-content").on("click", "#slider-delete-feed .cancel-delete-feed", function(e) {
 	e.preventDefault();
-	$("#modal-from-dom").hide();
-	$(".modal-backdrop").hide();
+	$("#feed-content").find("#slider-delete-feed").slideUp();
 });
 
 // Delete a feed (and its entries)
-$("#modal-from-dom").on("click", ".confirm-delete", function(e) {
+$("#feed-content").on("click", "#slider-delete-feed .confirm-delete-feed", function(e) {
 	e.preventDefault();
-	var id = $(this).data("id");
-	$("#load-feed-link-"+id).hide();	
-	$("#modal-from-dom").hide();
-	$(".modal-backdrop").hide();
-	$("#feed-content").html("");
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Deleting this feed.");
+	var id = $(this).attr("data-id");
 	var request = $.ajax({
 		url: 'feed/delete/' + id,
 		type: "GET",
-		dataType: "html"
+		dataType: "json"
+	});
+	request.done(function(data) {
+		if (data.result === 1)
+		{
+			$("#load-feed-link-"+id).hide();
+			$("#feed-content").find("#slider-delete-feed").slideUp();
+			$("#feed-content").html("");
+		}
+		else if (data.errors)
+		{
+			$.each(data.errors, function(i, item) {
+				$("#feed-content").find("#slider-delete-feed").find("div.errors").append('<div class="error-message">' + item + '</div>');
+			});
+		}
+		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
+		$('#overlay').hide();
+		$("#feed-content").find("#slider-delete-feed").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
 	});
 });
 
 // Show all entries from a feed (read and unread)
 $("#feed-content").on("click", ".show-all", function(e) {
 	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Retrieving feed entries.");
 	var id = $(this).data("id");
 	var request = $.ajax({
 		url: 'feed/load/' + id + '/1',
@@ -543,6 +509,7 @@ $("#feed-content").on("click", ".show-all", function(e) {
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -550,6 +517,8 @@ $("#feed-content").on("click", ".show-all", function(e) {
 // Show only the unread entries from a feed
 $("#feed-content").on("click", ".show-unread", function(e) {
 	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Retrieving feed entries.");
 	var id = $(this).data("id");
 	var request = $.ajax({
 		url: 'feed/load/' + id + '/0',
@@ -563,6 +532,7 @@ $("#feed-content").on("click", ".show-unread", function(e) {
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -626,13 +596,13 @@ function toggleEntryRead(id)
 
 function markEntryRead(id)
 {
+	$("#load-entry-link-" + id).parent().addClass('read');
 	var request = $.ajax({
 		url: 'entry/markread/' + id,
 		type: "GET",
 		dataType: "json"
 	});
 	request.done(function(data) {
-		$("#load-entry-link-" + id).parent().addClass('read');
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -642,13 +612,13 @@ function markEntryRead(id)
 
 function markEntryNotRead(id)
 {
+	$("#load-entry-link-" + id).parent().removeClass('read');
 	var request = $.ajax({
 		url: 'entry/markunread/' + id,
 		type: "GET",
 		dataType: "json"
 	});
 	request.done(function(data) {
-		$("#load-entry-link-" + id).parent().removeClass('read');
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -678,6 +648,7 @@ function setFeedViewAsSource(id)
 	});
 }
 
+// Update the entries count every 10 minutes
 setInterval(function() {
 	//your jQuery ajax code
 	var request = $.ajax({
@@ -706,15 +677,22 @@ $("#feed-content").on("click", '#next-entry-link', function(e) {
 });
 
 $(document.documentElement).keyup(function (event) {
-	event.preventDefault();
-	// handle cursor keys
-	if (event.keyCode == 80) { // P
-
-		openPreviousEntry();
-
-	} else if (event.keyCode == 78) { // N
-
-		openNextEntry();
+	if ($('div.modal-backdrop').css('display') == 'none')
+	{
+		event.preventDefault();
+		// handle cursor keys
+		if (event.keyCode == 80) // P
+		{ 
+			openPreviousEntry();
+		}
+		else if (event.keyCode == 78) // N
+		{
+			openNextEntry();
+		}
+		else if (event.keyCode == 27) // Escape
+		{
+			$('div.slider').slideUp();
+		}
 	}
 });
 
@@ -759,24 +737,26 @@ function openNextEntry()
 //Show the modal to Add a feed
 $("#header").on("click", "#add-new-feed", function(e) {
 	e.preventDefault();
-	$(".modal-backdrop").show();
-	$('#modal-new-feed').show();
+	$("#slider-new-feed").find("div.errors").html('');
+	$("#slider-new-feed").find("#feed-url").val('');
+	$('#slider-new-feed').slideToggle();
 });
 
 // Close the feed deletion modal
-$("#modal-new-feed").on("click", ".cancel-new-feed", function(e) {
+$("#slider-new-feed").on("click", ".cancel-new-feed", function(e) {
 	e.preventDefault();
-	$("#modal-new-feed").hide();
-	$(".modal-backdrop").hide();
+	$("#slider-new-feed").slideUp();
+	$("#slider-new-feed").find("div.errors").html('');
+	$("#slider-new-feed").find("#feed-url").val('');
 });
 
 // Delete a feed (and its entries)
-$("#modal-new-feed").on("click", ".confirm-new-feed", function(e) {
+$("#slider-new-feed").on("click", ".confirm-new-feed", function(e) {
 	e.preventDefault();
-	var form = $(this).closest("#modal-new-feed").find("form.feed-form");
+	var form = $(this).closest("#slider-new-feed").find("form.feed-form");
 	var feedUrlValue = form.find("#feed-url").val();
 	var catIdValue = form.find("#feed-category").val();
-	
+	$("#slider-new-feed").find("div.errors").html('');
 	var request = $.ajax({
 		url: 'feed/add',
 		type: "POST",
@@ -784,12 +764,20 @@ $("#modal-new-feed").on("click", ".confirm-new-feed", function(e) {
 		data: {feedUrl: feedUrlValue, feedCategory: catIdValue}
 	});
 	request.done(function(data, textStatus, jqXHR) {
-		addNewFeed(data.catId, data.feedId, data.feedName, data.feedCount, data.feedUrl);
-		$("#modal-new-feed").hide();
-		$(".modal-backdrop").hide();
+		if (data.errors)
+		{
+			$.each(data.errors, function(i, item) {
+				$("#slider-new-feed").find("div.errors").append('<div class="error-message">' + item + '</div>');
+			});
+		}
+		else
+		{
+			addNewFeed(data.catId, data.feedId, data.feedName, data.feedCount, data.feedUrl);
+			$("#slider-new-feed").slideUp();
+		}
 	});
 	request.fail(function(jqXHR, textStatus) {
-		alert("Request failed: " + textStatus);
+		$("#slider-new-feed").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
 	});
 });
 
@@ -798,11 +786,11 @@ function addNewFeed(catId, feedId, feedName, feedCount, feedUrl)
 	var template = $("<li class='load-feed-link empty not-valid' id='load-feed-link-1' data-href='feed/load/1' data-cat-id='2' data-id='1' data-viewtype='rss' data-baselink='http://friendfeed.com/'>"
 			+ "<a href='feed/load/1'><span class='feed-title'>Title</span><span class='feed-count'></span></a></li>");
 	
-	template.find('li').attr('id', 'load-feed-link-' + feedId);
-	template.find('li').attr('data-href', 'feed/load/' + feedId);
-	template.find('li').attr('data-cat-id', catId);
-	template.find('li').attr('data-id', feedId);
-	template.find('li').attr('data-baselink', feedUrl);
+	template.attr('id', 'load-feed-link-' + feedId);
+	template.attr('data-href', 'feed/load/' + feedId);
+	template.attr('data-cat-id', catId);
+	template.attr('data-id', feedId);
+	template.attr('data-baselink', feedUrl);
 	template.find('a').attr('href', 'feed/load/' + feedId);
 	template.find('span.feed-title').html(feedName);
 	
@@ -810,6 +798,62 @@ function addNewFeed(catId, feedId, feedName, feedCount, feedUrl)
 	
 	cat.append(template);
 }
+
+$("#slider-import-opml").find("form").submit(function(e) {
+	return false;
+});
+
+//Show the modal to Add a feed
+$("#header").on("click", "#import-opml", function(e) {
+	e.preventDefault();
+	$("#slider-import-opml").find("div.errors").html('');
+	$("#slider-import-opml").find("#feed-url").val('');
+	$('#slider-import-opml').slideToggle();
+});
+
+// Close the feed deletion modal
+$("#slider-import-opml").on("click", ".cancel-import-opml", function(e) {
+	e.preventDefault();
+	$("#slider-import-opml").slideUp();
+	$("#slider-import-opml").find("div.errors").html('');
+	$("#slider-import-opml").find("#feed-url").val('');
+});
+
+$("#slider-import-opml").on("click", '.confirm-import-opml', function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').html("Importing the OPML file");
+
+//	var	oData = new FormData($('#slider-import-opml').find('form'));
+	var oData = new FormData();
+	oData.append('opmlfile', $("#slider-import-opml").find("#opmlfile")[0].files[0]);
+
+	var request = $.ajax({
+	    url: '/feed/importopml',
+	    data: oData,
+	    cache: false,
+	    contentType: false,
+	    processData: false,
+	    type: 'POST'
+	});
+	request.done(function(data) {
+        $('#overlay').find('.ajax-loader-text').html("Updating all the feeds");
+        $.ajax({
+			url: "/feed/forceupdateall",
+			type: "GET",
+			success: function(data2) {
+				$('#overlay').hide();
+			}
+		});
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		$("#slider-import-opml").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
+	});
+});
+
+
+
 
 //Bind to the resize event of the window object
 $(window).on("resize", function () {
@@ -821,3 +865,5 @@ $(window).on("resize", function () {
     positionFeedEntries();
 // Invoke the resize event immediately
 }).resize();
+
+

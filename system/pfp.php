@@ -45,7 +45,7 @@ function pfp()
 		$arguments = array_slice($segments, 2);
 	}
 	
-	if ($controller != 'install' && !($controller == 'user' && $action == 'login') && !($controller == 'feed' && $action == 'updateall'))
+	if ($controller != 'install' && !($controller == 'user' && $action == 'login') && !($controller == 'feed' && ($action == 'updateall' || $action == 'forceupdateall')))
 	{		
 		$currentUser = $sessionHelper->getCurrentUser();
 		if ($currentUser == null)

@@ -12,11 +12,7 @@ class FeedController extends Controller {
 	
 	function add()
 	{
-		$template = $this->loadView('feed_add_view');
-		$template->set('pageTitle', PROJECT_NAME.' - New feed');
-		$template->set('pageDescription', 'New feed');
 		$categories = CategoryQuery::create()->findByParentCategoryId(1);
-		$template->set('categories', $categories);
 		$errors = array();
 		$feed = null;
 		if (array_key_exists('feedUrl', $_POST) && array_key_exists('feedCategory', $_POST))
@@ -25,27 +21,26 @@ class FeedController extends Controller {
 			$feedCategoryId = $_POST['feedCategory'];
 			$feedCategory = CategoryQuery::create()->findPK($feedCategoryId);
 			$feed = $this->importFeed($feedUrl, $errors, $feedCategory);
-			$template->set('errors', $errors);
 		}
 		else
 		{
 			$errors[] = "Feed URL or Category not set.";
+			return json_encode(array("errors" => $errors));
 		}
 		
-		if ($feed != null)
+		if ($feed instanceof Feed)
 		{
 			$return = array("catId" => $feed->getCategoryId(), "feedId" => $feed->getId(), "feedName" => $feed->getTitle(), "feedCount" => 0, "feedUrl" => $feed->getBaseLink());
-			echo json_encode($return);
+			return json_encode($return);
+		}
+		elseif (is_array($feed))
+		{
+			return json_encode(array("errors" => $feed));
 		}
 		else
 		{
-			foreach ($errors as $error)
-			{
-				echo $error;
-			}
+			return json_encode(array("errors" => $errors));
 		}
-		
-//   		$template->render();
 	}
 
 	function load($id, $all = null)
@@ -62,9 +57,11 @@ class FeedController extends Controller {
 		else
 		{
 			$entries = EntryQuery::create()->filterByFeed($feed)->orderByUpdated('desc')->find();
-		}		
+		}
+		$categories = CategoryQuery::create()->find();
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
+		$template->set('categories', $categories);
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
 		return json_encode(array(
@@ -78,9 +75,6 @@ class FeedController extends Controller {
 	
 	function importOpml()
 	{
-		$template = $this->loadView('feed_importopml_view');
-		$template->set('pageTitle', PROJECT_NAME.' - Import OPML file');
-		$template->set('pageDescription', 'Import OPML file');
 		$errors = array();
 		if (array_key_exists('opmlfile', $_FILES)
 			&& $_FILES['opmlfile']['error'] == UPLOAD_ERR_OK		//checks for errors
@@ -97,20 +91,14 @@ class FeedController extends Controller {
 			{
 				$errors[] = 'Error while importing the OPML file: '.$e->getTraceAsString();
 			}
-			$return = "";
-			foreach ($errors as $error)
+			if (is_array($errors) && sizeof($errors) > 0)
 			{
-				$return .= '
-					<div class="alert">
-    					<button type="button" class="close" data-dismiss="alert">&times;</button>
-    					'.$error.'
-    				</div>';
+				return json_encode(array("errors" => $errors));
 			}
-
-			return $return;
-		}		
-		$template->set('errors', $errors);
-		$template->render();
+			return json_encode(array("result" => 1));
+		}
+		$errors[] = "File not found";
+		return json_encode(array("errors" => $errors));
 	}
 
 	/**
@@ -139,19 +127,22 @@ class FeedController extends Controller {
 	 * 
 	 * @return string
 	 */
-	function forceUpdateAll()
+	function forceUpdateAll($direction = 'asc')
 	{
+		set_time_limit(0);
+		$logFile = LOG_DIR."force-update-".date("Ymd-his")."-".$direction.".log";
 		$errors = array();
-		$feeds = FeedQuery::create()->find();
+		$feeds = FeedQuery::create()->orderById($direction)->find();
+		$this->logToFile($logFile, "Total: ".sizeof($feeds));
+		$i = 0;
 		foreach ($feeds as $feed)
 		{
-			$this->updateFeed($feed, $errors, false);
+			$i++;
+			$errors = array();
+			$errors = $this->updateFeed($feed, $errors, false);
+			$this->logToFile($logFile, implode("\n", $errors));
+			$this->logToFile($logFile, "updated feed ".$i." ".$feed->getTitle());
 		}
-		$feeds = FeedQuery::create()->find();
-		$template = $this->loadView('feed_updateall_view');
-		$template->set('feeds', $feeds);
-		$template->set('errors', $errors);
-		return $template->renderString();
 	}
 
 	function update($id)
@@ -216,7 +207,15 @@ class FeedController extends Controller {
 
 	function delete($id)
 	{
-		FeedQuery::create()->findPK($id)->delete();
+		try {
+			FeedQuery::create()->findPK($id)->delete();
+			return json_encode(array("result" => 1));
+		}
+		catch (Exception $e)
+		{
+			$errors[] = $e->getMessage();
+			return json_encode(array("errors" => $errors));
+		}
 	}
 
 	function setViewSource($id)
@@ -237,11 +236,14 @@ class FeedController extends Controller {
 	{
 		$category = CategoryQuery::create()->findPK($catId);
 		$feed = FeedQuery::create()->findPK($feedId);
+		$query = FeedQuery::create()
+					->orderBycatOrder('asc');
+		$catFeeds = $category->getFeeds($query);
 		if ($feed->getCategory()->getId() == $catId)
 		{
 			$i = 0;
 			$movedBack = true;
-			foreach ($category->getFeeds() as $tmpFeed)
+			foreach ($catFeeds as $tmpFeed)
 			{
 				if ($i < $order)
 				{
@@ -275,7 +277,7 @@ class FeedController extends Controller {
 		{
 			$feed->setCategory($category);
 			$i = 0;
-			foreach ($category->getFeeds() as $tmpFeed)
+			foreach ($catFeeds as $tmpFeed)
 			{
 				if ($i < $order)
 				{
@@ -295,30 +297,38 @@ class FeedController extends Controller {
 		
 	}
 
-	function edit($id)
+	function edit()
 	{
 		if (array_key_exists('feed-id', $_POST)
 			&& array_key_exists('feed-title', $_POST)
 			&& array_key_exists('feed-link', $_POST)
 			&& array_key_exists('feed-base-link', $_POST)
+			&& array_key_exists('feed-category', $_POST)
 			)
 		{
 			$feed = FeedQuery::create()->findPK($_POST['feed-id']);
-			if ($feed != null)
+			$category = CategoryQuery::create()->findPk($_POST['feed-category']);
+			if ($feed != null && $category != null)
 			{
+				$oldCat = $feed->getCategoryId();
+				$newCat = $category->getId();
 				$feed->setTitle($_POST['feed-title']);
 				$feed->setLink($_POST['feed-link']);
 				$feed->setBaseLink($_POST['feed-base-link']);
+				$feed->setCategory($category);
 				$feed->save();
+				if ($oldCat != $newCat)
+				{
+					$this->order($feed->getId(), $newCat, 0);
+				}
 			}
-			return json_encode(array('result' => '1', 'feedtitle' => $feed->getTitle(), 'message' => 'Feed saved'));
+			$result = array('result' => '1', 'feedid' => $feed->getId(), 'feedtitle' => $feed->getTitle(), 'message' => 'Feed saved');
+			if ($oldCat != $newCat)
+			{
+				$result['newcat'] = $newCat;
+			}
+			return json_encode($result);
 		}
-		$feed = FeedQuery::create()->findPK($id);
-		return json_encode(array('result' => ''
-							, 'feedid' => $feed->getId()
-							, 'feedtitle' => $feed->getTitle()
-							, 'feedlink' => $feed->getLink()
-							, 'feedbaselink' => $feed->getBaseLink()));
 	}
 
 	private function importFeed($feedUrl, $errors, $parentCat = null, $logFile = null)
@@ -409,9 +419,16 @@ class FeedController extends Controller {
 		}
 		catch (Exception $e)
 		{
-			$errors[] = 'Error when importing feed '.$feedUrl.': '.$e->getMessage();
-			$this->logToFile($logFile, '[Error] Error when importing feed '.$feedUrl.': '.$e->getMessage());
-			return null;
+			if (stripos($e->getMessage(), "Duplicate entry") !== false)
+			{
+				$errors[] = "Error - This feed already exists";
+			}
+			else
+			{
+				$errors[] = 'Error when importing feed '.$feedUrl.': '.$e->getMessage();
+				$this->logToFile($logFile, '[Error] Error when importing feed '.$feedUrl.': '.$e->getMessage());
+			}
+			return $errors;
 		}
 	}
 
@@ -424,18 +441,18 @@ class FeedController extends Controller {
 	 */
 	private function updateFeed($feed, $errors, $invalidate = true)
 	{
-		set_time_limit(30);
+		set_time_limit(0);
 
 		$feedUrl = $feed->getLink();
 
 		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
-
+		
 		try
 		{
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url($feedUrl);
 			$valid = $feedSP->init();
-
+			
 			if(!$valid)
 			{
 				if ($invalidate)
@@ -443,32 +460,38 @@ class FeedController extends Controller {
 					$feed->setValid(false);
 					$feed->save();
 				}
+				$errors[] = "ERROR - Feed ".$feed->getTitle()." is invalid.";
 				return $errors;
 			}
 			else {
 				$feed->setValid(true);
 			}
-
+			
 			if ($feed->getUpdated(null) != null)
 			{
 				$lastUpdate = $feed->getUpdated(null)->getTimestamp();
 			}
 			else
 			{
-				$lastUpdate = 0;
+				$lastUpdate = new DateTime();
+				$lastUpdate = $lastUpdate->getTimestamp();
 			}
 
 			$feed->setUpdated(new DateTime());
 			$feed->setDescription($feedSP->get_description());
 			$feed->setBaseLink($feedSP->get_link());
 			$feed->save();
-
+			
 			foreach ($feedSP->get_items() as $item)
 			{
 				$entryUpdated = $item->get_date('U');
 				/*if ($entryUpdated > $lastUpdate)
 				{*/
 					$link = $item->get_link();
+					if ($link == null || $link == '')
+					{
+						continue;
+					}
 					$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
 					if ($entry == null)
 					{
@@ -480,19 +503,35 @@ class FeedController extends Controller {
 					{
 						$entry->setAuthor($item->get_author()->get_name());
 					}
-					$entry->setPublished($item->get_date('U'));
-					$entry->setUpdated($item->get_date('U'));
+					$published = $item->get_date('U');
+					if ($published == null)
+					{
+						$entry->setPublished($lastUpdate);
+					}
+					else
+					{
+						$entry->setPublished($published);
+					}
+					$updated = $item->get_date('U');
+					if ($updated == null)
+					{
+						$entry->setUpdated($lastUpdate);
+					}
+					else
+					{
+						$entry->setUpdated($updated);
+					}
 					$entry->setTitle($item->get_title());
 					$entry->setContent($item->get_content());
 					$entry->save();
 				/*}*/
 			}
-
+			
 			$feedSP = null;
 		}
 		catch (Exception $e)
 		{
-			$errors[] = 'Error when updating feed '.$feedUrl.': '.$e->getMessage();
+			$errors[] = 'ERROR - Error when updating feed '.$feedUrl.': '.$e->getTraceAsString();
 			if ($invalidate)
 			{
 				$feed->setValid(false);
@@ -501,7 +540,7 @@ class FeedController extends Controller {
 		}
 		
 		$this->cleanOldEntries($feed);
-
+		
 		return $errors;
 	}
 
@@ -509,7 +548,7 @@ class FeedController extends Controller {
 	{
 		if ($xmlNode->count() > 0)
 		{
-			if ($xmlNode->getName() == 'outline')
+			if ($xmlNode->getName() == 'outline' && $xmlNode['title'] != null)
 			{
 				$category = CategoryQuery::create()->findOneByName($xmlNode['title']);
 				if ($category == null || $category->getParentCategory()->getId() != $parentCat->getId())
@@ -537,7 +576,7 @@ class FeedController extends Controller {
 				$title = (string)$xmlNode['title'];
 				$feedUrl = (string)$xmlNode['xmlUrl'];
 				$feed->setTitle($title);
-				$feed->setUpdated(0);			
+				$feed->setUpdated(0);	
 				$feed->setLink($feedUrl);
 				if ($parentCat != null)
 				{
@@ -552,6 +591,10 @@ class FeedController extends Controller {
 				$this->logToFile($logFile, '[Error] Feed not imported: '.$feedUrl.' - '.$e->getMessage());
 				$errors[] = 'Error when importing feed '.$feedUrl.': '.$e->getMessage();
 			}
+		}
+		else
+		{
+			$errors[] = "Couldn't recognize element ".print_r($xmlNode, true);
 		}
 		return $errors;
 	}
@@ -580,14 +623,12 @@ class FeedController extends Controller {
 			{
 				$read++;
 			}
-			if ($all > 200 || ($read > 50 && $entry->getRead() == 1))
+			if ($all > 250 || ($read > 100 && $entry->getRead() == 1))
 			{
 				$entry->delete();
 			}
-
 		}
 	}
-
 }
 
 ?>

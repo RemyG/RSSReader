@@ -39,7 +39,7 @@
 					<a class="brand" href="<?php echo BASE_URL; ?>"><?php echo PROJECT_NAME; ?></a>
 				    <ul class="nav pull-right">
 				    	<li><a href="<?php echo BASE_URL; ?>feed/add" id="add-new-feed" title="Add new feed"><i class="icon-plus-sign"> </i></a></li>
-				    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" title="Import OPML file"><i class="icon-download"> </i></a></li>
+				    	<li><a href="<?php echo BASE_URL; ?>feed/importopml" id="import-opml" title="Import OPML file"><i class="icon-download"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>settings" title="Settings"><i class="icon-cog"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>feed/updateall" class="link-update-all" title="Update all feeds"><i class="icon-repeat"> </i></a></li>
 				    	<li><a href="<?php echo BASE_URL; ?>m" title="Go to mobile version"><i class="icon-mobile-phone"> </i></a></li>
@@ -49,76 +49,64 @@
 			</div>
 		</nav>
 		
-		<div id="modal-new-feed" class="modal fade">
-			<div class="modal-header">
+		<div id="slider-new-feed" class="slider">
+			<div class="slider-header">
 				<a href="#" class="close cancel-new-feed">&times;</a>
-				<h3>Add a new feed</h3>
+				<h3 class="slider-title">Add a new feed</h3>
 			</div>
-			<div class="modal-body">
+			<div class="slider-body">
+				<div class="errors"></div>
 				<form method="post" class="feed-form custom">
 					<fieldset>
-						<label for="feed-url">Feed URL</label>
-						<input type="text" length="255" name="feed-url" id="feed-url" />
-						<label for="feed-category">Category</label>
-						<select name="feed-category" id="feed-category" class="medium">
-							<?php
-								if (isset($categoriesTree))
-								{
-									foreach ($categoriesTree as $category)
+						<div class="field-group">
+							<label for="feed-url">Feed URL</label>
+							<input type="text" length="255" name="feed-url" id="feed-url" />
+						</div>
+						<div class="field-group">
+							<label for="feed-category">Category</label>
+							<select name="feed-category" id="feed-category" class="medium">
+								<?php
+									if (isset($categoriesTree))
 									{
-										echo '<option value="'.$category->getId().'">'.$category->getName().'</option>';
+										foreach ($categoriesTree as $category)
+										{
+											echo '<option value="'.$category->getId().'">'.$category->getName().'</option>';
+										}
 									}
-								}
-							?>
-						</select>
+								?>
+							</select>
+						</div>
 					</fieldset>
 				</form>
 			</div>
-			<div class="modal-footer">
+			<div class="slider-footer">
 				<a href="#" class="btn btn-primary confirm-new-feed">Add feed</a>
 				<a href="#" class="btn cancel-new-feed">Cancel</a>
 			</div>
 		</div>
 		
-		<div id="modal-edit" class="modal fade">
-			<div class="modal-header">
-				<a href="#" class="close cancel-edit-feed">&times;</a>
-				<h3>Edit feed</h3>
+		<div id="slider-import-opml" class="slider">
+			<div class="slider-header">
+				<a href="#" class="close cancel-import-opml">&times;</a>
+				<h3 class="slider-title">Import an OPML file</h3>
 			</div>
-			<div class="modal-body">
-				<form id="form-edit">
+			<div class="slider-body">
+				<div class="errors"></div>
+				<form class="feed-form" enctype="multipart/form-data">
 					<fieldset>
-						<input type="hidden" name="feed-id">
-						<label>Feed title</label>
-						<input type="text" name="feed-title">
-						<label>Feed link</label>
-						<input type="url" name="feed-link">
-						<label>Feed base link</label>
-						<input type="url" name="feed-base-link">
+						<div class="field-group">
+							<label for="opmlfile">OPML file</label>
+							<input type="file" name="opmlfile" id="opmlfile">
+						</div>
 					</fieldset>
 				</form>
 			</div>
-			<div class="modal-footer">
-				<a href="#" class="btn btn-primary confirm-edit-feed">Save</a>
-				<a href="#" class="btn cancel-edit-feed">Cancel</a>
+			<div class="slider-footer">
+				<a href="#" class="btn btn-primary confirm-import-opml">Add feed</a>
+				<a href="#" class="btn cancel-import-opml">Cancel</a>
 			</div>
 		</div>
 		
-		<div id="modal-from-dom" class="modal fade">
-			<div class="modal-header">
-				<a href="#" class="close cancel-delete">&times;</a>
-				<h3>Delete URL</h3>
-			</div>
-			<div class="modal-body">
-				<p>You are about to delete this feed, this procedure is irreversible.</p>
-				<p>Do you want to proceed?</p>
-			</div>
-			<div class="modal-footer">
-				<a href="#" data-id="" class="btn danger confirm-delete">Yes</a>
-				<a href="#" class="btn secondary cancel-delete">No</a>
-			</div>
-		</div>
-	
 		<div class="sub-container">
 	
 			<div id="main-table">
