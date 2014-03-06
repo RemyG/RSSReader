@@ -103,7 +103,7 @@ abstract class BaseUser extends BaseObject implements Persistent
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return User The current object (for fluent API support)
      */
     public function setId($v)
@@ -124,12 +124,12 @@ abstract class BaseUser extends BaseObject implements Persistent
     /**
      * Set the value of [login] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return User The current object (for fluent API support)
      */
     public function setLogin($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -145,12 +145,12 @@ abstract class BaseUser extends BaseObject implements Persistent
     /**
      * Set the value of [password] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return User The current object (for fluent API support)
      */
     public function setPassword($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -623,6 +623,11 @@ abstract class BaseUser extends BaseObject implements Persistent
             $keys[1] => $this->getLogin(),
             $keys[2] => $this->getPassword(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
 
         return $result;
     }

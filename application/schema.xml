@@ -49,6 +49,7 @@
 		<column name="read" type="tinyint" required="true" />
 		<column name="content" type="longvarchar" required="false" />
 		<column name="feed_id" type="integer" required="true" />
+		<column name="favourite" type="tinyint" required="true" defaultValue="0" />
 		<foreign-key foreignTable="feed" phpName="Feed" refPhpName="Entry" onDelete="CASCADE">
 			<reference local="feed_id" foreign="id" />
 		</foreign-key>

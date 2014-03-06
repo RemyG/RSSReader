@@ -24,13 +24,13 @@ abstract class BaseEntryPeer
     const TM_CLASS = 'EntryTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 11;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /** the column name for the id field */
     const ID = 'rss_entry.id';
@@ -62,6 +62,9 @@ abstract class BaseEntryPeer
     /** the column name for the feed_id field */
     const FEED_ID = 'rss_entry.feed_id';
 
+    /** the column name for the favourite field */
+    const FAVOURITE = 'rss_entry.favourite';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -81,12 +84,12 @@ abstract class BaseEntryPeer
      * e.g. EntryPeer::$fieldNames[EntryPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Published', 'Updated', 'Link', 'Title', 'Description', 'Author', 'Read', 'Content', 'FeedId', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'author', 'read', 'content', 'feedId', ),
-        BasePeer::TYPE_COLNAME => array (EntryPeer::ID, EntryPeer::PUBLISHED, EntryPeer::UPDATED, EntryPeer::LINK, EntryPeer::TITLE, EntryPeer::DESCRIPTION, EntryPeer::AUTHOR, EntryPeer::READ, EntryPeer::CONTENT, EntryPeer::FEED_ID, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PUBLISHED', 'UPDATED', 'LINK', 'TITLE', 'DESCRIPTION', 'AUTHOR', 'READ', 'CONTENT', 'FEED_ID', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'author', 'read', 'content', 'feed_id', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Published', 'Updated', 'Link', 'Title', 'Description', 'Author', 'Read', 'Content', 'FeedId', 'Favourite', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'author', 'read', 'content', 'feedId', 'favourite', ),
+        BasePeer::TYPE_COLNAME => array (EntryPeer::ID, EntryPeer::PUBLISHED, EntryPeer::UPDATED, EntryPeer::LINK, EntryPeer::TITLE, EntryPeer::DESCRIPTION, EntryPeer::AUTHOR, EntryPeer::READ, EntryPeer::CONTENT, EntryPeer::FEED_ID, EntryPeer::FAVOURITE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PUBLISHED', 'UPDATED', 'LINK', 'TITLE', 'DESCRIPTION', 'AUTHOR', 'READ', 'CONTENT', 'FEED_ID', 'FAVOURITE', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'published', 'updated', 'link', 'title', 'description', 'author', 'read', 'content', 'feed_id', 'favourite', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -96,12 +99,12 @@ abstract class BaseEntryPeer
      * e.g. EntryPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Published' => 1, 'Updated' => 2, 'Link' => 3, 'Title' => 4, 'Description' => 5, 'Author' => 6, 'Read' => 7, 'Content' => 8, 'FeedId' => 9, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'author' => 6, 'read' => 7, 'content' => 8, 'feedId' => 9, ),
-        BasePeer::TYPE_COLNAME => array (EntryPeer::ID => 0, EntryPeer::PUBLISHED => 1, EntryPeer::UPDATED => 2, EntryPeer::LINK => 3, EntryPeer::TITLE => 4, EntryPeer::DESCRIPTION => 5, EntryPeer::AUTHOR => 6, EntryPeer::READ => 7, EntryPeer::CONTENT => 8, EntryPeer::FEED_ID => 9, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PUBLISHED' => 1, 'UPDATED' => 2, 'LINK' => 3, 'TITLE' => 4, 'DESCRIPTION' => 5, 'AUTHOR' => 6, 'READ' => 7, 'CONTENT' => 8, 'FEED_ID' => 9, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'author' => 6, 'read' => 7, 'content' => 8, 'feed_id' => 9, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Published' => 1, 'Updated' => 2, 'Link' => 3, 'Title' => 4, 'Description' => 5, 'Author' => 6, 'Read' => 7, 'Content' => 8, 'FeedId' => 9, 'Favourite' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'author' => 6, 'read' => 7, 'content' => 8, 'feedId' => 9, 'favourite' => 10, ),
+        BasePeer::TYPE_COLNAME => array (EntryPeer::ID => 0, EntryPeer::PUBLISHED => 1, EntryPeer::UPDATED => 2, EntryPeer::LINK => 3, EntryPeer::TITLE => 4, EntryPeer::DESCRIPTION => 5, EntryPeer::AUTHOR => 6, EntryPeer::READ => 7, EntryPeer::CONTENT => 8, EntryPeer::FEED_ID => 9, EntryPeer::FAVOURITE => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PUBLISHED' => 1, 'UPDATED' => 2, 'LINK' => 3, 'TITLE' => 4, 'DESCRIPTION' => 5, 'AUTHOR' => 6, 'READ' => 7, 'CONTENT' => 8, 'FEED_ID' => 9, 'FAVOURITE' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'published' => 1, 'updated' => 2, 'link' => 3, 'title' => 4, 'description' => 5, 'author' => 6, 'read' => 7, 'content' => 8, 'feed_id' => 9, 'favourite' => 10, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -185,6 +188,7 @@ abstract class BaseEntryPeer
             $criteria->addSelectColumn(EntryPeer::READ);
             $criteria->addSelectColumn(EntryPeer::CONTENT);
             $criteria->addSelectColumn(EntryPeer::FEED_ID);
+            $criteria->addSelectColumn(EntryPeer::FAVOURITE);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.published');
@@ -196,6 +200,7 @@ abstract class BaseEntryPeer
             $criteria->addSelectColumn($alias . '.read');
             $criteria->addSelectColumn($alias . '.content');
             $criteria->addSelectColumn($alias . '.feed_id');
+            $criteria->addSelectColumn($alias . '.favourite');
         }
     }
 
@@ -248,7 +253,7 @@ abstract class BaseEntryPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return                 Entry
+     * @return Entry
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -315,7 +320,7 @@ abstract class BaseEntryPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param      Entry $obj A Entry object.
+     * @param Entry $obj A Entry object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -365,7 +370,7 @@ abstract class BaseEntryPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return   Entry Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Entry Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
@@ -753,7 +758,7 @@ abstract class BaseEntryPeer
     {
       $dbMap = Propel::getDatabaseMap(BaseEntryPeer::DATABASE_NAME);
       if (!$dbMap->hasTable(BaseEntryPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new EntryTableMap());
+        $dbMap->addTableObject(new \EntryTableMap());
       }
     }
 
@@ -803,7 +808,7 @@ abstract class BaseEntryPeer
             $con->beginTransaction();
             $pk = BasePeer::doInsert($criteria, $con);
             $con->commit();
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -876,7 +881,7 @@ abstract class BaseEntryPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -935,7 +940,7 @@ abstract class BaseEntryPeer
             $con->commit();
 
             return $affectedRows;
-        } catch (PropelException $e) {
+        } catch (Exception $e) {
             $con->rollBack();
             throw $e;
         }
@@ -948,7 +953,7 @@ abstract class BaseEntryPeer
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param      Entry $obj The object to validate.
+     * @param Entry $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -981,7 +986,7 @@ abstract class BaseEntryPeer
     /**
      * Retrieve a single object by pkey.
      *
-     * @param      int $pk the primary key.
+     * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
      * @return Entry
      */

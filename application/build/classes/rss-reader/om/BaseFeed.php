@@ -294,7 +294,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setId($v)
@@ -315,12 +315,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [link] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setLink($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -336,12 +336,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [base_link] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setBaseLink($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -357,12 +357,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [title] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setTitle($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -378,12 +378,12 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [description] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setDescription($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -422,7 +422,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [category_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setCategoryId($v)
@@ -505,7 +505,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Set the value of [cat_order] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Feed The current object (for fluent API support)
      */
     public function setcatOrder($v)
@@ -792,7 +792,6 @@ abstract class BaseFeed extends BaseObject implements Persistent
 
             if ($this->entrysScheduledForDeletion !== null) {
                 if (!$this->entrysScheduledForDeletion->isEmpty()) {
-                    //the foreign key is flagged as `CASCADE`, so we delete the items
                     EntryQuery::create()
                         ->filterByPrimaryKeys($this->entrysScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
@@ -1129,6 +1128,11 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $keys[8] => $this->getViewframe(),
             $keys[9] => $this->getcatOrder(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aCategory) {
                 $result['Category'] = $this->aCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1394,7 +1398,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Category object.
      *
-     * @param   Category $v
+     * @param                  Category $v
      * @return Feed The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1635,7 +1639,7 @@ abstract class BaseFeed extends BaseObject implements Persistent
      * Method called to associate a Entry object to this object
      * through the Entry foreign key attribute.
      *
-     * @param   Entry $l Entry
+     * @param    Entry $l Entry
      * @return Feed The current object (for fluent API support)
      */
     public function addEntry(Entry $l)
@@ -1644,8 +1648,13 @@ abstract class BaseFeed extends BaseObject implements Persistent
             $this->initEntrys();
             $this->collEntrysPartial = true;
         }
+
         if (!in_array($l, $this->collEntrys->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddEntry($l);
+
+            if ($this->entrysScheduledForDeletion and $this->entrysScheduledForDeletion->contains($l)) {
+                $this->entrysScheduledForDeletion->remove($this->entrysScheduledForDeletion->search($l));
+            }
         }
 
         return $this;

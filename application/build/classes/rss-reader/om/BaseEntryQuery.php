@@ -16,6 +16,7 @@
  * @method EntryQuery orderByRead($order = Criteria::ASC) Order by the read column
  * @method EntryQuery orderByContent($order = Criteria::ASC) Order by the content column
  * @method EntryQuery orderByFeedId($order = Criteria::ASC) Order by the feed_id column
+ * @method EntryQuery orderByFavourite($order = Criteria::ASC) Order by the favourite column
  *
  * @method EntryQuery groupById() Group by the id column
  * @method EntryQuery groupByPublished() Group by the published column
@@ -27,6 +28,7 @@
  * @method EntryQuery groupByRead() Group by the read column
  * @method EntryQuery groupByContent() Group by the content column
  * @method EntryQuery groupByFeedId() Group by the feed_id column
+ * @method EntryQuery groupByFavourite() Group by the favourite column
  *
  * @method EntryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method EntryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -48,6 +50,7 @@
  * @method Entry findOneByRead(int $read) Return the first Entry filtered by the read column
  * @method Entry findOneByContent(string $content) Return the first Entry filtered by the content column
  * @method Entry findOneByFeedId(int $feed_id) Return the first Entry filtered by the feed_id column
+ * @method Entry findOneByFavourite(int $favourite) Return the first Entry filtered by the favourite column
  *
  * @method array findById(int $id) Return Entry objects filtered by the id column
  * @method array findByPublished(string $published) Return Entry objects filtered by the published column
@@ -59,6 +62,7 @@
  * @method array findByRead(int $read) Return Entry objects filtered by the read column
  * @method array findByContent(string $content) Return Entry objects filtered by the content column
  * @method array findByFeedId(int $feed_id) Return Entry objects filtered by the feed_id column
+ * @method array findByFavourite(int $favourite) Return Entry objects filtered by the favourite column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -166,7 +170,7 @@ abstract class BaseEntryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `author`, `read`, `content`, `feed_id` FROM `rss_entry` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `author`, `read`, `content`, `feed_id`, `favourite` FROM `rss_entry` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -304,7 +308,7 @@ abstract class BaseEntryQuery extends ModelCriteria
      * <code>
      * $query->filterByPublished('2011-03-14'); // WHERE published = '2011-03-14'
      * $query->filterByPublished('now'); // WHERE published = '2011-03-14'
-     * $query->filterByPublished(array('max' => 'yesterday')); // WHERE published > '2011-03-13'
+     * $query->filterByPublished(array('max' => 'yesterday')); // WHERE published < '2011-03-13'
      * </code>
      *
      * @param     mixed $published The value to use as filter.
@@ -347,7 +351,7 @@ abstract class BaseEntryQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdated('2011-03-14'); // WHERE updated = '2011-03-14'
      * $query->filterByUpdated('now'); // WHERE updated = '2011-03-14'
-     * $query->filterByUpdated(array('max' => 'yesterday')); // WHERE updated > '2011-03-13'
+     * $query->filterByUpdated(array('max' => 'yesterday')); // WHERE updated < '2011-03-13'
      * </code>
      *
      * @param     mixed $updated The value to use as filter.
@@ -612,6 +616,48 @@ abstract class BaseEntryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EntryPeer::FEED_ID, $feedId, $comparison);
+    }
+
+    /**
+     * Filter the query on the favourite column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFavourite(1234); // WHERE favourite = 1234
+     * $query->filterByFavourite(array(12, 34)); // WHERE favourite IN (12, 34)
+     * $query->filterByFavourite(array('min' => 12)); // WHERE favourite >= 12
+     * $query->filterByFavourite(array('max' => 12)); // WHERE favourite <= 12
+     * </code>
+     *
+     * @param     mixed $favourite The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EntryQuery The current query, for fluid interface
+     */
+    public function filterByFavourite($favourite = null, $comparison = null)
+    {
+        if (is_array($favourite)) {
+            $useMinMax = false;
+            if (isset($favourite['min'])) {
+                $this->addUsingAlias(EntryPeer::FAVOURITE, $favourite['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($favourite['max'])) {
+                $this->addUsingAlias(EntryPeer::FAVOURITE, $favourite['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EntryPeer::FAVOURITE, $favourite, $comparison);
     }
 
     /**

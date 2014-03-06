@@ -90,6 +90,13 @@ abstract class BaseEntry extends BaseObject implements Persistent
     protected $feed_id;
 
     /**
+     * The value for the favourite field.
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $favourite;
+
+    /**
      * @var        Feed
      */
     protected $aFeed;
@@ -113,6 +120,27 @@ abstract class BaseEntry extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->favourite = 0;
+    }
+
+    /**
+     * Initializes internal state of BaseEntry object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [id] column value.
@@ -283,9 +311,20 @@ abstract class BaseEntry extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [favourite] column value.
+     *
+     * @return int
+     */
+    public function getFavourite()
+    {
+
+        return $this->favourite;
+    }
+
+    /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setId($v)
@@ -352,12 +391,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [link] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setLink($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -373,12 +412,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [title] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setTitle($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -394,12 +433,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [description] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setDescription($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -415,12 +454,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [author] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setAuthor($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -436,7 +475,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [read] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setRead($v)
@@ -457,12 +496,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [content] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setContent($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -478,7 +517,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Set the value of [feed_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Entry The current object (for fluent API support)
      */
     public function setFeedId($v)
@@ -501,6 +540,27 @@ abstract class BaseEntry extends BaseObject implements Persistent
     } // setFeedId()
 
     /**
+     * Set the value of [favourite] column.
+     *
+     * @param  int $v new value
+     * @return Entry The current object (for fluent API support)
+     */
+    public function setFavourite($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->favourite !== $v) {
+            $this->favourite = $v;
+            $this->modifiedColumns[] = EntryPeer::FAVOURITE;
+        }
+
+
+        return $this;
+    } // setFavourite()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -510,6 +570,10 @@ abstract class BaseEntry extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->favourite !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -542,6 +606,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
             $this->read = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->content = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->feed_id = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+            $this->favourite = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -551,7 +616,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 10; // 10 = EntryPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = EntryPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Entry object", $e);
@@ -809,6 +874,9 @@ abstract class BaseEntry extends BaseObject implements Persistent
         if ($this->isColumnModified(EntryPeer::FEED_ID)) {
             $modifiedColumns[':p' . $index++]  = '`feed_id`';
         }
+        if ($this->isColumnModified(EntryPeer::FAVOURITE)) {
+            $modifiedColumns[':p' . $index++]  = '`favourite`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `rss_entry` (%s) VALUES (%s)',
@@ -849,6 +917,9 @@ abstract class BaseEntry extends BaseObject implements Persistent
                         break;
                     case '`feed_id`':
                         $stmt->bindValue($identifier, $this->feed_id, PDO::PARAM_INT);
+                        break;
+                    case '`favourite`':
+                        $stmt->bindValue($identifier, $this->favourite, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1026,6 +1097,9 @@ abstract class BaseEntry extends BaseObject implements Persistent
             case 9:
                 return $this->getFeedId();
                 break;
+            case 10:
+                return $this->getFavourite();
+                break;
             default:
                 return null;
                 break;
@@ -1065,7 +1139,13 @@ abstract class BaseEntry extends BaseObject implements Persistent
             $keys[7] => $this->getRead(),
             $keys[8] => $this->getContent(),
             $keys[9] => $this->getFeedId(),
+            $keys[10] => $this->getFavourite(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aFeed) {
                 $result['Feed'] = $this->aFeed->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1134,6 +1214,9 @@ abstract class BaseEntry extends BaseObject implements Persistent
             case 9:
                 $this->setFeedId($value);
                 break;
+            case 10:
+                $this->setFavourite($value);
+                break;
         } // switch()
     }
 
@@ -1168,6 +1251,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) $this->setRead($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setContent($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setFeedId($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setFavourite($arr[$keys[10]]);
     }
 
     /**
@@ -1189,6 +1273,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
         if ($this->isColumnModified(EntryPeer::READ)) $criteria->add(EntryPeer::READ, $this->read);
         if ($this->isColumnModified(EntryPeer::CONTENT)) $criteria->add(EntryPeer::CONTENT, $this->content);
         if ($this->isColumnModified(EntryPeer::FEED_ID)) $criteria->add(EntryPeer::FEED_ID, $this->feed_id);
+        if ($this->isColumnModified(EntryPeer::FAVOURITE)) $criteria->add(EntryPeer::FAVOURITE, $this->favourite);
 
         return $criteria;
     }
@@ -1261,6 +1346,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
         $copyObj->setRead($this->getRead());
         $copyObj->setContent($this->getContent());
         $copyObj->setFeedId($this->getFeedId());
+        $copyObj->setFavourite($this->getFavourite());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1322,7 +1408,7 @@ abstract class BaseEntry extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Feed object.
      *
-     * @param   Feed $v
+     * @param                  Feed $v
      * @return Entry The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1386,10 +1472,12 @@ abstract class BaseEntry extends BaseObject implements Persistent
         $this->read = null;
         $this->content = null;
         $this->feed_id = null;
+        $this->favourite = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

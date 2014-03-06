@@ -92,8 +92,17 @@ function setCountForFeed(iFeedId, feedCount, catCount)
 function loadCategory(catId)
 {
 	$('#overlay-content').show();
+	var catUrl = '';
+	if (catId == 'favourite')
+	{
+		catUrl = 'entry/loadfavourites';
+	}
+	else
+	{
+		catUrl = 'category/load/' + catId;
+	}
 	var request = $.ajax({
-		url: 'category/load/' + catId,
+		url: catUrl,
 		type: "GET",
 		dataType: "json"
 	});
@@ -206,11 +215,19 @@ $("#feed-list").on("click", "li.category div i", function(e) {
 	e.preventDefault();
 	e.stopPropagation();
 	$(this).parents('li.category').find('ul.feeds').toggle();
-	$(this).toggleClass('icon-expand-alt icon-collapse-alt');
+	$(this).toggleClass('fa-plus-square-o fa-minus-square-o');
 });
 
 // Open a category
 $("#feed-list").on("click", "li.category div", function(e) {
+	e.preventDefault();
+	$('#overlay-content').show();
+	var id = $(this).parents('li.category').data('cat-id');
+	loadCategory(id);
+});
+
+// Open a category
+$("#favourite").on("click", "li.category div", function(e) {
 	e.preventDefault();
 	$('#overlay-content').show();
 	var id = $(this).parents('li.category').data('cat-id');
@@ -620,6 +637,52 @@ function markEntryNotRead(id)
 	});
 	request.done(function(data) {
 		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+}
+
+//Mark an entry as favourite
+$("#feed-content").on('click', '.toggle-favourite a', function(e) {
+	e.preventDefault();
+	var id = $(this).attr('data-id');
+	toggleEntryFavourite(id);
+});
+
+function toggleEntryFavourite(id)
+{
+	var favourite = $("#load-entry-link-" + id).parent().hasClass('favourite');
+	if (favourite)
+	{
+		markEntryNotFavourite(id);
+	}
+	else
+	{
+		markEntryFavourite(id);
+	}
+}
+
+function markEntryFavourite(id)
+{
+	$("#load-entry-link-" + id).parent().addClass('favourite');
+	var request = $.ajax({
+		url: 'entry/markfavourite/' + id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.fail(function(jqXHR, textStatus) {
+		alert("Request failed: " + textStatus);
+	});
+}
+
+function markEntryNotFavourite(id)
+{
+	$("#load-entry-link-" + id).parent().removeClass('favourite');
+	var request = $.ajax({
+		url: 'entry/markunfavourite/' + id,
+		type: "GET",
+		dataType: "json"
 	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);

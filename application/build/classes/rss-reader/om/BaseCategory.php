@@ -171,7 +171,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
     /**
      * Set the value of [id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Category The current object (for fluent API support)
      */
     public function setId($v)
@@ -192,12 +192,12 @@ abstract class BaseCategory extends BaseObject implements Persistent
     /**
      * Set the value of [name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return Category The current object (for fluent API support)
      */
     public function setName($v)
     {
-        if ($v !== null && is_numeric($v)) {
+        if ($v !== null) {
             $v = (string) $v;
         }
 
@@ -213,7 +213,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
     /**
      * Set the value of [parent_category_id] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Category The current object (for fluent API support)
      */
     public function setParentCategoryId($v)
@@ -238,7 +238,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
     /**
      * Set the value of [cat_order] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return Category The current object (for fluent API support)
      */
     public function setCatOrder($v)
@@ -531,10 +531,9 @@ abstract class BaseCategory extends BaseObject implements Persistent
 
             if ($this->feedsScheduledForDeletion !== null) {
                 if (!$this->feedsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->feedsScheduledForDeletion as $feed) {
-                        // need to save related object because we set the relation to null
-                        $feed->save($con);
-                    }
+                    FeedQuery::create()
+                        ->filterByPrimaryKeys($this->feedsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->feedsScheduledForDeletion = null;
                 }
             }
@@ -816,6 +815,11 @@ abstract class BaseCategory extends BaseObject implements Persistent
             $keys[2] => $this->getParentCategoryId(),
             $keys[3] => $this->getCatOrder(),
         );
+        $virtualColumns = $this->virtualColumns;
+        foreach ($virtualColumns as $key => $virtualColumn) {
+            $result[$key] = $virtualColumn;
+        }
+
         if ($includeForeignObjects) {
             if (null !== $this->aParentCategory) {
                 $result['ParentCategory'] = $this->aParentCategory->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1054,7 +1058,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
     /**
      * Declares an association between this object and a Category object.
      *
-     * @param   Category $v
+     * @param                  Category $v
      * @return Category The current object (for fluent API support)
      * @throws PropelException
      */
@@ -1298,7 +1302,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
      * Method called to associate a Category object to this object
      * through the Category foreign key attribute.
      *
-     * @param   Category $l Category
+     * @param    Category $l Category
      * @return Category The current object (for fluent API support)
      */
     public function addChildrenCategory(Category $l)
@@ -1307,8 +1311,13 @@ abstract class BaseCategory extends BaseObject implements Persistent
             $this->initChildrenCategorys();
             $this->collChildrenCategorysPartial = true;
         }
+
         if (!in_array($l, $this->collChildrenCategorys->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddChildrenCategory($l);
+
+            if ($this->childrenCategorysScheduledForDeletion and $this->childrenCategorysScheduledForDeletion->contains($l)) {
+                $this->childrenCategorysScheduledForDeletion->remove($this->childrenCategorysScheduledForDeletion->search($l));
+            }
         }
 
         return $this;
@@ -1518,7 +1527,7 @@ abstract class BaseCategory extends BaseObject implements Persistent
      * Method called to associate a Feed object to this object
      * through the Feed foreign key attribute.
      *
-     * @param   Feed $l Feed
+     * @param    Feed $l Feed
      * @return Category The current object (for fluent API support)
      */
     public function addFeed(Feed $l)
@@ -1527,8 +1536,13 @@ abstract class BaseCategory extends BaseObject implements Persistent
             $this->initFeeds();
             $this->collFeedsPartial = true;
         }
+
         if (!in_array($l, $this->collFeeds->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
             $this->doAddFeed($l);
+
+            if ($this->feedsScheduledForDeletion and $this->feedsScheduledForDeletion->contains($l)) {
+                $this->feedsScheduledForDeletion->remove($this->feedsScheduledForDeletion->search($l));
+            }
         }
 
         return $this;

@@ -67,6 +67,7 @@ CREATE TABLE `rss_entry`
     `read` TINYINT NOT NULL,
     `content` TEXT,
     `feed_id` INTEGER NOT NULL,
+    `favourite` TINYINT DEFAULT 0 NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `rss_entry_FI_1` (`feed_id`),
     CONSTRAINT `rss_entry_FK_1`

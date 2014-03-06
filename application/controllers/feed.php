@@ -9,7 +9,7 @@ class FeedController extends Controller {
 		$template->set('feed', $feed);
 		$template->render();
 	}
-	
+
 	function add()
 	{
 		$categories = CategoryQuery::create()->findByParentCategoryId(1);
@@ -27,7 +27,7 @@ class FeedController extends Controller {
 			$errors[] = "Feed URL or Category not set.";
 			return json_encode(array("errors" => $errors));
 		}
-		
+
 		if ($feed instanceof Feed)
 		{
 			$return = array("catId" => $feed->getCategoryId(), "feedId" => $feed->getId(), "feedName" => $feed->getTitle(), "feedCount" => 0, "feedUrl" => $feed->getBaseLink());
@@ -67,12 +67,12 @@ class FeedController extends Controller {
 		return json_encode(array(
 			'feedId' => $feed->getId(),
 			'count' => $feed->countEntrys($c),
-			'categorycount' => $feed->getCategory()->countEntrys($c), 
+			'categorycount' => $feed->getCategory()->countEntrys($c),
 			'valid' => $feed->getValid(),
 			'html' => $template->renderString()
 			));
 	}
-	
+
 	function importOpml()
 	{
 		$errors = array();
@@ -103,7 +103,7 @@ class FeedController extends Controller {
 
 	/**
 	 * Update all the valid feeds.
-	 * 
+	 *
 	 * @return string
 	 */
 	function updateAll()
@@ -175,7 +175,7 @@ class FeedController extends Controller {
 			{
 				$result[] = array(
 					'feedId' => $feed->getId(),
-					'feedCount' => $feed->countEntrys($c), 
+					'feedCount' => $feed->countEntrys($c),
 					'valid' => $feed->getValid(),
 					'categoryCount' => $category->countEntrys($c));
 			}
@@ -184,16 +184,16 @@ class FeedController extends Controller {
 	}
 
 	function markRead($id)
-	{		
+	{
 		$feed = FeedQuery::create()->findPK($id);
 		foreach ($feed->getEntrys() as $entry)
 		{
 			$entry->setRead(1);
 			$entry->save();
-		}		
+		}
 		return $this->load($id);
 	}
-	
+
 	function markNotRead($id)
 	{
 		$feed = FeedQuery::create()->findPK($id);
@@ -285,7 +285,7 @@ class FeedController extends Controller {
 					$tmpFeed->save();
 				}
 				else if ($i >= $order)
-				{					
+				{
 					$tmpFeed->setcatOrder($i + 1);
 					$tmpFeed->save();
 				}
@@ -294,7 +294,7 @@ class FeedController extends Controller {
 			$feed->setcatOrder($order);
 			$feed->save();
 		}
-		
+
 	}
 
 	function edit()
@@ -446,13 +446,13 @@ class FeedController extends Controller {
 		$feedUrl = $feed->getLink();
 
 		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
-		
+
 		try
 		{
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url($feedUrl);
 			$valid = $feedSP->init();
-			
+
 			if(!$valid)
 			{
 				if ($invalidate)
@@ -466,7 +466,7 @@ class FeedController extends Controller {
 			else {
 				$feed->setValid(true);
 			}
-			
+
 			if ($feed->getUpdated(null) != null)
 			{
 				$lastUpdate = $feed->getUpdated(null)->getTimestamp();
@@ -481,7 +481,7 @@ class FeedController extends Controller {
 			$feed->setDescription($feedSP->get_description());
 			$feed->setBaseLink($feedSP->get_link());
 			$feed->save();
-			
+
 			foreach ($feedSP->get_items() as $item)
 			{
 				$entryUpdated = $item->get_date('U');
@@ -526,7 +526,7 @@ class FeedController extends Controller {
 					$entry->save();
 				/*}*/
 			}
-			
+
 			$feedSP = null;
 		}
 		catch (Exception $e)
@@ -538,9 +538,9 @@ class FeedController extends Controller {
 				$feed->save();
 			}
 		}
-		
+
 		$this->cleanOldEntries($feed);
-		
+
 		return $errors;
 	}
 
@@ -564,7 +564,7 @@ class FeedController extends Controller {
 				$category = $parentCat;
 			}
 			foreach ($xmlNode->outline as $outline)
-			{				
+			{
 				$errors = $this->recursiveOpmlImport($outline, $errors, $category, $logFile);
 			}
 		}
@@ -576,14 +576,14 @@ class FeedController extends Controller {
 				$title = (string)$xmlNode['title'];
 				$feedUrl = (string)$xmlNode['xmlUrl'];
 				$feed->setTitle($title);
-				$feed->setUpdated(0);	
+				$feed->setUpdated(0);
 				$feed->setLink($feedUrl);
 				if ($parentCat != null)
 				{
 					$feed->setCategory($parentCat);
 				}
 				$feed->setValid(true);
-				$feed->save();				
+				$feed->save();
 				$this->logToFile($logFile, 'Feed imported: '.$feedUrl);
 			}
 			catch (Exception $e)
@@ -600,17 +600,17 @@ class FeedController extends Controller {
 	}
 
 	private function logToFile($filename, $msg)
-	{ 
+	{
 		// open file
 		$fd = fopen($filename, "a");
 		// append date/time to message
-		$str = "[" . date("Y/m/d h:i:s") . "] " . $msg; 
+		$str = "[" . date("Y/m/d h:i:s") . "] " . $msg;
 		// write string
 		fwrite($fd, $str . "\n");
 		// close file
 		fclose($fd);
 	}
-	
+
 	private function cleanOldEntries($feed)
 	{
 		$all = 0;
@@ -622,6 +622,10 @@ class FeedController extends Controller {
 			if ($entry->getRead() == 1)
 			{
 				$read++;
+			}
+			if ($entry->getFavourite() == 1)
+			{
+				continue;
 			}
 			if ($all > 250 || ($read > 100 && $entry->getRead() == 1))
 			{

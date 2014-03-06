@@ -424,7 +424,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      * <code>
      * $query->filterByUpdated('2011-03-14'); // WHERE updated = '2011-03-14'
      * $query->filterByUpdated('now'); // WHERE updated = '2011-03-14'
-     * $query->filterByUpdated(array('max' => 'yesterday')); // WHERE updated > '2011-03-13'
+     * $query->filterByUpdated(array('max' => 'yesterday')); // WHERE updated < '2011-03-13'
      * </code>
      *
      * @param     mixed $updated The value to use as filter.
