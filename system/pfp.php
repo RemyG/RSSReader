@@ -60,23 +60,26 @@ function pfp()
 	}
 
 	// Get our controller file
-		$path = APP_DIR . 'controllers/' . $controller . '.php';
-	if(file_exists($path)){
+	$path = APP_DIR . 'controllers/' . $controller . '.php';
+	if(file_exists($path))
+	{
 				require_once($path);
-	} else {
+	}
+	else
+	{
 				$controller = ERROR_CONTROLLER.'Controller';
 				require_once(APP_DIR . 'controllers/' . $controller . '.php');
 	}
 
 	$controller = $controller.'Controller';
 
-		// Check the action exists
-		if(!method_exists($controller, $action)
-		{
-				$controller = ERROR_CONTROLLER.'Controller';
-				require_once(APP_DIR . 'controllers/' . $controller . '.php');
-				$action = 'index';
-		}
+	// Check the action exists
+	if(!method_exists($controller, $action))
+	{
+			$controller = ERROR_CONTROLLER.'Controller';
+			require_once(APP_DIR . 'controllers/' . $controller . '.php');
+			$action = 'index';
+	}
 
 	// Create object and call method
 	$obj = new $controller;

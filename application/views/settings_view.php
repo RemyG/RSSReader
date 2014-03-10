@@ -8,7 +8,7 @@
 <?php
 	foreach ($categories as $category)
 	{
-		echo '<li class="ui-state-default" data-id="'.$category->getId().'">'.$category->getName().'</li>';
+		echo '<li class="ui-state-default" data-id="'.$category->getId().'"><i class="fa fa-arrows-v"> </i> '.$category->getName().'</li>';
 	}
 ?>
 </ul>
