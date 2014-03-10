@@ -116,7 +116,7 @@ function loadCategory(catId)
 	});
 }
 
-function displayCategory(catId, catHtml, catCount)
+function displayCategory(catId, catHtml, catCount, feedsCounts)
 {
 	$('.load-feed-link').removeClass('active');
 	$('li.category').removeClass('active');
@@ -125,8 +125,12 @@ function displayCategory(catId, catHtml, catCount)
 	$("#feed-content").html(catHtml);
 	positionFeedEntries();
 	setCountForCategory(catId, catCount);
+	for (var i in feedsCounts)
+	{
+		setCountForFeed(i, feedsCounts[i]);
+	}
 	scrollToActiveEntry('feed-content');
-	$('#entry-navigation-links').show();		
+	$('#entry-navigation-links').show();
 }
 
 function setCountForCategory(catId, catCount)
@@ -143,7 +147,7 @@ function updateCategory(catId)
 		dataType: "json"
 	});
 	request.done(function(data) {
-		displayCategory(catId, data.html, data.count);
+		displayCategory(catId, data.html, data.count, data.counts);
 		$('#overlay').hide();
 	});
 	request.fail(function(jqXHR, textStatus) {
@@ -195,7 +199,7 @@ $("#feed-content").on("click", '.iframe-link', function(e) {
 	var id = $(this).attr('data-entry-id');
 	var feedId = $(this).attr('data-feed-id');
 	setFeedViewInFrame(feedId);
-	openEntryAsFrame(id, this.href);	
+	openEntryAsFrame(id, this.href);
 });
 
 $("#feed-content").on("click", "a.feed-refresh", function(e) {
@@ -215,7 +219,7 @@ $("#feed-list").on("click", "li.category div i", function(e) {
 	e.preventDefault();
 	e.stopPropagation();
 	$(this).parents('li.category').find('ul.feeds').toggle();
-	$(this).toggleClass('fa-plus-square-o fa-minus-square-o');
+	$(this).toggleClass('fa-caret-right fa-caret-down');
 });
 
 // Open a category
@@ -267,7 +271,7 @@ function openEntry(id, href)
 	$('.load-entry-div').hide();
 	$('.load-entry-link').parent().removeClass('active');
 	$('.load-entry-link').parents('div.entry-container').removeClass('active');
-	$field.parent().addClass('active');	
+	$field.parent().addClass('active');
 	$field.parents('div.entry-container').addClass('active');
 	$("#load-entry-div-" + id).show();
 	if ($field.attr('data-viewtype') == 'www')
@@ -281,7 +285,7 @@ function openEntry(id, href)
 }
 
 function openEntryAsFrame(id, href)
-{	
+{
 	var request = $.ajax({
 		url: 'entry/loadframe/' + id,
 		type: "GET",
@@ -461,7 +465,48 @@ $("#feed-content").on("click", ".feed-marknotread", function(e) {
 		$('#overlay').hide();
 		alert("Request failed: " + textStatus);
 	});
+});
 
+// Mark all entries from a category as read
+$("#feed-content").on("click", ".category-markread", function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Marking this category as read.");
+	var id = $(this).attr('data-id');
+	var request = $.ajax({
+		url: 'category/markread/'+id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayCategory(id, data.html, data.count, data.counts);
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		alert("Request failed: " + textStatus);
+	});
+
+});
+
+$("#feed-content").on("click", ".category-marknotread", function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Marking this category as not read.");
+	var id = $(this).attr('data-id');
+	var request = $.ajax({
+		url: 'category/marknotread/'+id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayCategory(id, data.html, data.count, data.counts);
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		alert("Request failed: " + textStatus);
+	});
 });
 
 // Show the modal to Delete a feed (and its entries)
@@ -554,6 +599,51 @@ $("#feed-content").on("click", ".show-unread", function(e) {
 	});
 });
 
+// Show all entries from a category (read and unread)
+$("#feed-content").on("click", ".category-show-all", function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Retrieving category entries.");
+	var id = $(this).data("id");
+	var request = $.ajax({
+		url: 'category/load/' + id + '/1',
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayCategory(id, data.html, data.count, data.counts);
+		$('.category-show-unread').parent().show();
+		$('.category-show-all').parent().hide();
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		alert("Request failed: " + textStatus);
+	});
+});
+
+// Show only the unread entries from a feed
+$("#feed-content").on("click", ".category-show-unread", function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Retrieving category entries.");
+	var id = $(this).data("id");
+	var request = $.ajax({
+		url: 'category/load/' + id + '/0',
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayCategory(id, data.html, data.count, data.counts);
+		$('.category-show-unread').parent().hide();
+		$('.category-show-all').parent().show();
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		alert("Request failed: " + textStatus);
+	});
+});
 
 function updateCountForEntry(id)
 {
@@ -608,7 +698,6 @@ function toggleEntryRead(id)
 	{
 		markEntryRead(id);
 	}
-	
 }
 
 function markEntryRead(id)
@@ -624,7 +713,7 @@ function markEntryRead(id)
 	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
-	});	
+	});
 }
 
 function markEntryNotRead(id)
@@ -731,12 +820,12 @@ setInterval(function() {
 
 $("#feed-content").on("click", '#previous-entry-link', function(e) {
 	e.preventDefault();
-	openPreviousEntry();	
+	openPreviousEntry();
 });
 
 $("#feed-content").on("click", '#next-entry-link', function(e) {
 	e.preventDefault();
-	openNextEntry();	
+	openNextEntry();
 });
 
 $(document.documentElement).keyup(function (event) {
@@ -745,7 +834,7 @@ $(document.documentElement).keyup(function (event) {
 		event.preventDefault();
 		// handle cursor keys
 		if (event.keyCode == 80) // P
-		{ 
+		{
 			openPreviousEntry();
 		}
 		else if (event.keyCode == 78) // N
@@ -782,7 +871,7 @@ function openNextEntry()
 	var $currentEntryLinkContainer = $('.entry-link-container.active');
 	if ($currentEntryLinkContainer.length > 0)
 	{
-		var $currentEntryContainer = $currentEntryLinkContainer.parent();    	
+		var $currentEntryContainer = $currentEntryLinkContainer.parent();
 		var $nextEntryContainer = $currentEntryContainer.nextAll(".entry-container:first");
 	}
 	else
@@ -848,7 +937,7 @@ function addNewFeed(catId, feedId, feedName, feedCount, feedUrl)
 {
 	var template = $("<li class='load-feed-link empty not-valid' id='load-feed-link-1' data-href='feed/load/1' data-cat-id='2' data-id='1' data-viewtype='rss' data-baselink='http://friendfeed.com/'>"
 			+ "<a href='feed/load/1'><span class='feed-title'>Title</span><span class='feed-count'></span></a></li>");
-	
+
 	template.attr('id', 'load-feed-link-' + feedId);
 	template.attr('data-href', 'feed/load/' + feedId);
 	template.attr('data-cat-id', catId);
@@ -856,9 +945,9 @@ function addNewFeed(catId, feedId, feedName, feedCount, feedUrl)
 	template.attr('data-baselink', feedUrl);
 	template.find('a').attr('href', 'feed/load/' + feedId);
 	template.find('span.feed-title').html(feedName);
-	
+
 	var cat = $('li.category[data-cat-id="' + catId + '"]').find("ul.feeds");
-	
+
 	cat.append(template);
 }
 
@@ -915,16 +1004,15 @@ $("#slider-import-opml").on("click", '.confirm-import-opml', function(e) {
 	});
 });
 
-
-
-
 //Bind to the resize event of the window object
 $(window).on("resize", function () {
     // Set .right's width to the window width minus 480 pixels
 	var height = $(window).height() - $('div#left-menu').offset().top;
+	var topHeight = $('div#left-menu-top').outerHeight();
     $('div#left-menu').height(height);
     $('div#left-menu-inner').height(height);
-    $('div#feed-list-container').height(height);
+    $('div#feed-list-container').height(height - topHeight);
+    $('div#feed-list-container').css({ top: topHeight });
     positionFeedEntries();
 // Invoke the resize event immediately
 }).resize();

@@ -14,26 +14,26 @@ class Model {
 	{
 		$this->connection = PDO2::getInstance();
 	}
-	
+
 	public function to_bool($val)
 	{
 	    return !!$val;
 	}
-	
+
 	public function to_date($val)
 	{
 	    return date('Y-m-d', $val);
 	}
-	
+
 	public function to_time($val)
 	{
 	    return date('H:i:s', $val);
 	}
-	
+
 	public function to_datetime($val)
 	{
 	    return date('Y-m-d H:i:s', $val);
-	}	
+	}
 
 	public function prepareStatement($sql) {
 		return $this->connection->prepare($sql);
@@ -45,7 +45,7 @@ class Model {
 			$statement->execute($parameters);
 		} else {
 			$statement->execute();
-		}		
+		}
 		$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 		return $result;
 
@@ -57,7 +57,7 @@ class Model {
 			$statement->execute($parameters);
 		} else {
 			$statement->execute();
-		}		
+		}
 		$result = $statement->rowCount();
 		return $result;
 
@@ -69,10 +69,9 @@ class Model {
 			$statement->execute($parameters);
 		} else {
 			$statement->execute();
-		}		
+		}
 		$result = $this->connection->lastInsertId();
 		return $result;
 	}
-    
 }
 ?>

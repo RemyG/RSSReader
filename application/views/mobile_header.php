@@ -10,14 +10,14 @@
 
 	<title><?php echo isset($pageTitle) ? $pageTitle : DEFAULT_TITLE; ?></title>
 
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/font-awesome.min.css" type="text/css" media="screen" />
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/mobile.css" />
 
-	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/jquery.mobile-1.3.1.min.css" />
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.1/jquery.mobile.min.css" />
 	
-	<script src="<?php echo BASE_URL; ?>static/js/jquery-2.0.0.min.js"></script>
-	<script src="<?php echo BASE_URL; ?>static/js/jquery.mobile-1.3.1.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.1/jquery.mobile.min.js"></script>
 
 </head>
 <body>

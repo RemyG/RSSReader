@@ -1,4 +1,4 @@
-<div id="content">
+<div id="content" class="content-center">
 
 <h1>Settings</h1>
 
@@ -15,22 +15,36 @@
 
 <h3>New category</h3>
 
-<form method="post" id="form-create-category" class="settings-form">
-	<label for="category-name">Category name</label>
-	<input type="text" name="category-name" id="category-name" required />
-	<input type="hidden" name="action" value="new-category" />
-	<a href="#" class="btn btn-primary create-category">Create category</a>
+<form method="post" id="form-create-category" class="settings-form form-block">
+	<fieldset>
+		<input type="hidden" name="action" value="new-category" />
+		<div class="field-group">
+			<label for="category-name">Category name</label>
+			<input type="text" name="category-name" id="category-name" required />
+		</div>
+		<div class="field-group">
+			<a href="#" class="btn btn-primary create-category">Create category</a>
+		</div>
+	</fieldset>
 </form>
 
 <h2>Update user</h2>
 
-<form method="post" class="settings-form" novalidate>
-	<label for="login">Login</label>
-	<input type="email" name="login" id="login" required />
-	<label for="password">Password</label>
-	<input type="password" name="password" id="password" required />
-	<input type="hidden" name="action" value="update-user" />
-	<button type="submit" class="btn">Update</button>
+<form method="post" class="settings-form form-block" novalidate>
+	<fieldset>
+		<input type="hidden" name="action" value="update-user" />
+		<div class="field-group">
+			<label for="login">Login</label>
+			<input type="email" name="login" id="login" required />
+		</div>
+		<div class="field-group">
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" required />
+		</div>
+		<div class="field-group">
+			<button type="submit" class="btn">Update</button>
+		</div>
+	</fieldset>
 </form>
 
 </div>

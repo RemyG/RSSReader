@@ -89,7 +89,12 @@ class CategoryController extends Controller {
 		$template->set('entries', $entries);
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
-		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c)));
+		$counts = array();
+		foreach ($category->getFeeds() as $feed)
+		{
+			$counts[$feed->getId()] = $feed->countEntrys($c);
+		}
+		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c), 'counts' => $counts));
 	}
 	
 	/**
@@ -161,6 +166,34 @@ class CategoryController extends Controller {
 	{
 		$category = CategoryQuery::create()->findPK($id);
 		return $category->countEntrys();
+	}
+
+	function markRead($id)
+	{
+		$category = CategoryQuery::create()->findPK($id);
+		foreach ($category->getFeeds() as $feed)
+		{
+			foreach ($feed->getEntrys() as $entry)
+			{
+				$entry->setRead(1);
+				$entry->save();
+			}
+		}
+		return $this->load($id);
+	}
+
+	function markNotRead($id)
+	{
+		$category = CategoryQuery::create()->findPK($id);
+		foreach ($category->getFeeds() as $feed)
+		{
+			foreach ($feed->getEntrys() as $entry)
+			{
+				$entry->setRead(0);
+				$entry->save();
+			}
+		}
+		return $this->load($id);
 	}
 
 }

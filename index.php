@@ -4,7 +4,7 @@
  */
 
 //Start the Session
-session_start(); 
+session_start();
 
 // Defines
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');

@@ -28,7 +28,7 @@ class View {
 		include APP_DIR.'views/header.php';
 		require($this->template);
 		include APP_DIR.'views/footer.php';
-		echo ob_get_clean();		
+		echo ob_get_clean();
 	}
 
 	public function renderString()
@@ -46,7 +46,7 @@ class View {
 		include APP_DIR.'views/mobile_header.php';
 		require($this->template);
 		include APP_DIR.'views/mobile_footer.php';
-		echo ob_get_clean();	
+		echo ob_get_clean();
 	}
 }
 

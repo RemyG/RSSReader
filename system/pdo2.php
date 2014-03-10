@@ -12,7 +12,7 @@ class PDO2 extends PDO
 
 	public function __construct()
 	{
-	
+
 	}
 
 	public static function getInstance()
@@ -21,7 +21,7 @@ class PDO2 extends PDO
 		{
 			try
 			{
-				self::$_instance = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);			
+				self::$_instance = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);
 			}
 			catch (PDOException $e)
 			{

@@ -2,24 +2,24 @@
 
 <div id="feed-content">
 
-	<?php 
+	<?php
 	if (!isset($categoriesTree) || sizeof($categoriesTree) == 0)
 	{
-		echo "You haven't imported any feed yet. To do so, <a href='".BASE_URL."feed/add'><i class='icon-plus-sign'> </i> Import a new feed</a>
-		or <a href='".BASE_URL."feed/importopml'><i class='icon-download'> </i> Import an OPML file</a>";
+		echo "You haven't imported any feed yet. To do so, <a href='".BASE_URL."feed/add'><i class='fa fa-plus-circle'> </i> Import a new feed</a>
+		or <a href='".BASE_URL."feed/importopml'><i class='fa fa-download'> </i> Import an OPML file</a>";
 	}
-	?>	
+	?>
 
 </div>
 
 </div>
 
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>static/js/main.js"></script>
-	
+
 	<script type="text/javascript">
 		//$('#button-refresh').parent('li').show();
 	</script>
-	
+
 	<script type="text/javascript">
 		$(function() {
 			$("ul.feeds").sortable({

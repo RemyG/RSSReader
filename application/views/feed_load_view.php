@@ -27,51 +27,9 @@
 				</span>
 			</div>
 		</div>';
-	echo '<div id="slider-edit-feed" class="slider">
-			<div class="slider-header">
-				<a href="#" class="close cancel-edit-feed">&times;</a>
-				<h3 class="title">Edit feed</h3>
-			</div>
-			<div class="slider-body">
-				<form id="form-edit">
-					<fieldset>
-						<input type="hidden" name="feed-id" value="'.$feed->getId().'">
-						<div class="field-group">
-							<label>Feed title</label>
-							<input type="text" name="feed-title" value="'.$feed->getTitle().'">
-						</div>
-						<div class="field-group">
-							<label>Feed link</label>
-							<input type="url" name="feed-link" value="'.$feed->getLink().'">
-						</div>
-						<div class="field-group">
-							<label>Feed base link</label>
-							<input type="url" name="feed-base-link" value="'.$feed->getBaseLink().'">
-						</div>
-						<div class="field-group">
-							<label for="feed-category">Category</label>
-							<select name="feed-category" id="feed-category">';
-	foreach ($categories as $category)
-	{
-		if ($category->getId() == $feed->getCategory()->getId())
-		{
-			echo '<option value="'.$category->getId().'" selected="selected">'.$category->getName().'</option>';
-		}
-		else
-		{
-			echo '<option value="'.$category->getId().'">'.$category->getName().'</option>';
-		}
-	}
-	echo '</select>
-						</div>
-					</fieldset>
-				</form>
-			</div>
-			<div class="slider-footer">
-				<a href="#" class="btn btn-primary confirm-edit-feed">Save</a>
-				<a href="#" class="btn cancel-edit-feed">Cancel</a>
-			</div>
-		</div>';
+
+	include 'templates/tpl_slider_edit_feed.php';
+
 	echo '<div id="slider-delete-feed" class="slider">
 			<div class="slider-header">
 				<a href="#" class="close cancel-delete-feed">&times;</a>
@@ -86,5 +44,6 @@
 				<a href="#" class="btn secondary cancel-delete-feed">No</a>
 			</div>
 		</div>';
-	include 'tpl_entries.php';
+
+	include 'templates/tpl_entries.php';
 ?>
