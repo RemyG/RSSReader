@@ -31,7 +31,7 @@ title: RSS Reader
 			{% for post in site.posts limit: 5 %}
 				<li>
 					<a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-					<small><i class="icon-time"> </i>{{ post.date | date:"%Y-%m-%d" }}</small>
+					<small><i class="fa fa-clock-o"> </i> {{ post.date | date:"%Y-%m-%d" }}</small>
 				</li>
 			{% endfor %}
 		</ul>

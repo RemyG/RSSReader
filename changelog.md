@@ -5,7 +5,14 @@ title: Changelog
 
 # {{ page.title }}
 
-## v0.2.0
+## v0.3
+
+* favourite entries
+* feed edition
+* category entries
+* mobile website (read/unread)
+
+## v0.2
 
 * jQueryMobile mobile website
 * jQueryUI sortable feeds list

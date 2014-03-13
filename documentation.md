@@ -29,6 +29,6 @@ See [the download page]({{ site.baseurl }}/download.html).
 	* DB Host: the database host URL
 	* DB Name: the database name
 	* DB Username: the database account username
-	* DB Password: the database account password	
+	* DB Password: the database account password
 * Go to `BASE_URL` in a browser, and create the main user as asked.
 * You're good to go!

@@ -17,11 +17,11 @@ title: Blog Posts
 		</div>
 		<div class="post-meta">
 			<div class="post-date left">
-				<i class="icon-time"> </i>
+				<i class="fa fa-clock-o"> </i>
 				{{ post.date | date:"%Y-%m-%d" }}
 			</div>
 			<div class="comments-heading right">
-				<i class="icon-comments"> </i>
+				<i class="fa fa-comments-o"> </i>
 				<a href="{{ site.baseurl }}{{ post.url }}/#disqus_thread">Comments</a>
 			</div>
 		</div>
@@ -35,7 +35,7 @@ title: Blog Posts
 		{% unless post.tags == empty %}
 		<div>
 			<ul class="tag_box inline-list valign-middle">
-				<li><i class="icon-tags valign-middle float-left"> </i></li>
+				<li><i class="fa fa-fw fa-tags valign-middle float-left"> </i></li>
 				{% assign tags_list = post.tags %}
 				{% include tags_list %}
 			</ul>
@@ -44,7 +44,7 @@ title: Blog Posts
 		{% unless post.categories == empty %}
 		<div>
 			<ul class="tag_box inline-list valign-middle">
-				<li><i class="icon-folder-open valign-middle float-left"> </i></li>
+				<li><i class="fa fa-fw fa-folder-open valign-middle float-left"> </i></li>
 				{% assign categories_list = post.categories %}
 				{% include categories_list %}
 			</ul>

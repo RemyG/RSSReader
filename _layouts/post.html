@@ -11,7 +11,7 @@ layout: default
 		</div>
 		<div class="post-meta">
 			<div class="post-date">
-				<i class="icon-time"> </i>
+				<i class="fa fa-clock-o"> </i>
 				{{ page.date | date:"%Y-%m-%d" }}
 			</div>
 		</div>
@@ -23,7 +23,7 @@ layout: default
 		{% unless page.tags == empty %}
 		<div>
 			<ul class="tag_box inline-list valign-middle">
-				<li><i class="icon-tags valign-middle float-left"> </i></li>
+				<li><i class="fa fa-fw fa-tags valign-middle float-left"> </i></li>
 				{% assign tags_list = page.tags %}
 				{% include tags_list %}
 			</ul>
@@ -32,7 +32,7 @@ layout: default
 		{% unless page.categories == empty %}
 		<div>
 			<ul class="tag_box inline-list valign-middle">
-				<li><i class="icon-folder-open valign-middle float-left"> </i></li>
+				<li><i class="fa fa-fw fa-folder-open valign-middle float-left"> </i></li>
 				{% assign categories_list = page.categories %}
 				{% include categories_list %}
 			</ul>
