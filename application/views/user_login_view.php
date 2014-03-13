@@ -6,7 +6,7 @@ document.location = "<?php echo BASE_URL; ?>m/user/login";
 
 </script>
 
-<div id="content">
+<div id="content" class="content-center">
 
 <?php
 
@@ -26,14 +26,22 @@ if (count($errors) > 0)
 
 ?>
 
-<h1>Sign in</h1>
+	<h1>Sign in</h1>
 
-<form class="login-form custom" method="post" action="<?php echo BASE_URL; ?>user/login" novalidate>
-	<label for="login">Login</label>
-	<input type="email" name="login" id="login" required />
-	<label for="password">Password</label>
-	<input type="password" name="password" id="password" required />
-	<button type="submit" class="btn">Sign in</button>
-</form>
+	<form class="login-form custom form-block" method="post" action="<?php echo BASE_URL; ?>user/login" novalidate>
+		<fieldset>
+			<div class="field-group">
+				<label for="login">Login</label>
+				<input type="email" name="login" id="login" required />
+			</div>
+			<div class="field-group">
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" required />
+			</div>
+			<div class="field-group">
+				<button type="submit" class="btn">Sign in</button>
+			</div>
+		</fieldset>
+	</form>
 
 </div>
