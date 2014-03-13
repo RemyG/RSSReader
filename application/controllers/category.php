@@ -5,7 +5,7 @@ class CategoryController extends Controller {
 	/**
 	 * Re-order the categories by setting a specific position to a categorie, and
 	 * moving the other categories if required.
-	 * 
+	 *
 	 * @param int $catId
 	 * 		The category id.
 	 * @param int $order
@@ -50,12 +50,12 @@ class CategoryController extends Controller {
 
 	/**
 	 * Open a category and all of its entries, and display it in the view <code>category_load_view</code>.
-	 * 
-	 * @param int $id 
+	 *
+	 * @param int $id
 	 * 		The category id.
-	 * @param int $all 
+	 * @param int $all
 	 * 		1 if we want to display all the entries, null or 0 if we want to display only the un-read entries.
-	 * 
+	 *
 	 * @return
 	 * 		A json object containing 2 keys: 'html' for the HTML representation of the entries list, and 'count'
 	 * 		for the number of entries of this category.
@@ -96,10 +96,10 @@ class CategoryController extends Controller {
 		}
 		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c), 'counts' => $counts));
 	}
-	
+
 	/**
 	 * Create a new category.
-	 *  
+	 *
 	 * @return string A json array containing either the 'id' and 'name' of the new category,
 	 * 		or the 'error' that happened.
 	 */
@@ -136,10 +136,10 @@ class CategoryController extends Controller {
 
 	/**
 	 * Update every feed of this category, and return the result of $this->load.
-	 * 
-	 * @param int $id 
+	 *
+	 * @param int $id
 	 * 		The category id.
-	 * 
+	 *
 	 * @return The result of $this->load.
 	 */
 	function update($id)
@@ -156,11 +156,11 @@ class CategoryController extends Controller {
 
 	/**
 	 * Return the number of un-read entries for this category.
-	 * 
+	 *
 	 * @param int $id
 	 * 		The category id.
-	 * 
-	 * @returns The number of un-read entries.
+	 *
+	 * @return The number of un-read entries.
 	 */
 	function count($id)
 	{
@@ -168,6 +168,14 @@ class CategoryController extends Controller {
 		return $category->countEntrys();
 	}
 
+	/**
+	 * Mark all entries from this category as read
+	 *
+	 * @param int $id
+	 * 		The category id.
+	 *
+	 * @return The result of $this->load($id).
+	 */
 	function markRead($id)
 	{
 		$category = CategoryQuery::create()->findPK($id);
@@ -182,6 +190,14 @@ class CategoryController extends Controller {
 		return $this->load($id);
 	}
 
+	/**
+	 * Mark all entries from this category as not read
+	 *
+	 * @param int $id
+	 * 		The category id.
+	 *
+	 * @return The result of $this->load($id).
+	 */
 	function markNotRead($id)
 	{
 		$category = CategoryQuery::create()->findPK($id);
@@ -195,5 +211,4 @@ class CategoryController extends Controller {
 		}
 		return $this->load($id);
 	}
-
 }
