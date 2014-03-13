@@ -1,12 +1,13 @@
 $title-font: 'Dosis', Helvetica, Arial, sans-serif;
 $body-font: 'Gudea', sans-serif;
 
-$default-text-color: #444;
+$default-text-color: #333;
 
 /* COLORS */
 
 $orange: #e67e22;
 $orange-light: #EBA05E;
+$orange-dark: #CC660C;
 
 /* GLOBAL */
 
@@ -31,12 +32,12 @@ $header-bg-hover: $orange-light;
 
 $menu-width: 325px;
 
-$feed-link-text: #fff;
-$feed-link-bg: #444;
-$feed-link-bg-active: #eee;
-$feed-link-text-active: #444;
-$feed-link-bg-hover: #222;
-$feed-link-text-not-valid: #bbb;
+$feed-link-text: #333;
+$feed-link-bg: #FFF9F5;
+$feed-link-bg-active: $orange-light;
+$feed-link-text-active: #333;
+$feed-link-bg-hover: $orange;
+$feed-link-text-not-valid: #888;
 
 /* MAIN CONTENT */
 
