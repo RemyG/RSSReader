@@ -26,6 +26,7 @@
 				items: "li.load-feed-link",
 				connectWith: "ul.feeds",
 				placeholder: "feed-link-placeholder",
+				delay: 150,
 				update: function(event, ui)
 				{
 					var feedId = ui.item.data('id');
