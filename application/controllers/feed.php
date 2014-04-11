@@ -48,11 +48,16 @@ class FeedController extends Controller {
 		$template = $this->loadView('feed_load_view');
 		$feed = FeedQuery::create()->findPK($id);
 		$errors = array();
-		// $this->updateFeed($feed, $errors);
-		// $feed = FeedQuery::create()->findPK($id);
+		// Always show the favourite entries
 		if ($all == null || $all == 0)
 		{
-			$entries = EntryQuery::create()->filterByFeed($feed)->filterByRead(0)->orderByUpdated('desc')->find();
+			$entries = EntryQuery::create()
+				->filterByFeed($feed)
+				->filterByRead(0)
+					->_or()
+				->filterByFavourite(1)
+				->orderByUpdated('desc')
+				->find();
 		}
 		else
 		{
