@@ -1,6 +1,6 @@
 [submodule "src/plugins/simplepie"]
 	path = src/plugins/simplepie
-	url = git@github.com:simplepie/simplepie.git
+	url = https://github.com/simplepie/simplepie.git
 [submodule "src/plugins/propel"]
 	path = src/plugins/propel
-	url = git@github.com:propelorm/Propel.git
+	url = https://github.com/propelorm/Propel.git
