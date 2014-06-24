@@ -2,6 +2,8 @@
 
 This application is a self-hosted RSS aggregator and reader.
 
+[![Build Status](https://travis-ci.org/RemyG/RSSReader.svg?branch=develop)](https://travis-ci.org/RemyG/RSSReader)
+
 ## Requirements
 
 To run this application, you need:
