@@ -8,7 +8,7 @@ session_start();
 
 // Defines
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
-define('APP_DIR', ROOT_DIR .'application/');
+define('APP_DIR', ROOT_DIR .'src/');
 define('LOG_DIR', ROOT_DIR.'logs/');
 
 // Includes

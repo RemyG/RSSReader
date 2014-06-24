@@ -1,6 +1,0 @@
-[submodule "application/plugins/propel"]
-	path = application/plugins/propel
-	url = git://github.com/propelorm/Propel.git
-[submodule "application/plugins/simplepie"]
-	path = application/plugins/simplepie
-	url = https://github.com/simplepie/simplepie.git
