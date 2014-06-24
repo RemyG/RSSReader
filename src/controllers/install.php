@@ -1,7 +1,7 @@
 <?php
 
 class InstallController extends Controller {
-	
+
 	function index()
 	{
 		$template = $this->loadView('install_view');
@@ -32,9 +32,8 @@ class InstallController extends Controller {
 		{
 			$template->render();
 		}
-  		
 	}
-    
+
 }
 
 ?>

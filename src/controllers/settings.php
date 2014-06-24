@@ -1,7 +1,7 @@
 <?php
 
 class SettingsController extends Controller {
-	
+
 	function index()
 	{
 		$template = $this->loadView('settings_view');

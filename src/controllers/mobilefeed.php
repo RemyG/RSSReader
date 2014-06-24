@@ -14,13 +14,13 @@ class MobileFeedController extends Controller {
 	{
 		$template = $this->loadView('mobile_category_load_view');
 		$template->set('pageTitle', PROJECT_NAME);
-		$template->set('pageDescription', 'Welcome to PFP - Main page');	
+		$template->set('pageDescription', 'Welcome to PFP - Main page');
 		$category = CategoryQuery::create()->findPK($id);
-  		$template->set('category', $category);
+		$template->set('category', $category);
 		$template->set('backUrl', '/m/');
-  		$template->renderMobile();
+		$template->renderMobile();
 	}
-	
+
 	function add()
 	{
 		$template = $this->loadView('feed_add_view');
@@ -37,7 +37,7 @@ class MobileFeedController extends Controller {
 			$this->importFeed($feedUrl, $errors, $feedCategory);
 			$template->set('errors', $errors);
 		}
-  		$template->render();
+		$template->render();
 	}
 
 	function load($id, $all = null)
@@ -52,14 +52,14 @@ class MobileFeedController extends Controller {
 		else
 		{
 			$entries = EntryQuery::create()->filterByFeed($feed)->orderByUpdated('desc')->find();
-		}		
+		}
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
-		$template->set('backUrl', '/m/feed/category/'.$feed->getCategory()->getId());		
+		$template->set('backUrl', '/m/feed/category/'.$feed->getCategory()->getId());
 		$template->set('toggleText', $all == null || $all == 0 ? 'All' : 'Unread');
 		$template->set('toggleUrl', '/m/feed/load/'.$id.($all == null || $all == 0 ? '/1' : ''));
 		$template->renderMobile();
-		
+
 	}
 
 }

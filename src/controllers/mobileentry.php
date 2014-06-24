@@ -13,26 +13,26 @@ class MobileEntryController extends Controller {
 		$template->set('entryId', $id);
 		$template->renderMobile();
 	}
-    
-    function count($id)
-    {
-    	$entry = EntryQuery::create()->findPK($id);
-    	$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
-    	$count = $entry->getFeed()->countEntrys($c);
-    	echo $count;
-    }
 
-    function markRead($id)
-    {
-    	$entry = EntryQuery::create()->findPK($id);
+	function count($id)
+	{
+		$entry = EntryQuery::create()->findPK($id);
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+		$count = $entry->getFeed()->countEntrys($c);
+		echo $count;
+	}
+
+	function markRead($id)
+	{
+		$entry = EntryQuery::create()->findPK($id);
 		$entry->setRead(1);
 		$entry->save();
-    }
+	}
 
-    function markUnread($id)
+	function markUnread($id)
 	{
-    	$entry = EntryQuery::create()->findPK($id);
+		$entry = EntryQuery::create()->findPK($id);
 		$entry->setRead(0);
 		$entry->save();
 	}

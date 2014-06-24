@@ -6,7 +6,7 @@ class Session_helper {
 	{
 		$_SESSION["$key"] = $val;
 	}
-	
+
 	function get($key)
 	{
 		if (array_key_exists($key, $_SESSION))
@@ -17,9 +17,8 @@ class Session_helper {
 		{
 			return null;
 		}
-		
 	}
-	
+
 	function destroy()
 	{
 		session_destroy();
@@ -36,7 +35,6 @@ class Session_helper {
 			return null;
 		}
 	}
-
 }
 
 ?>

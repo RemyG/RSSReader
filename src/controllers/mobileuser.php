@@ -20,7 +20,7 @@ class MobileUserController extends Controller {
 					{
 						$sessionHelper = $this->loadHelper('Session_helper');
 						$sessionHelper->destroy();
-						session_start();						
+						session_start();
 						$sessionHelper->set('user-login', $user->getLogin());
 						$this->redirect('m/');
 					}

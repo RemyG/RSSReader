@@ -6,12 +6,12 @@ class EntryController extends Controller {
 	{
 		echo $this->loadWithTemplate($id, 'entry_load_view');
 	}
-	
+
 	function loadFrame($id)
 	{
 		echo $this->loadWithTemplate($id, 'entry_load_frame_view');
 	}
-	
+
 	function loadWithTemplate($id, $templateName)
 	{
 		$template = $this->loadView($templateName);
@@ -29,8 +29,8 @@ class EntryController extends Controller {
 				'html' => $template->renderString(),
 				'feedCount' => $entry->getFeed()->countEntrys($c),
 				'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
-	}	
-	
+	}
+
 	function count($id)
 	{
 		$entry = EntryQuery::create()->findPK($id);
@@ -50,7 +50,7 @@ class EntryController extends Controller {
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
 		echo json_encode(array(
-			'feedId' => $entry->getFeed()->getId(), 
+			'feedId' => $entry->getFeed()->getId(),
 			'feedCount' => $entry->getFeed()->countEntrys($c),
 			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
 	}
@@ -68,8 +68,8 @@ class EntryController extends Controller {
 			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
 	}
 
- 	function markFavourite($id)
- 	{
+	function markFavourite($id)
+	{
 		$entry = EntryQuery::create()->findPK($id);
 		$entry->setFavourite(1);
 		$entry->save();
@@ -90,7 +90,7 @@ class EntryController extends Controller {
 
 	/**
 	 * Load the favourite entries
-	 * 
+	 *
 	 * @return
 	 * 		A json object containing 2 keys: 'html' for the HTML representation of the entries list, and 'count'
 	 * 		for the number of entries of this category.
