@@ -37,8 +37,8 @@ $ git submodule update
 #### Without git
 
 * Download the application, and extract.
-* Download [Propel](http://propelorm.org/download.html) and extract in `application/plugins/propel`.
-* Download [SimplePie](http://simplepie.org/downloads/) and extract in `application/plugins/simplepie`.
+* Download [Propel](http://propelorm.org/download.html) and extract in `src/plugins/propel`.
+* Download [SimplePie](http://simplepie.org/downloads/) and extract in `src/plugins/simplepie`.
 
 ### Configuration
 
@@ -48,7 +48,7 @@ $ git submodule update
 	* DB Host: the database host URL
 	* DB Name: the database name
 	* DB Username: the database account username
-	* DB Password: the database account password	
+	* DB Password: the database account password
 * Go to `BASE_URL` in a browser, and create the main user as asked.
 * You're good to go!
 

@@ -3,7 +3,9 @@
 $updated = false;
 $installed = false;
 
-$str = $str = file_get_contents('application/config/config.php');
+$SRC_DIR = 'src';
+
+$str = $str = file_get_contents($SRC_DIR.'/config/config.php');
 if (preg_match("/define\('INSTALLED', 'true'\);/", $str))
 {
 	$installed = true;
@@ -17,33 +19,33 @@ if (!$installed
 	&& array_key_exists('dbhost', $_POST))
 {
 
-	$str = file_get_contents('application/config/config.php');
+	$str = file_get_contents($SRC_DIR.'/config/config.php');
 	$baseUrl = $_POST['baseurl'];
 	if (substr($baseUrl, -strlen("/")) !== "/")
 	{
 		$baseUrl = $baseUrl."/";
 	}
 	$str = preg_replace("/define\('BASE_URL', '.*?'\);/", "define('BASE_URL', '".$baseUrl."');", $str);
-	file_put_contents('application/config/config.php', $str);
+	file_put_contents($SRC_DIR.'/config/config.php', $str);
 
 	//read the entire string
-	$str = file_get_contents('application/build/conf/rss-reader-conf.php');
+	$str = file_get_contents($SRC_DIR.'/build/conf/rss-reader-conf.php');
 
 	$str = preg_replace("/'mysql:host=(.*?);dbname=(.*?)',/", "'mysql:host=".$_POST['dbhost'].";dbname=".$_POST['dbname']."',", $str);
 	$str = preg_replace("/'user' => '(.*?)',/", "'user' => '".$_POST['dbuser']."',", $str);
 	$str = preg_replace("/'password' => '(.*?)',/", "'password' => '".$_POST['dbpassword']."',", $str);
 
-	file_put_contents('application/build/conf/rss-reader-conf.php', $str);
+	file_put_contents($SRC_DIR.'/build/conf/rss-reader-conf.php', $str);
 
 	$db = new PDO("mysql:host=".$_POST['dbhost'].";dbname=".$_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
-	$sql = file_get_contents('application/build/sql/schema.sql');
+	$sql = file_get_contents($SRC_DIR.'/build/sql/schema.sql');
 	$qr = $db->exec($sql);
-	$sql = file_get_contents('application/build/sql/insert.sql');
+	$sql = file_get_contents($SRC_DIR.'/build/sql/insert.sql');
 	$qr = $db->exec($sql);
 
-	$str = file_get_contents('application/config/config.php');
+	$str = file_get_contents($SRC_DIR.'/config/config.php');
 	$str = preg_replace("/define\('INSTALLED', '.*?'\);/", "define('INSTALLED', 'true');", $str);
-	file_put_contents('application/config/config.php', $str);
+	file_put_contents($SRC_DIR.'/config/config.php', $str);
 
 	$updated = true;
 }
@@ -78,7 +80,7 @@ if (!$installed
 
 </head>
 
-<body>	
+<body>
 
 	<div class="content">
 
@@ -94,10 +96,10 @@ if (!$installed
 
 		<?php } else if ($updated) { ?>
 
-			    <div class="alert alert-success">
+				<div class="alert alert-success">
 					RSS Reader has been successfully installed!
 				</div>
-			
+
 				<p><a class="btn btn-success" href="<?php echo $baseUrl; ?>">Go to homepage</a></p>
 
 		<?php } else { ?>
@@ -113,7 +115,7 @@ if (!$installed
 					<label for="dbhost">DB Host</label><input type="text" name="dbhost" id="dbhost" placeholder="localhost" required />
 					<label for="dbname">DB Name</label><input type="text" name="dbname" id="dbname" placeholder="rss-reader" required />
 					<label for="dbuser">DB Username</label><input type="text" name="dbuser" id="dbuser" placeholder="mysqluser" required />
-					<label for="dbpassword">DB Password</label><input type="password" name="dbpassword" id="dbpassword" placeholder="mysql-password" />					
+					<label for="dbpassword">DB Password</label><input type="password" name="dbpassword" id="dbpassword" placeholder="mysql-password" />
 				</fieldset>
 				<fieldset>
 					<input type="submit" class="btn btn-large btn-primary" value="Install RSS Reader" />
@@ -121,7 +123,7 @@ if (!$installed
 			</form>
 
 		<?php } ?>
-		
+
 	</div>
 
 </body>
