@@ -3,6 +3,7 @@
 This application is a self-hosted RSS aggregator and reader.
 
 [![Build Status](https://travis-ci.org/RemyG/RSSReader.svg?branch=develop)](https://travis-ci.org/RemyG/RSSReader)
+[![Coverage Status](https://coveralls.io/repos/RemyG/RSSReader/badge.png?branch=develop)](https://coveralls.io/r/RemyG/RSSReader?branch=develop)
 
 ## Requirements
 
