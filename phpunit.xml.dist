@@ -7,14 +7,16 @@
 			<directory suffix="Test.php">./tests</directory>
 		</testsuite>
 	</testsuites>
-
 	<filter>
 		<whitelist>
-			<directory>./</directory>
+			<directory>./src</directory>
 			<exclude>
-				<directory>./tests</directory>
-				<directory>./vendor</directory>
+				<directory>./src/plugins</directory>
+				<directory>./src/config</directory>
 			</exclude>
 		</whitelist>
 	</filter>
+	<php>
+		<const name="BASE_URL" value="BASE_URL"/>
+	</php>
 </phpunit>

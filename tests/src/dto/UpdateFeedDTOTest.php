@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @covers UpdateFeedDTO
+ */
 class UpdateFeedDTOTest extends PHPUnit_Framework_TestCase
 {
 	protected $dto;
@@ -9,6 +12,11 @@ class UpdateFeedDTOTest extends PHPUnit_Framework_TestCase
 		$feed = new Feed();
 		$feed->setId(1);
 		$this->dto = new UpdateFeedDTO($feed);
+	}
+
+	public function testGetFeed()
+	{
+		$this->assertEquals(1, $this->dto->getFeed()->getId());
 	}
 
 	public function testIsValid()
