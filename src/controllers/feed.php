@@ -118,12 +118,12 @@ class FeedController extends Controller {
 	{
 		set_time_limit(0);
 		$feeds = FeedQuery::create()->filterByValid(1)->find();
-		/*
+		
 		$log = new Logger('Feed.updateAll');
 		$log->pushHandler(new StreamHandler(LOG_DIR."update-".date("Ymd-His")."-".$direction.".log", Logger::INFO));
 		$logHelper = $this->loadHelper('Monolog_helper');
 		$log->addInfo('Updating '.sizeof($feeds).' feeds');
-		*/
+		
 		$updateFeedDTOs = array();
 		$i = 0;
 		foreach ($feeds as $feed)
@@ -132,9 +132,9 @@ class FeedController extends Controller {
 			$errors = array();
 			$dto = $this->updateFeed($feed, $errors);
 			$updateFeedDTOs[] = $dto;
-			/*
+			
 			$logHelper->logUpdateFeedDTO($log, $dto, $i);
-			*/
+			
 		}
 		$feeds = FeedQuery::create()->find();
 		$template = $this->loadView('feed_updateall_view');
@@ -355,9 +355,6 @@ class FeedController extends Controller {
 
 	private function importFeed($feedUrl, $errors, $parentCat = null, $logFile = null)
 	{
-
-		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
-
 		try
 		{
 			if ($logFile == null)
@@ -468,8 +465,6 @@ class FeedController extends Controller {
 		$feedUrl = $feed->getLink();
 
 		$dto = new UpdateFeedDTO($feed);
-
-		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
 
 		try
 		{
