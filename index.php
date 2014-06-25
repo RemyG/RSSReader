@@ -18,6 +18,7 @@ require(ROOT_DIR .'system/model.php');
 require(ROOT_DIR .'system/view.php');
 require(ROOT_DIR .'system/controller.php');
 require(ROOT_DIR .'system/pfp.php');
+require(ROOT_DIR .'vendor/autoload.php');
 
 // Include the main Propel script
 require_once(APP_DIR.'plugins/propel/runtime/lib/Propel.php');

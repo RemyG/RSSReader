@@ -1,5 +1,8 @@
 <?php
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 class FeedController extends Controller {
 
 	function index($id)
@@ -111,42 +114,56 @@ class FeedController extends Controller {
 	 *
 	 * @return string
 	 */
-	function updateAll()
-	{
-		$errors = array();
-		$feeds = FeedQuery::create()->filterByValid(1)->find();
-		foreach ($feeds as $feed)
-		{
-			$this->updateFeed($feed, $errors);
-		}
-		$feeds = FeedQuery::create()->find();
-		$template = $this->loadView('feed_updateall_view');
-		$template->set('feeds', $feeds);
-		$template->set('errors', $errors);
-		return $template->renderString();
-	}
-	
-	/**
-	 * Force the update of all the feeds (valid or invalid).
-	 * Should be called once a day, to re-check all the feeds.
-	 * 
-	 * @return string
-	 */
-	function forceUpdateAll($direction = 'asc')
+	function updateAll($direction = 'asc')
 	{
 		set_time_limit(0);
-		$logFile = LOG_DIR."force-update-".date("Ymd-his")."-".$direction.".log";
-		$errors = array();
-		$feeds = FeedQuery::create()->orderById($direction)->find();
-		$this->logToFile($logFile, "Total: ".sizeof($feeds));
+		$feeds = FeedQuery::create()->filterByValid(1)->find();
+		/*
+		$log = new Logger('Feed.updateAll');
+		$log->pushHandler(new StreamHandler(LOG_DIR."update-".date("Ymd-His")."-".$direction.".log", Logger::INFO));
+		$logHelper = $this->loadHelper('Monolog_helper');
+		$log->addInfo('Updating '.sizeof($feeds).' feeds');
+		*/
+		$updateFeedDTOs = array();
 		$i = 0;
 		foreach ($feeds as $feed)
 		{
 			$i++;
 			$errors = array();
-			$errors = $this->updateFeed($feed, $errors, false);
-			$this->logToFile($logFile, implode("\n", $errors));
-			$this->logToFile($logFile, "updated feed ".$i." ".$feed->getTitle());
+			$dto = $this->updateFeed($feed, $errors);
+			$updateFeedDTOs[] = $dto;
+			/*
+			$logHelper->logUpdateFeedDTO($log, $dto, $i);
+			*/
+		}
+		$feeds = FeedQuery::create()->find();
+		$template = $this->loadView('feed_updateall_view');
+		$template->set('feeds', $feeds);
+		$template->set('dtos', $updateFeedDTOs);
+		return $template->renderString();
+	}
+
+	/**
+	 * Force the update of all the feeds (valid or invalid).
+	 * Should be called once a day, to re-check all the feeds.
+	 *
+	 * @return string
+	 */
+	function forceUpdateAll($direction = 'asc')
+	{
+		set_time_limit(0);
+		$feeds = FeedQuery::create()->orderById($direction)->find();
+		$log = new Logger('Feed.forceUpdateAll');
+		$log->pushHandler(new StreamHandler(LOG_DIR."force-update-".date("Ymd-His")."-".$direction.".log", Logger::INFO));
+		$logHelper = $this->loadHelper('Monolog_helper');
+		$log->addInfo('Updating '.sizeof($feeds).' feeds');
+		$i = 0;
+		foreach ($feeds as $feed)
+		{
+			$i++;
+			$errors = array();
+			$dto = $this->updateFeed($feed, $errors, false);
+			$logHelper->logUpdateFeedDTO($log, $dto, $i);
 		}
 	}
 
@@ -154,7 +171,7 @@ class FeedController extends Controller {
 	{
 		$errors = array();
 		$feed = FeedQuery::create()->findPK($id);
-		$this->updateFeed($feed, $errors);
+		$dto = $this->updateFeed($feed, $errors);
 		return $this->load($id);
 	}
 
@@ -442,13 +459,15 @@ class FeedController extends Controller {
 	 * @param Feed $feed The feed to update
 	 * @param mixed $errors A list of strings for the current errors.
 	 * @param bool $invalidate If true, when a feed cannot be updated, mark the feed as not valid.
-	 * @return mixed A list of strings for the current errors.
+	 * @return UpdateFeedDTO
 	 */
 	private function updateFeed($feed, $errors, $invalidate = true)
 	{
 		set_time_limit(0);
 
 		$feedUrl = $feed->getLink();
+
+		$dto = new UpdateFeedDTO($feed);
 
 		require_once(APP_DIR.'plugins/simplepie/autoloader.php');
 
@@ -457,6 +476,7 @@ class FeedController extends Controller {
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url($feedUrl);
 			$valid = $feedSP->init();
+			$dto->setValid($valid);
 
 			if(!$valid)
 			{
@@ -465,12 +485,11 @@ class FeedController extends Controller {
 					$feed->setValid(false);
 					$feed->save();
 				}
-				$errors[] = "ERROR - Feed ".$feed->getTitle()." is invalid.";
-				return $errors;
+				$dto->addError("ERROR - Feed ".$feed->getTitle()." is invalid.");
+				return $dto;
 			}
-			else {
-				$feed->setValid(true);
-			}
+
+			$feed->setValid(true);
 
 			if ($feed->getUpdated(null) != null)
 			{
@@ -492,43 +511,44 @@ class FeedController extends Controller {
 				$entryUpdated = $item->get_date('U');
 				/*if ($entryUpdated > $lastUpdate)
 				{*/
-					$link = $item->get_link();
-					if ($link == null || $link == '')
-					{
-						continue;
-					}
-					$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
-					if ($entry == null)
-					{
-						$entry = new Entry();
-						$entry->setLink($link);
-						$entry->setFeed($feed);
-					}
-					if ($item->get_author() != null)
-					{
-						$entry->setAuthor($item->get_author()->get_name());
-					}
-					$published = $item->get_date('U');
-					if ($published == null)
-					{
-						$entry->setPublished($lastUpdate);
-					}
-					else
-					{
-						$entry->setPublished($published);
-					}
-					$updated = $item->get_date('U');
-					if ($updated == null)
-					{
-						$entry->setUpdated($lastUpdate);
-					}
-					else
-					{
-						$entry->setUpdated($updated);
-					}
-					$entry->setTitle($item->get_title());
-					$entry->setContent($item->get_content());
-					$entry->save();
+				$link = $item->get_link();
+				if ($link == null || $link == '')
+				{
+					continue;
+				}
+				$entry = EntryQuery::create()->filterByFeed($feed)->filterByLink($link)->findOne();
+				if ($entry == null)
+				{
+					$entry = new Entry();
+					$entry->setLink($link);
+					$entry->setFeed($feed);
+				}
+				if ($item->get_author() != null)
+				{
+					$entry->setAuthor($item->get_author()->get_name());
+				}
+				$published = $item->get_date('U');
+				if ($published == null)
+				{
+					$entry->setPublished($lastUpdate);
+				}
+				else
+				{
+					$entry->setPublished($published);
+				}
+				$updated = $item->get_date('U');
+				if ($updated == null)
+				{
+					$entry->setUpdated($lastUpdate);
+				}
+				else
+				{
+					$entry->setUpdated($updated);
+				}
+				$entry->setTitle($item->get_title());
+				$entry->setContent($item->get_content());
+				$entry->save();
+				$dto->incrementNbEntriesUpdated();
 				/*}*/
 			}
 
@@ -536,7 +556,8 @@ class FeedController extends Controller {
 		}
 		catch (Exception $e)
 		{
-			$errors[] = 'ERROR - Error when updating feed '.$feedUrl.': '.$e->getTraceAsString();
+			$dto->setValid(false);
+			$dto->addError('ERROR - Error when updating feed '.$feedUrl.': '.$e->getTraceAsString());
 			if ($invalidate)
 			{
 				$feed->setValid(false);
@@ -546,7 +567,7 @@ class FeedController extends Controller {
 
 		$this->cleanOldEntries($feed);
 
-		return $errors;
+		return $dto;
 	}
 
 	private function recursiveOpmlImport($xmlNode, $errors, $parentCat, $logFile = null)

@@ -2,13 +2,21 @@
 
 class UpdateFeedDTOTest extends PHPUnit_Framework_TestCase
 {
-
 	protected $dto;
 
-    protected function setUp()
-    {
-        $this->dto = new UpdateFeedDTO(1);
-    }
+	protected function setUp()
+	{
+		$feed = new Feed();
+		$feed->setId(1);
+		$this->dto = new UpdateFeedDTO($feed);
+	}
+
+	public function testIsValid()
+	{
+		$this->assertEquals(false, $this->dto->isValid());
+		$this->dto->setValid(true);
+		$this->assertEquals(true, $this->dto->isValid());
+	}
 
 	public function testIncrementNbEntriesUpdated()
 	{
