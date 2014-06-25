@@ -89,7 +89,7 @@ if (!$installed
 		<?php if ($installed) { ?>
 
 			<p>RSS Reader is already installed.</p>
-			<p>To install again, edit <pre><code>application/config/config.php</code></pre>
+			<p>To install again, edit <pre><code>src/config/config.php</code></pre>
 				and replace <pre><code>define('INSTALLED', 'true');</code></pre>
 				by <pre><code>define('INSTALLED', 'false');</code></pre></p>
 			<p><a href="/">Go to homepage</a></p>
