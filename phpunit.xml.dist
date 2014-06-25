@@ -19,4 +19,7 @@
 	<php>
 		<const name="BASE_URL" value="BASE_URL"/>
 	</php>
+	<logging>
+		<log type="coverage-clover" target="build/logs/clover.xml"/>
+	</logging>
 </phpunit>
