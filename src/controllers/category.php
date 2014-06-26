@@ -2,6 +2,13 @@
 
 class CategoryController extends Controller {
 
+	private $categoryDAO;
+
+	public function __construct($categoryDAO = null)
+	{
+		$this->categoryDAO = $categoryDAO != null ? $categoryDAO : new CategoryDAO();
+	}
+
 	/**
 	 * Re-order the categories by setting a specific position to a categorie, and
 	 * moving the other categories if required.
@@ -13,8 +20,8 @@ class CategoryController extends Controller {
 	 */
 	function order($catId, $order)
 	{
-		$category = CategoryQuery::create()->findPK($catId);
-		$categories = CategoryQuery::create()->orderByCatOrder('asc')->findByParentCategoryId(1);
+		$category = $this->categoryDAO->findById($catId);
+		$categories = $this->categoryDAO->findByParentId(1, $order);
 		$i = 0;
 		$movedBack = true;
 		foreach ($categories as $tmpCat)
@@ -44,7 +51,7 @@ class CategoryController extends Controller {
 					$i++;
 				}
 			}
-			$tmpCat->save();
+			$this->categoryDAO->save($tmpCat);
 		}
 	}
 
@@ -62,7 +69,7 @@ class CategoryController extends Controller {
 	 */
 	function load($id, $all = null)
 	{
-		$category = CategoryQuery::create()->findPK($id);
+		$category = $this->categoryDAO->findById($catId);
 
 		if ($all == null || $all == 0)
 		{
@@ -113,15 +120,10 @@ class CategoryController extends Controller {
 				$category = new Category();
 				$category->setName($catName);
 				$category->setParentCategoryId(1);
-				$catOrder = CategoryQuery::create()
-					->select('Category.ParentCategoryId')
-					->withColumn('MAX(Category.CatOrder)', 'MaxCatOrder')
-					->groupBy('Category.ParentCategoryId')
-					->having('Category.ParentCategoryId', 1)
-					->findOne();
-				$category->setCatOrder($catOrder['MaxCatOrder'] + 1);
-				$category->save();
-				return json_encode(array('id' => $category->getId(), 'name' => $category->getName()));
+				$catOrder = $this->categoryDAO->findNextCatOrder();
+				$category->setCatOrder($catOrder + 1);
+				$this->categoryDAO->save($category);
+				return json_encode(array('id' => $category->getId(), 'name' => $category->getName(), 'order' => $category->getCatOrder()));
 			}
 			catch (Exception $e)
 			{

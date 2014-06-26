@@ -13,10 +13,10 @@ define('LOG_DIR', ROOT_DIR.'logs/');
 
 // Includes
 require(APP_DIR .'config/config.php');
-require(ROOT_DIR .'system/pdo2.php');
-require(ROOT_DIR .'system/model.php');
+//require(ROOT_DIR .'system/pdo2.php');
+//require(ROOT_DIR .'system/model.php');
 require(ROOT_DIR .'system/view.php');
-require(ROOT_DIR .'system/controller.php');
+//require(APP_DIR .'controllers/controller.php');
 require(ROOT_DIR .'system/pfp.php');
 require(ROOT_DIR .'vendor/autoload.php');
 
