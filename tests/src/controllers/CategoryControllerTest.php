@@ -31,7 +31,7 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$controller = new CategoryController($dao);
 
-		$controller->order(6, 4);
+		$controller->logicOrder(6, 4);
 
 		$this->resetModified($cats);
 
@@ -72,7 +72,7 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$controller = new CategoryController($dao);
 
-		$controller->order(6, 2);
+		$controller->logicOrder(6, 2);
 
 		$this->resetModified($cats);
 
@@ -100,11 +100,11 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$_POST['categoryName'] = 'Test name';
 
-		$output = $controller->create();
+		$output = $controller->logicCreate();
 
-		$this->assertEquals(0, json_decode($output)->id);
-		$this->assertEquals('Test name', json_decode($output)->name);
-		$this->assertEquals(7, json_decode($output)->order);
+		$this->assertEquals(0, $output['id']);
+		$this->assertEquals('Test name', $output['name']);
+		$this->assertEquals(7, $output['order']);
 	}
 
 	public function testCreate_noName()
@@ -113,9 +113,9 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$controller = new CategoryController($dao);
 
-		$output = $controller->create();
+		$output = $controller->logicCreate();
 
-		$this->assertEquals('Category name not set.', json_decode($output)->error);
+		$this->assertEquals('Category name not set.', $output['error']);
 	}
 
 	public function testCreate_exception()
@@ -132,9 +132,9 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$_POST['categoryName'] = 'Test name';
 
-		$output = $controller->create();
+		$output = $controller->logicCreate();
 
-		$this->assertEquals('Error while saving.', json_decode($output)->error);
+		$this->assertEquals('Error while saving.', $output['error']);
 	}
 
 	private function mockCategory($id, $name, $catOrder, $parentCat)

@@ -7,9 +7,9 @@ class CategoryDAO implements iCategoryDAO
 		return CategoryQuery::create()->findPK($id);
 	}
 
-	public function findByParentId($id, $order)
+	public function findByParentId($id, $dir = 'asc')
 	{
-		return CategoryQuery::create()->orderByCatOrder($order)->findByParentCategoryId($id);
+		return CategoryQuery::create()->orderByCatOrder($dir)->findByParentCategoryId($id);
 	}
 
 	public function findNextCatOrder()
@@ -25,5 +25,26 @@ class CategoryDAO implements iCategoryDAO
 	public function save($category)
 	{
 		$category->save();
+	}
+
+	public function getUnreadEntries($id)
+	{
+		return EntryQuery::create()
+				->useFeedQuery()
+					->filterByCategoryId($id)
+				->endUse()
+				->orderByUpdated('desc')
+				->filterByRead(0)
+				->find();
+	}
+
+	public function getAllEntries($id)
+	{
+		EntryQuery::create()
+				->useFeedQuery()
+					->filterByCategoryId($id)
+				->endUse()
+				->orderByUpdated('desc')
+				->find();
 	}
 }

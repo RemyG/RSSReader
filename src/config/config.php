@@ -13,4 +13,3 @@ define('DEFAULT_AUTHOR', 'Rémy Gardette'); // Default author name, displayed as
 define('DEFAULT_TITLE', PROJECT_NAME.''); // Default page title, displayed in head title
 define('DEFAULT_DESCRIPTION', 'RSS Reader - A self-hosted RSS aggregator and reader'); // Default page description, displayed as meta description
 
-?>

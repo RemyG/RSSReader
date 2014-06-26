@@ -3,11 +3,63 @@
 class CategoryController extends Controller {
 
 	private $categoryDAO;
+	private $feedDAO;
+	private $entryDAO;
 
-	public function __construct($categoryDAO = null)
+	private $feedController;
+
+	public function __construct($categoryDAO = null, $feedDAO = null, $entryDAO = null)
 	{
 		$this->categoryDAO = $categoryDAO != null ? $categoryDAO : new CategoryDAO();
+		$this->feedDAO = $feedDAO != null ? $feedDAO : new FeedDAO();
+		$this->entryDAO = $entryDAO != null ? $entryDAO : new EntryDAO();
+
+		$this->feedController = new FeedController();
 	}
+
+	/*** ROUTES ***/
+
+	function order($catId, $order)
+	{
+		$this->logicOrder($catId, $order);
+	}
+
+	function load($id, $all = null)
+	{
+		$result = $this->logicLoad($id, $all);
+		$template = $this->viewLoad($result);
+		return json_encode(array('html' => $template->renderString(), 'count' => $result['count'], 'counts' => $result['counts']));
+	}
+
+	function create()
+	{
+		return json_encode($this->logicCreate());
+	}
+
+	function update($id)
+	{
+		$this->logicUpdate($id);
+		return $this->load($id);
+	}
+
+	function count($id)
+	{
+		return $this->logicCount($id);
+	}
+
+	function markRead($id)
+	{
+		$this->logicMarkRead($id);
+		return $this->load($id);
+	}
+
+	function markNotRead($id)
+	{
+		$this->logicMarkNotRead($id);
+		return $this->load($id);
+	}
+
+	/*** LOGIC ***/
 
 	/**
 	 * Re-order the categories by setting a specific position to a categorie, and
@@ -16,37 +68,27 @@ class CategoryController extends Controller {
 	 * @param int $catId
 	 * 		The category id.
 	 * @param int $order
-	 * 		The new position for this category.
+	 * 		The new position for this category (0-based).
 	 */
-	function order($catId, $order)
+	function logicOrder($catId, $order)
 	{
-		$category = $this->categoryDAO->findById($catId);
-		$categories = $this->categoryDAO->findByParentId(1, $order);
+		$categories = $this->categoryDAO->findByParentId(1);
 		$i = 0;
-		$movedBack = true;
-		foreach ($categories as $tmpCat)
-		{
-			if ($i < $order)
-			{
-				if ($catId == $tmpCat->getId())
-				{
+		foreach ($categories as $tmpCat) {
+			if ($i < $order) {
+				if ($catId == $tmpCat->getId()) {
 					$tmpCat->setCatOrder($order);
-					$movedBack = false;
 				}
-				else
-				{
+				else {
 					$tmpCat->setCatOrder($i);
 					$i++;
 				}
 			}
-			else if ($i >= $order)
-			{
-				if ($catId == $tmpCat->getId())
-				{
+			else if ($i >= $order) {
+				if ($catId == $tmpCat->getId()) {
 					$tmpCat->setCatOrder($order);
 				}
-				else
-				{
+				else {
 					$tmpCat->setCatOrder($i + 1);
 					$i++;
 				}
@@ -60,79 +102,59 @@ class CategoryController extends Controller {
 	 *
 	 * @param int $id
 	 * 		The category id.
-	 * @param int $all
+	 * @param int $all [default = null]
 	 * 		1 if we want to display all the entries, null or 0 if we want to display only the un-read entries.
 	 *
 	 * @return
-	 * 		A json object containing 2 keys: 'html' for the HTML representation of the entries list, and 'count'
-	 * 		for the number of entries of this category.
+	 * 		An array containing the category ['category'], the list of entries ['entries'], the number of unread
+	 *		entries for this category ['count'] and an array of { feedId => nb unread entries} ['counts'].
 	 */
-	function load($id, $all = null)
+	function logicLoad($id, $all = null)
 	{
-		$category = $this->categoryDAO->findById($catId);
+		$category = $this->categoryDAO->findById($id);
 
-		if ($all == null || $all == 0)
-		{
-			$entries = EntryQuery::create()
-				->useFeedQuery()
-					->filterByCategoryId($id)
-				->endUse()
-			->orderByUpdated('desc')
-			->filterByRead(0)
-			->find();
+		if ($all == null || $all == 0) {
+			$entries = $this->categoryDAO->getUnreadEntries($id);
 		}
-		else
-		{
-			$entries = EntryQuery::create()
-				->useFeedQuery()
-					->filterByCategoryId($id)
-				->endUse()
-			->orderByUpdated('desc')
-			->find();
+		else {
+			$entries = $this->categoryDAO->getAllEntries($id);
 		}
 
-		$template = $this->loadView('category_load_view');
-		$template->set('category', $category);
-		$template->set('entries', $entries);
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
 		$counts = array();
-		foreach ($category->getFeeds() as $feed)
-		{
+		foreach ($category->getFeeds() as $feed) {
 			$counts[$feed->getId()] = $feed->countEntrys($c);
 		}
-		return json_encode(array('html' => $template->renderString(), 'count' => $category->countEntrys($c), 'counts' => $counts));
+		return array('category' => $category, 'entries' => $entries, 'count' => $category->countEntrys($c), 'counts' => $counts);
 	}
 
 	/**
 	 * Create a new category.
 	 *
-	 * @return string A json array containing either the 'id' and 'name' of the new category,
+	 * @return
+	 *		An array containing either the 'id', 'name' and 'order' of the new category,
 	 * 		or the 'error' that happened.
 	 */
-	function create()
+	function logicCreate()
 	{
-		if (array_key_exists('categoryName', $_POST))
-		{
-			try
-			{
-				$catName = $_POST['categoryName'];
+		$catName = filter_input(INPUT_POST, 'categoryName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		if ($catName != null && $catName != false) {
+			try {
 				$category = new Category();
 				$category->setName($catName);
 				$category->setParentCategoryId(1);
 				$catOrder = $this->categoryDAO->findNextCatOrder();
 				$category->setCatOrder($catOrder + 1);
 				$this->categoryDAO->save($category);
-				return json_encode(array('id' => $category->getId(), 'name' => $category->getName(), 'order' => $category->getCatOrder()));
+				return array('id' => $category->getId(), 'name' => $category->getName(), 'order' => $category->getCatOrder());
 			}
-			catch (Exception $e)
-			{
-				return json_encode(array('error' => $e->getMessage()));
+			catch (Exception $e) {
+				return array('error' => $e->getMessage());
 			}
 		}
-		else
-		{
-			return json_encode(array('error' => "Category name not set."));
+		else {
+			return array('error' => "Category name not set.");
 		}
 	}
 
@@ -144,16 +166,12 @@ class CategoryController extends Controller {
 	 *
 	 * @return The result of $this->load.
 	 */
-	function update($id)
+	function logicUpdate($id)
 	{
-		$category = CategoryQuery::create()->findPK($id);
-		require_once('feed.php');
-		$feedController = new FeedController();
-		foreach ($category->getFeeds() as $feed)
-		{
-			$feedController->update($feed->getId());
+		$category = $this->categoryDAO->findById($id);
+		foreach ($category->getFeeds() as $feed) {
+			$this->feedController->update($feed->getId());
 		}
-		return $this->load($id);
 	}
 
 	/**
@@ -164,9 +182,9 @@ class CategoryController extends Controller {
 	 *
 	 * @return The number of un-read entries.
 	 */
-	function count($id)
+	function logicCount($id)
 	{
-		$category = CategoryQuery::create()->findPK($id);
+		$category = $this->categoryDAO->findById($id);
 		return $category->countEntrys();
 	}
 
@@ -178,18 +196,15 @@ class CategoryController extends Controller {
 	 *
 	 * @return The result of $this->load($id).
 	 */
-	function markRead($id)
+	function logicMarkRead($id)
 	{
-		$category = CategoryQuery::create()->findPK($id);
-		foreach ($category->getFeeds() as $feed)
-		{
-			foreach ($feed->getEntrys() as $entry)
-			{
+		$category = $this->categoryDAO->findById($id);
+		foreach ($category->getFeeds() as $feed) {
+			foreach ($feed->getEntrys() as $entry) {
 				$entry->setRead(1);
-				$entry->save();
+				$this->entryDAO->save($entry);
 			}
 		}
-		return $this->load($id);
 	}
 
 	/**
@@ -200,17 +215,24 @@ class CategoryController extends Controller {
 	 *
 	 * @return The result of $this->load($id).
 	 */
-	function markNotRead($id)
+	function logicMarkNotRead($id)
 	{
-		$category = CategoryQuery::create()->findPK($id);
-		foreach ($category->getFeeds() as $feed)
-		{
-			foreach ($feed->getEntrys() as $entry)
-			{
+		$category = $this->categoryDAO->findById($id);
+		foreach ($category->getFeeds() as $feed) {
+			foreach ($feed->getEntrys() as $entry) {
 				$entry->setRead(0);
-				$entry->save();
+				$this->entryDAO->save($entry);
 			}
 		}
-		return $this->load($id);
+	}
+
+	/*** VIEWS ***/
+
+	function viewLoad($data)
+	{
+		$template = $this->loadView('category_load_view');
+		$template->set('category', $data['category']);
+		$template->set('entries', $data['entries']);
+		return $template;
 	}
 }
