@@ -9,7 +9,10 @@
 		<whitelist>
 			<directory>./src</directory>
 			<exclude>
+				<directory>./src/build</directory>
 				<directory>./src/config</directory>
+				<directory>./src/dao</directory>
+				<directory>./src/views</directory>
 			</exclude>
 		</whitelist>
 	</filter>
