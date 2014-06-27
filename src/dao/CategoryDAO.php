@@ -47,4 +47,10 @@ class CategoryDAO implements iCategoryDAO
 				->orderByUpdated('desc')
 				->find();
 	}
+
+	public function countEntries(\Category $category, \Criteria $criteria)
+	{
+		return $category->countEntrys($criteria);
+	}
+
 }

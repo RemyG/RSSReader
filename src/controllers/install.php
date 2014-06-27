@@ -21,10 +21,9 @@ class InstallController extends Controller {
 				$passwordHashed = crypt($password, '$5$rounds=5000$'.md5($password).'$');
 				$user->setPassword($passwordHashed);
 				$user->save();
-				$sessionHelper = $this->loadHelper('Session_helper');
-				$sessionHelper->destroy();
+				SessionUtils::destroy();
 				session_start();
-				$sessionHelper->set('user-login', $user->getLogin());
+				SessionUtils::set('user-login', $user->getLogin());
 				$this->redirect('');
 			}
 		}

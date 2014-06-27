@@ -72,6 +72,16 @@ class CategoryController extends Controller {
 	 */
 	function logicOrder($catId, $order)
 	{
+		$catId = FilterUtils::sanitizeVar($catId, FILTER_VALIDATE_INT);
+		$order = FilterUtils::sanitizeVar($order, FILTER_VALIDATE_INT);
+
+		if ($catId === NULL || $catId === false) {
+			return array('error' => 'Invalid category id');
+		}
+		if ($order === NULL || $order === false) {
+			return array('error' => 'Invalid position value');
+		}
+
 		$categories = $this->categoryDAO->findByParentId(1);
 		$i = 0;
 		foreach ($categories as $tmpCat) {
@@ -111,6 +121,12 @@ class CategoryController extends Controller {
 	 */
 	function logicLoad($id, $all = null)
 	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid category id');
+		}
+
 		$category = $this->categoryDAO->findById($id);
 
 		if ($all == null || $all == 0) {
@@ -138,14 +154,12 @@ class CategoryController extends Controller {
 	 */
 	function logicCreate()
 	{
-		//if (isset($_POST['categoryName'])) {
-		//if ($catName != null && $catName != false) {
-		try {
-			$catName = filter_var($_POST['categoryName'], FILTER_SANITIZE_STRING);
-		}
-		catch (Exception $e) {
+		$catName = FilterUtils::sanitizeEntry($_POST, 'categoryName', FILTER_SANITIZE_STRING);
+
+		if ($catName === NULL || $catName === false) {
 			return array('error' => 'Category name not set');
 		}
+
 		try {
 			$category = new Category();
 			$category->setName($catName);
@@ -170,6 +184,12 @@ class CategoryController extends Controller {
 	 */
 	function logicUpdate($id)
 	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid category id');
+		}
+
 		$category = $this->categoryDAO->findById($id);
 		foreach ($category->getFeeds() as $feed) {
 			$this->feedController->update($feed->getId());
@@ -186,6 +206,12 @@ class CategoryController extends Controller {
 	 */
 	function logicCount($id)
 	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid category id');
+		}
+
 		$category = $this->categoryDAO->findById($id);
 		return $category->countEntrys();
 	}
@@ -200,6 +226,12 @@ class CategoryController extends Controller {
 	 */
 	function logicMarkRead($id)
 	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid category id');
+		}
+
 		$category = $this->categoryDAO->findById($id);
 		foreach ($category->getFeeds() as $feed) {
 			foreach ($feed->getEntrys() as $entry) {
@@ -219,6 +251,12 @@ class CategoryController extends Controller {
 	 */
 	function logicMarkNotRead($id)
 	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid category id');
+		}
+
 		$category = $this->categoryDAO->findById($id);
 		foreach ($category->getFeeds() as $feed) {
 			foreach ($feed->getEntrys() as $entry) {

@@ -5,6 +5,17 @@
  */
 class CategoryControllerTest extends PHPUnit_Framework_TestCase
 {
+	public function testOrder_wrongArguments()
+	{
+		$controller = new CategoryController();
+		$output = $controller->logicOrder('A', 'B');
+		$this->assertEquals('Invalid category id', $output['error']);
+
+		$output = $controller->logicOrder(1, NULL);
+		$this->assertEquals('Invalid position value', $output['error']);
+
+	}
+
 	public function testOrder_forward()
 	{
 		$cat = $this->mockCategory(6, 'Test cat 6', 3, 1);

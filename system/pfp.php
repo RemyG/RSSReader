@@ -24,16 +24,13 @@ function pfp()
 	// Split the url into segments
 	$segments = explode('/', $url);
 
-	require_once(APP_DIR .'helpers/session_helper.php');
-	$sessionHelper = new Session_helper();
-
 	$mobile = '';
 	$useMobile = false;
 	if (isset($segments[0]) && $segments[0] == 'm')
 	{
 		$mobile = 'm/';
 		$useMobile = true;
-		$sessionHelper->set('mobile', '1');
+		SessionUtils::set('mobile', '1');
 		if(isset($segments[1]) && $segments[1] != '') $controller = $segments[1];
 		if(isset($segments[2]) && $segments[2] != '') $action = $segments[2];
 		$arguments = array_slice($segments, 3);
@@ -47,7 +44,7 @@ function pfp()
 
 	if ($controller != 'install' && !($controller == 'user' && $action == 'login') && !($controller == 'feed' && ($action == 'updateall' || $action == 'forceupdateall')))
 	{
-		$currentUser = $sessionHelper->getCurrentUser();
+		$currentUser = SessionUtils::getCurrentUser();
 		if ($currentUser == null)
 		{
 			header('Location: '. BASE_URL . $mobile . 'user/login');

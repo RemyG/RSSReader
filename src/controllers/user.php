@@ -20,10 +20,9 @@ class UserController extends Controller
 				{
 					if ($passwordHashed == $user->getPassword())
 					{
-						$sessionHelper = $this->loadHelper('Session_helper');
-						$sessionHelper->destroy();
+						SessionUtils::destroy();
 						session_start();
-						$sessionHelper->set('user-login', $user->getLogin());
+						SessionUtils::set('user-login', $user->getLogin());
 						$this->redirect('');
 					}
 					else
@@ -48,8 +47,7 @@ class UserController extends Controller
 
 	function logout()
 	{
-		$sessionHelper = $this->loadHelper('Session_helper');
-		$sessionHelper->destroy();
+		SessionUtils::destroy();
 		$this->redirect('');
 	}
 }

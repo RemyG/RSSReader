@@ -1,111 +1,229 @@
 <?php
 
-class EntryController extends Controller {
+class EntryController extends Controller
+{
+	/**
+	 * EntryDAO.
+	 * @var iEntryDAO
+	 */
+	private $entryDAO;
+	
+	/**
+	 * FeedDAO
+	 * @var iFeedDAO
+	 */
+	private $feedDAO;
+	
+	/**
+	 * CategoryDAO
+	 * @var iCategoryDAO
+	 */
+	private $categoryDAO;
 
-	function load($id)
+	public function __construct($entryDAO = null, $feedDAO = null, $categoryDAO = null)
+	{
+		$this->entryDAO = $entryDAO != null ? $entryDAO : new EntryDAO();
+		$this->feedDAO = $feedDAO != null ? $feedDAO : new FeedDAO();
+		$this->categoryDAO = $categoryDAO != null ? $categoryDAO : new CategoryDAO();
+	}
+
+	/* ROUTES */
+
+	public function load($id)
 	{
 		echo $this->loadWithTemplate($id, 'entry_load_view');
 	}
 
-	function loadFrame($id)
+	public function loadFrame($id)
 	{
 		echo $this->loadWithTemplate($id, 'entry_load_frame_view');
 	}
 
-	function loadWithTemplate($id, $templateName)
+	public function loadWithTemplate($id, $templateName)
 	{
-		$template = $this->loadView($templateName);
-		$entry = EntryQuery::create()->findPK($id);
-		if ($entry->getRead() == 0)
-		{
-			$entry->setRead(1);
-			$entry->save();
-		}
-		$template->set('entry', $entry);
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$data = $this->logicLoad($id);
 		return json_encode(array(
-				'feedId' => $entry->getFeed()->getId(),
-				'html' => $template->renderString(),
-				'feedCount' => $entry->getFeed()->countEntrys($c),
-				'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
+		    'feedId' => $data['feedId'],
+		    'html' => $this->viewLoadWithTemplate($data, $templateName),
+		    'feedCount' => $data['feedCount'],
+		    'categoryCount' => $data['categoryCount']
+		));
 	}
 
-	function count($id)
+	public function count($id)
 	{
-		$entry = EntryQuery::create()->findPK($id);
+		return json_encode($this->logicCount($id));
+	}
+
+	public function markRead($id)
+	{
+		return json_encode($this->logicUpdateRead($id, 1));
+	}
+
+	public function markUnread($id)
+	{
+		return json_encode($this->logicUpdateRead($id, 0));
+	}
+
+	public function markFavourite($id)
+	{
+		return json_encode($this->logicUpdateFavourite($id, 1));
+	}
+
+	public function markUnfavourite($id)
+	{
+		return json_encode($this->logicUpdateFavourite($id, 0));
+	}
+
+	public function loadFavourites()
+	{
+		$data = $this->logicLoadFavourite();
+		return json_encode($this->viewLoadFavourites($data));
+	}
+
+	/* LOGIC */
+
+	/**
+	 * Load the specific entry.
+	 * 
+	 * @param int $id The entry id.
+	 * 
+	 * @return array An array {'feedId', 'entry', 'feedCount', 'categoryCount'}, or
+	 * an array {'error'} if something goes wrong.
+	 */
+	function logicLoad($id)
+	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid entry id');
+		}
+
+		$entry = $this->entryDAO->findById($id);
+
+		if ($entry->getRead() === 0) {
+			$entry->setRead(1);
+			$this->entryDAO->save($entry);
+		}
+
 		$c = new Criteria();
 		$c->add(EntryPeer::READ, 0);
-		$count = $entry->getFeed()->countEntrys($c);
-		$catCount = $entry->getFeed()->getCategory()->countEntrys($c);
-		//echo $count.','.$catCount;
-		echo json_encode(array('feed' => $count, 'category' => $catCount));
-	}
 
-	function markRead($id)
-	{
-		$entry = EntryQuery::create()->findPK($id);
-		$entry->setRead(1);
-		$entry->save();
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
-		echo json_encode(array(
-			'feedId' => $entry->getFeed()->getId(),
-			'feedCount' => $entry->getFeed()->countEntrys($c),
-			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
-	}
-
-	function markUnread($id)
-	{
-		$entry = EntryQuery::create()->findPK($id);
-		$entry->setRead(0);
-		$entry->save();
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
-		echo json_encode(array(
-			'feedId' => $entry->getFeed()->getId(),
-			'feedCount' => $entry->getFeed()->countEntrys($c),
-			'categoryCount' => $entry->getFeed()->GetCategory()->countEntrys($c)));
-	}
-
-	function markFavourite($id)
-	{
-		$entry = EntryQuery::create()->findPK($id);
-		$entry->setFavourite(1);
-		$entry->save();
-		echo json_encode(array(
-			'feedId' => $entry->getFeed()->getId()
-			));
-	}
-
-	function markUnfavourite($id)
-	{
-		$entry = EntryQuery::create()->findPK($id);
-		$entry->setFavourite(0);
-		$entry->save();
-		echo json_encode(array(
-			'feedId' => $entry->getFeed()->getId()
-			));
+		return array(
+		    'feedId' => $entry->getFeed()->getId(),
+		    'entry' => $entry,
+		    'feedCount' => $this->feedDAO->countEntries($entry->getFeed(), $c),
+		    'categoryCount' => $this->categoryDAO->countEntries($entry->getFeed()->getCategory(), $c));
 	}
 
 	/**
-	 * Load the favourite entries
-	 *
-	 * @return
-	 * 		A json object containing 2 keys: 'html' for the HTML representation of the entries list, and 'count'
-	 * 		for the number of entries of this category.
+	 * Return the count of unread entries for the entry feed and category.
+	 * 
+	 * @param int $id The entry id.
+	 * 
+	 * @return array An array {'feed', 'category'} for the number of unread entries
+	 * of the feed and category, or an array {'error'} if something goes wrong.
 	 */
-	function loadFavourites()
+	function logicCount($id)
 	{
-		$entries = EntryQuery::create()
-				->filterByFavourite(1)
-				->orderByUpdated('desc')
-				->find();
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
 
-		$template = $this->loadView('entry_favourite_view');
-		$template->set('entries', $entries);
-		return json_encode(array('html' => $template->renderString()));
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid entry id');
+		}
+
+		$entry = $this->entryDAO->findById($id);
+
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+
+		return array(
+		    'feed' => $this->feedDAO->countEntries($entry->getFeed(), $c),
+		    'category' => $this->categoryDAO->countEntries($entry->getFeed()->getCategory(), $c));
 	}
-}
 
-?>
+	/**
+	 * Update the specified entry with the status READ 0 or 1.
+	 * 
+	 * @param int $id The entry id.
+	 * @param int $read The value of the READ field: 0 for unread, 1 for read.
+	 * 
+	 * @return array An array {'feedId', 'feedCount', 'categoryCount'}, or
+	 * an array {'error'} if something goes wrong.
+	 */
+	function logicUpdateRead($id, $read)
+	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid entry id');
+		}
+
+		$entry = $this->entryDAO->findById($id);
+
+		$entry->setRead($read);
+
+		$this->entryDAO->save($entry);
+
+		$c = new Criteria();
+		$c->add(EntryPeer::READ, 0);
+
+		return array(
+		    'feedId' => $entry->getFeed()->getId(),
+		    'feedCount' => $this->feedDAO->countEntries($entry->getFeed(), $c),
+		    'categoryCount' => $this->categoryDAO->countEntries($entry->getFeed()->getCategory(), $c));
+	}
+
+	/**
+	 * Update the specified entry with the status FAVOURITE 0 or 1.
+	 * 
+	 * @param int $id The entry id.
+	 * @param int $favourite The value of the FAVOURITE field: 0 for not favourite, 1 for favourite.
+	 * 
+	 * @return array An array {'feedId'}, or an array {'error'} if something goes wrong.
+	 */
+	function logicUpdateFavourite($id, $favourite)
+	{
+		$id = FilterUtils::sanitizeVar($id, FILTER_VALIDATE_INT);
+
+		if ($id === NULL || $id === false) {
+			return array('error' => 'Invalid entry id');
+		}
+
+		$entry = $this->entryDAO->findById($id);
+
+		$entry->setFavourite($favourite);
+
+		$this->entryDAO->save($entry);
+
+		return array(
+		    'feedId' => $entry->getFeed()->getId());
+	}
+
+	/**
+	 * Return the list of favourite entries.
+	 * 
+	 * @return array An array {'entries'}.
+	 */
+	function logicLoadFavourite()
+	{
+		return array('entries' => $this->entryDAO->getFavourites());
+	}
+
+	/* VIEW */
+
+	function viewLoadWithTemplate($data, $templateName)
+	{
+		$template = $this->loadView($templateName);
+		$template->set('entry', $data['entry']);
+		return $template->renderString();
+	}
+
+	function viewLoadFavourites($data)
+	{
+		$template = $this->loadView('entry_favourite_view');
+		$template->set('entries', $data['entries']);
+		return $template->renderString();
+	}
+
+}

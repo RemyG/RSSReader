@@ -1,13 +1,13 @@
 <?php
 
-class Url_helper {
+class URLUtils {
 
-	function base_url()
+	public static function base_url()
 	{
 		return BASE_URL;
 	}
 
-	function segment($seg)
+	public static function segment($seg)
 	{
 		if(!is_int($seg)) return false;
 
