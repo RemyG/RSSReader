@@ -115,7 +115,7 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$output = $controller->logicCreate();
 
-		$this->assertEquals('Category name not set.', $output['error']);
+		$this->assertEquals('Category name not set', $output['error']);
 	}
 
 	public function testCreate_exception()
@@ -126,7 +126,7 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 				->will($this->returnValue(6));
 		$dao->expects($this->any())
 				->method('save')
-				->will($this->throwException(new Exception('Error while saving.')));
+				->will($this->throwException(new Exception('Error while saving')));
 
 		$controller = new CategoryController($dao);
 
@@ -134,7 +134,7 @@ class CategoryControllerTest extends PHPUnit_Framework_TestCase
 
 		$output = $controller->logicCreate();
 
-		$this->assertEquals('Error while saving.', $output['error']);
+		$this->assertEquals('Error while saving', $output['error']);
 	}
 
 	private function mockCategory($id, $name, $catOrder, $parentCat)

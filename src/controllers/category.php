@@ -138,23 +138,25 @@ class CategoryController extends Controller {
 	 */
 	function logicCreate()
 	{
-		$catName = filter_input(INPUT_POST, 'categoryName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-		if ($catName != null && $catName != false) {
-			try {
-				$category = new Category();
-				$category->setName($catName);
-				$category->setParentCategoryId(1);
-				$catOrder = $this->categoryDAO->findNextCatOrder();
-				$category->setCatOrder($catOrder + 1);
-				$this->categoryDAO->save($category);
-				return array('id' => $category->getId(), 'name' => $category->getName(), 'order' => $category->getCatOrder());
-			}
-			catch (Exception $e) {
-				return array('error' => $e->getMessage());
-			}
+		//if (isset($_POST['categoryName'])) {
+		//if ($catName != null && $catName != false) {
+		try {
+			$catName = filter_var($_POST['categoryName'], FILTER_SANITIZE_STRING);
 		}
-		else {
-			return array('error' => "Category name not set.");
+		catch (Exception $e) {
+			return array('error' => 'Category name not set');
+		}
+		try {
+			$category = new Category();
+			$category->setName($catName);
+			$category->setParentCategoryId(1);
+			$catOrder = $this->categoryDAO->findNextCatOrder();
+			$category->setCatOrder($catOrder + 1);
+			$this->categoryDAO->save($category);
+			return array('id' => $category->getId(), 'name' => $category->getName(), 'order' => $category->getCatOrder());
+		}
+		catch (Exception $e) {
+			return array('error' => $e->getMessage());
 		}
 	}
 
