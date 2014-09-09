@@ -31,6 +31,14 @@ class View {
 		echo ob_get_clean();
 	}
 
+	public function renderViewOnly()
+	{
+		extract($this->pageVars);
+		ob_start();
+		require($this->template);
+		echo ob_get_clean();
+	}
+
 	public function renderString()
 	{
 		extract($this->pageVars);

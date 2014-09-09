@@ -37,7 +37,7 @@ class UserController extends Controller
 			}
 			$template = $this->loadView('user_login_view');
 			$template->set('errors', $errors);
-			$template->render();
+			$template->renderViewOnly();
 		}
 		else
 		{
