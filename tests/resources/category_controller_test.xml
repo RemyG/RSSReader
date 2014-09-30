@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<dataset>
+    <category id="1" name="Root" cat_order="0" />
+    <category id="2" name="Test cat 1" parent_category_id="1" cat_order="1" />
+    <category id="3" name="Test cat 2" parent_category_id="1" cat_order="6" />
+    <category id="4" name="Test cat 3" parent_category_id="1" cat_order="5" />
+    <category id="5" name="Test cat 4" parent_category_id="1" cat_order="2" />
+    <category id="6" name="Test cat 5" parent_category_id="1" cat_order="4" />
+    <category id="7" name="Test cat 6" parent_category_id="1" cat_order="3" />
+</dataset>
