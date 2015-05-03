@@ -78,7 +78,8 @@ class EntryController extends Controller
 	public function loadFavourites()
 	{
 		$data = $this->logicLoadFavourite();
-		return json_encode($this->viewLoadFavourites($data));
+		$template = $this->viewLoadFavourites($data);
+		return json_encode(array('html' => $template, 'count' => sizeof($data), 'counts' => array()));
 	}
 
 	/* LOGIC */
@@ -208,7 +209,7 @@ class EntryController extends Controller
 	 */
 	function logicLoadFavourite()
 	{
-		return array('entries' => $this->entryDAO->getFavourites());
+		return $this->entryDAO->getFavourites();
 	}
 
 	/* VIEW */
@@ -223,7 +224,7 @@ class EntryController extends Controller
 	function viewLoadFavourites($data)
 	{
 		$template = $this->loadView('entry_favourite_view');
-		$template->set('entries', $data['entries']);
+		$template->set('entries', $data);
 		return $template->renderString();
 	}
 
