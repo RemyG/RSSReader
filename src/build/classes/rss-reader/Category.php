@@ -16,11 +16,9 @@
 class Category extends BaseCategory
 {
 
-	public function countEntrys()
+	public function countEntrys($c)
 	{
 		$count = 0;
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
 		foreach ($this->getFeeds() as $feed)
 		{
 			$count += $feed->countEntrys($c);

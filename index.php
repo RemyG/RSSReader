@@ -26,6 +26,8 @@ Propel::init(APP_DIR."build/conf/rss-reader-conf.php");
 // Add the generated 'classes' directory to the include path
 set_include_path(APP_DIR."build/classes" . PATH_SEPARATOR . get_include_path());
 
+require(APP_DIR.'factories/CriteriaFactory.php');
+
 function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
 {
     // error was suppressed with the @-operator

@@ -70,8 +70,7 @@ class FeedController extends Controller {
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
 		$template->set('categories', $categories);
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		return json_encode(array(
 			'feedId' => $feed->getId(),
 			'count' => $feed->countEntrys($c),
@@ -178,8 +177,7 @@ class FeedController extends Controller {
 	function count($id)
 	{
 		$feed = FeedQuery::create()->findPK($id);
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		$count = $feed->countEntrys($c);
 		$catCount = $feed->getCategory()->countEntrys($c);
 		echo json_encode(array('feed' => $count, 'category' => $catCount));
@@ -189,8 +187,7 @@ class FeedController extends Controller {
 	{
 		$categories = CategoryQuery::create()->find();
 		$result = array();
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		foreach ($categories as $category)
 		{
 			foreach ($category->getFeeds() as $feed)

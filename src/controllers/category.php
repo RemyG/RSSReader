@@ -136,8 +136,7 @@ class CategoryController extends Controller {
 			$entries = $this->categoryDAO->getAllEntries($id);
 		}
 
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		$counts = array();
 		foreach ($category->getFeeds() as $feed) {
 			$counts[$feed->getId()] = $feed->countEntrys($c);

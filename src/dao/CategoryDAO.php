@@ -35,6 +35,8 @@ class CategoryDAO implements iCategoryDAO
 				->endUse()
 				->orderByUpdated('desc')
 				->filterByRead(0)
+					->_or()
+				->filterByFavourite(1)
 				->find();
 	}
 

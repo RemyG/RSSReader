@@ -106,8 +106,7 @@ class EntryController extends Controller
 			$this->entryDAO->save($entry);
 		}
 
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 
 		return array(
 		    'feedId' => $entry->getFeed()->getId(),
@@ -134,8 +133,7 @@ class EntryController extends Controller
 
 		$entry = $this->entryDAO->findById($id);
 
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 
 		return array(
 		    'feed' => $this->feedDAO->countEntries($entry->getFeed(), $c),
@@ -165,8 +163,7 @@ class EntryController extends Controller
 
 		$this->entryDAO->save($entry);
 
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 
 		return array(
 		    'feedId' => $entry->getFeed()->getId(),
@@ -195,9 +192,13 @@ class EntryController extends Controller
 		$entry->setFavourite($favourite);
 
 		$this->entryDAO->save($entry);
+		
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 
 		return array(
-		    'feedId' => $entry->getFeed()->getId());
+		    'feedId' => $entry->getFeed()->getId(),
+		    'feedCount' => $this->feedDAO->countEntries($entry->getFeed(), $c),
+		    'categoryCount' => $this->categoryDAO->countEntries($entry->getFeed()->getCategory(), $c));
 	}
 
 	/**

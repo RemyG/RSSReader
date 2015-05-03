@@ -93,8 +93,7 @@
 
 							<ul id="feed-list">
 								<?php
-									$c = new Criteria();
-									$c->add(EntryPeer::READ, 0);
+									$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 									$i = 0;
 									foreach ($categoriesTree as $category)
 									{
@@ -103,7 +102,7 @@
 												<div>
 													<i class="fa fa-fw fa-caret-down"> </i>
 													<span class="category-title">'.$category->getName().'</span>
-													<span class="category-count">'.$category->countEntrys().'</span>
+													<span class="category-count">'.$category->countEntrys($c).'</span>
 												</div>
 												<ul class="feeds">';
 
