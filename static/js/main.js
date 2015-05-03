@@ -760,6 +760,9 @@ function markEntryFavourite(id)
 		type: "GET",
 		dataType: "json"
 	});
+        request.done(function(data) {
+		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
+	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
 	});
@@ -772,6 +775,9 @@ function markEntryNotFavourite(id)
 		url: 'entry/markunfavourite/' + id,
 		type: "GET",
 		dataType: "json"
+	});
+        request.done(function(data) {
+		setCountForFeed(data.feedId, data.feedCount, data.categoryCount);
 	});
 	request.fail(function(jqXHR, textStatus) {
 		alert("Request failed: " + textStatus);
