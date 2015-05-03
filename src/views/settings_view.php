@@ -76,8 +76,20 @@ $("#category-list").on("click", "a", function(e) {
 	e.preventDefault();
 });
 
+$("form#form-create-category").find("input#category-name").keypress(function(e) {
+    if(e.which == 13) {
+        e.preventDefault();
+	createCategory();
+    }
+});
+
 $("form#form-create-category").on("click", "a.create-category", function(e) {
 	e.preventDefault();
+	createCategory();
+});
+
+function createCategory()
+{
 	var name = $("form#form-create-category").find("input#category-name").val();
 	var request = $.ajax({
 		url: "category/create",
@@ -88,11 +100,12 @@ $("form#form-create-category").on("click", "a.create-category", function(e) {
 	request.done(function(data) {
 		var template = $('<li class="ui-state-default" data-id=""></li>');
 		template.attr('data-id', data.id);
-		template.html(data.name);
+		template.html('<i class="fa fa-arrows-v"> </i> ' + data.name);
 		$('ul#category-list').append(template);
+		$("form#form-create-category").find("input#category-name").val('');
 	});
 	request.fail(function(jqXHR, textStatus) {
 	});
-});
+}
 
 </script>
