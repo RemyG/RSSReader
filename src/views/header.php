@@ -73,6 +73,8 @@
 				?>
 
 				<div id="left-menu">
+				    
+					<div id="left-menu-toggle"><i class="fa fa-fw fa-arrow-left"> </i><i class="fa fa-fw fa-arrow-right" style="display: none"> </i></div>
 
 					<div id="left-menu-inner">
 

@@ -1004,6 +1004,12 @@ $("#slider-import-opml").on("click", '.confirm-import-opml', function(e) {
 	});
 });
 
+$('#left-menu').on("click", '#left-menu-toggle', function(e){
+   $('#left-menu').toggleClass("hidden");
+   $('#left-menu-toggle i.fa-arrow-right').toggle();
+   $('#left-menu-toggle i.fa-arrow-left').toggle();
+});
+
 //Bind to the resize event of the window object
 $(window).on("resize", function () {
     // Set .right's width to the window width minus 480 pixels

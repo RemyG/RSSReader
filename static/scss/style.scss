@@ -176,9 +176,42 @@ body {
 					width: $menu-width;
 					height: 200px;
 					background-color: $feed-link-bg;
+                                        transition: all 1s linear;
+                                        -moz-transition: all 1s linear;
+                                        -webkit-transition: all 1s linear;
+                                        -o-transition: all 1s linear;
+                                        &.hidden {
+                                            width: 0;
+                                            #left-menu-inner {
+                                                width: 0;
+                                            }
+                                            #left-menu-toggle {
+                                                left: 0;
+                                            }
+                                        }
+                                        div#left-menu-toggle {
+                                            position: absolute;
+                                            left: $menu-width;
+                                            height: 30px;
+                                            width: 30px;
+                                            /*border: 1px solid grey;*/
+                                            line-height: 30px;
+                                            text-align: center;
+                                            cursor: pointer;
+                                            z-index: 15;
+                                            background-color: blue;
+                                            transition: all 1s linear;
+                                            -moz-transition: all 1s linear;
+                                            -webkit-transition: all 1s linear;
+                                            -o-transition: all 1s linear;
+                                        }
 					div#left-menu-inner {
 						position: relative;
 						width: $menu-width;
+                                                transition: all 1s linear;
+                                                -moz-transition: all 1s linear;
+                                                -webkit-transition: all 1s linear;
+                                                -o-transition: all 1s linear;
 						div#feed-list-container {
 							overflow-y: hidden;
 							overflow-x: hidden;
@@ -344,10 +377,11 @@ body {
 						> div.feed-title, > div.category-title {
 							border-bottom: #ececec solid 1px;
 							z-index: 10;
-							position: fixed;
+							/*position: fixed;*/
 							right: 0;
 							font-size: 1.4em;
 							padding: 15px 20px;
+                                                        padding-left: 35px;
 							background-color: white;
 							margin: 0;
 							div.title {
