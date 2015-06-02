@@ -8,6 +8,14 @@ class EntryDAO implements iEntryDAO
 		return EntryQuery::create()
 				->findPK($id);
 	}
+	
+	public function findByDate($searchDate)
+	{
+		return EntryQuery::create()
+				->filterByPublished(array("min" => $searchDate." 00:00:00", "max" => $searchDate." 23:59:59"))
+				->orderByUpdated('desc')
+				->find();
+	}
 
 	public function getFavourites()
 	{

@@ -24,7 +24,8 @@ img {
   max-width: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
-  display: block; }
+  display: block;
+  height: auto; }
 
 a > img {
   display: inline; }
@@ -128,18 +129,23 @@ body {
           body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-toggle {
             position: absolute;
             left: 325px;
-            height: 30px;
-            width: 30px;
+            height: 35px;
+            width: 35px;
             /*border: 1px solid grey;*/
-            line-height: 30px;
+            line-height: 35px;
             text-align: center;
             cursor: pointer;
             z-index: 15;
-            background-color: blue;
+            background-color: #f5cfae;
+            color: #5a5a5a;
+            border-bottom-right-radius: 2px;
             transition: all 1s linear;
             -moz-transition: all 1s linear;
             -webkit-transition: all 1s linear;
             -o-transition: all 1s linear; }
+            body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-toggle:hover {
+              background-color: #eba05e;
+              color: #000; }
           body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner {
             position: relative;
             width: 325px;
@@ -162,47 +168,63 @@ body {
               /* ul#feed-list */ }
               body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list,
               body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite,
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date,
               body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list,
-              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite {
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite,
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date {
                 padding: 0;
                 margin: 0; }
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list ul,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite ul,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date ul,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list ul,
-                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite ul {
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite ul,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date ul {
                   padding: 0;
                   margin: 0; }
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list .feed-link-placeholder,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite .feed-link-placeholder,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date .feed-link-placeholder,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list .feed-link-placeholder,
-                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite .feed-link-placeholder {
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite .feed-link-placeholder,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date .feed-link-placeholder {
                   height: 24px;
                   border: 1px dashed #ccc;
                   margin: 2px 10px; }
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li,
-                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li {
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li {
                   list-style: none;
                   margin: 0;
                   line-height: 22px; }
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li div, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li a span.feed-title,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li div,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li a span.feed-title,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li a span.feed-title,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li div,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li a span.feed-title,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li div,
-                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li a span.feed-title {
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li a span.feed-title,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li a span.feed-title {
                     overflow: hidden;
                     white-space: nowrap;
                     text-overflow: clip ellipsis; }
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.load-feed-link,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category,
-                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link {
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.load-feed-link {
                     font-weight: bold;
                     font-size: 12px; }
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category .category-count,
@@ -212,6 +234,10 @@ body {
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category .feed-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link .category-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.load-feed-link .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.load-feed-link .feed-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category .category-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category .feed-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link .category-count,
@@ -219,7 +245,11 @@ body {
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category .category-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category .feed-count,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .category-count,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .feed-count {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.load-feed-link .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.load-feed-link .feed-count {
                       display: inline;
                       position: absolute;
                       margin-top: 1px;
@@ -234,43 +264,61 @@ body {
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.empty, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.empty,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.empty,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.load-feed-link.empty,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.empty,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.empty,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.empty,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.load-feed-link.empty {
                       font-weight: normal; }
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.empty .feed-count, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.empty .feed-count,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.empty .feed-count,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.load-feed-link.empty .feed-count,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.empty .feed-count,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.empty .feed-count,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.empty .feed-count,
-                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty .feed-count {
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.load-feed-link.empty .feed-count {
                         display: none; }
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.not-valid, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.not-valid,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.not-valid,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.load-feed-link.not-valid,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.not-valid,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.not-valid,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.not-valid,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.not-valid {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.load-feed-link.not-valid {
                       font-weight: normal;
                       font-style: italic; }
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category,
                 body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category,
-                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category {
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category {
                   border-top: 1px solid #ccc;
                   color: #333; }
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category:first-child,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category:first-child,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category:first-child,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category:first-child,
-                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category:first-child {
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category:first-child,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category:first-child {
                     border-top: none; }
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category > div,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category > div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category > div,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category > div,
-                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div {
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category > div {
                     cursor: pointer;
                     padding: 2px 10px;
                     padding-bottom: 5px;
@@ -279,8 +327,10 @@ body {
                     font-weight: bold; }
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category > div i,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category > div i,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category > div i,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category > div i,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div i {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div i,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category > div i {
                       float: left;
                       font-size: 14px;
                       padding: 3px;
@@ -289,23 +339,31 @@ body {
                       vertical-align: middle; }
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category > div:hover,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category > div:hover,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category > div:hover,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category > div:hover,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div:hover {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div:hover,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category > div:hover {
                       background-color: #e67e22; }
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds,
-                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds {
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds {
                     min-height: 15px; }
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link {
                       font-size: 14px; }
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link a,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link a,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link a,
-                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a {
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link a {
                         display: block;
                         padding: 2px 20px;
                         padding-right: 5px;
@@ -313,43 +371,57 @@ body {
                         overflow: hidden; }
                         body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link a span.feed-title,
                         body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link a span.feed-title,
                         body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link a span.feed-title,
-                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title {
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link a span.feed-title {
                           max-width: 235px;
                           margin-right: 5px;
                           display: block;
                           float: left; }
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link:hover,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link:hover,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link:hover,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link:hover,
-                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link:hover {
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link:hover,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link:hover {
                         background-color: #e67e22; }
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.not-valid a,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.not-valid a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link.not-valid a,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.not-valid a,
-                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.not-valid a {
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.not-valid a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link.not-valid a {
                         color: #888; }
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.active,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.active,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link.active,
                       body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.active,
-                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active {
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link.active {
                         background-color: #EBA05E;
                         color: #333; }
                         body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.active a,
                         body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.active a,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category ul.feeds li.load-feed-link.active a,
                         body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.active a,
-                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active a {
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active a,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category ul.feeds li.load-feed-link.active a {
                           color: inherit; }
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.active div,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.active div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category.active div,
                   body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.active div,
-                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div {
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category.active div {
                     background-color: #EBA05E;
                     color: #333; }
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.active div a,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.active div a,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#by-date li.category.active div a,
                     body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.active div a,
-                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div a {
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div a,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#by-date li.category.active div a {
                       color: inherit; }
         body div#main-container div.sub-container div#main-table div#content {
           display: table-cell;
@@ -376,11 +448,10 @@ body {
             body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title {
               border-bottom: #ececec solid 1px;
               z-index: 10;
-              /*position: fixed;*/
               right: 0;
               font-size: 1.4em;
               padding: 15px 20px;
-              padding-left: 35px;
+              padding-left: 50px;
               background-color: white;
               margin: 0; }
               body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.title, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.title {

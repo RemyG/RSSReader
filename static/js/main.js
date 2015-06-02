@@ -89,18 +89,33 @@ function setCountForFeed(iFeedId, feedCount, catCount)
 
 /*** FUNCTIONS - CATEGORIES ***/
 
+function loadCategoryByDate(date)
+{
+    var catUrl = 'entry/loadbydate/' + date;
+    ajaxLoadCategory('by-date', catUrl);
+}
+
 function loadCategory(catId)
 {
+    var catUrl = '';
+    if (catId == 'favourite')
+    {
+            catUrl = 'entry/loadfavourites';
+    }
+    else if (catId == 'by-date')
+    {
+            catUrl = 'entry/loadbydate';
+    }
+    else
+    {
+            catUrl = 'category/load/' + catId;
+    }
+    ajaxLoadCategory(catId, catUrl);
+}
+
+function ajaxLoadCategory(catId, catUrl)
+{
 	$('#overlay-content').show();
-	var catUrl = '';
-	if (catId == 'favourite')
-	{
-		catUrl = 'entry/loadfavourites';
-	}
-	else
-	{
-		catUrl = 'category/load/' + catId;
-	}
 	var request = $.ajax({
 		url: catUrl,
 		type: "GET",
@@ -230,12 +245,27 @@ $("#feed-list").on("click", "li.category div", function(e) {
 	loadCategory(id);
 });
 
-// Open a category
+// Load favourites
 $("#favourite").on("click", "li.category div", function(e) {
 	e.preventDefault();
 	$('#overlay-content').show();
 	var id = $(this).parents('li.category').data('cat-id');
 	loadCategory(id);
+});
+
+// Load by date
+$("#by-date").on("click", "li.category div", function(e) {
+	e.preventDefault();
+	$('#overlay-content').show();
+	var id = $(this).parents('li.category').data('cat-id');
+	loadCategory(id);
+});
+
+$("#feed-content").on("click", "a.load-date", function(e) {
+	e.preventDefault();
+        $('#overlay-content').show();
+	var date = $(this).attr('data-date');
+	loadCategoryByDate(date);
 });
 
 // Open a feed

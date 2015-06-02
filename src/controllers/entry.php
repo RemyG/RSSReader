@@ -2,6 +2,8 @@
 
 class EntryController extends Controller
 {
+	private $dateFormat = 'Y-m-d';
+	
 	/**
 	 * EntryDAO.
 	 * @var iEntryDAO
@@ -79,6 +81,22 @@ class EntryController extends Controller
 	{
 		$data = $this->logicLoadFavourite();
 		$template = $this->viewLoadFavourites($data);
+		return json_encode(array('html' => $template, 'count' => sizeof($data), 'counts' => array()));
+	}
+	
+	/**
+	 * Return a json representation of the entries for a specific date.
+	 * @param string $date the date in format 'Y-m-d'.
+	 * @return type
+	 */
+	public function loadByDate($date = null)
+	{
+		if (sizeof($date) == 0)
+		{
+			$date = date_format(new DateTime(), $this->dateFormat);
+		}
+		$data = $this->logicLoadByDate($date);
+		$template = $this->viewLoadByDate($data, $date);
 		return json_encode(array('html' => $template, 'count' => sizeof($data), 'counts' => array()));
 	}
 
@@ -211,6 +229,18 @@ class EntryController extends Controller
 	{
 		return $this->entryDAO->getFavourites();
 	}
+	
+	/**
+	 * Return the list of entries for the specified date.
+	 * 
+	 * @param String $searchDate the date in format Y-m-d.
+	 * 
+	 * @return type the list of entries.
+	 */
+	function logicLoadByDate($searchDate)
+	{
+		return $this->entryDAO->findByDate($searchDate);
+	}
 
 	/* VIEW */
 
@@ -225,6 +255,16 @@ class EntryController extends Controller
 	{
 		$template = $this->loadView('entry_favourite_view');
 		$template->set('entries', $data);
+		return $template->renderString();
+	}
+	
+	function viewLoadByDate($data, $searchDate)
+	{
+		$template = $this->loadView('entry_bydate_view');
+		$template->set('entries', $data);
+		$template->set('date', $searchDate);
+		$template->set('prev_date', date_format(date_sub(new DateTime($searchDate), new DateInterval('P1D')), $this->dateFormat));
+		$template->set('next_date', date_format(date_add(new DateTime($searchDate), new DateInterval('P1D')), $this->dateFormat));
 		return $template->renderString();
 	}
 

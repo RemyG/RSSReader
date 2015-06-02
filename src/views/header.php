@@ -74,7 +74,9 @@
 
 				<div id="left-menu">
 				    
-					<div id="left-menu-toggle"><i class="fa fa-fw fa-arrow-left"> </i><i class="fa fa-fw fa-arrow-right" style="display: none"> </i></div>
+					<div id="left-menu-toggle">
+					    <i class="fa fa-fw fa-arrow-left"> </i><i class="fa fa-fw fa-arrow-right" style="display: none"> </i>
+					</div>
 
 					<div id="left-menu-inner">
 
@@ -85,6 +87,14 @@
 									<div>
 										<i class="fa fa-fw fa-star"> </i>
 										<span class="category-title">Favourite</span>
+									</div>
+								</li>
+							</ul>
+							<ul id="by-date">
+								<li class="category" data-cat-id="by-date">
+									<div>
+										<i class="fa fa-fw fa-calendar"> </i>
+										<span class="category-title">By date</span>
 									</div>
 								</li>
 							</ul>

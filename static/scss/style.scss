@@ -72,6 +72,7 @@ img {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	display: block;
+        height: auto;
 }
 
 a > img {
@@ -192,18 +193,24 @@ body {
                                         div#left-menu-toggle {
                                             position: absolute;
                                             left: $menu-width;
-                                            height: 30px;
-                                            width: 30px;
+                                            height: 35px;
+                                            width: 35px;
                                             /*border: 1px solid grey;*/
-                                            line-height: 30px;
+                                            line-height: 35px;
                                             text-align: center;
                                             cursor: pointer;
                                             z-index: 15;
-                                            background-color: blue;
+                                            background-color: #f5cfae;
+                                            color: #5a5a5a;
+                                            border-bottom-right-radius: 2px;
                                             transition: all 1s linear;
                                             -moz-transition: all 1s linear;
                                             -webkit-transition: all 1s linear;
                                             -o-transition: all 1s linear;
+                                            &:hover {
+                                                background-color: #eba05e;
+                                                color: #000;
+                                            }
                                         }
 					div#left-menu-inner {
 						position: relative;
@@ -226,7 +233,8 @@ body {
 						div#left-menu-top {
 							width: 100%;
 							ul#feed-list,
-							ul#favourite {
+							ul#favourite,
+                                                        ul#by-date {
 								padding: 0;
 								margin: 0;
 								ul {
@@ -377,11 +385,10 @@ body {
 						> div.feed-title, > div.category-title {
 							border-bottom: #ececec solid 1px;
 							z-index: 10;
-							/*position: fixed;*/
 							right: 0;
 							font-size: 1.4em;
 							padding: 15px 20px;
-                                                        padding-left: 35px;
+                                                        padding-left: 50px;
 							background-color: white;
 							margin: 0;
 							div.title {
