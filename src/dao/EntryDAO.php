@@ -13,6 +13,9 @@ class EntryDAO implements iEntryDAO
 	{
 		return EntryQuery::create()
 				->filterByPublished(array("min" => $searchDate." 00:00:00", "max" => $searchDate." 23:59:59"))
+				->filterByRead(0)
+					->_or()
+				->filterByFavourite(1)
 				->orderByUpdated('desc')
 				->find();
 	}
