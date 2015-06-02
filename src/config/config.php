@@ -1,6 +1,6 @@
 <?php
 
-define('INSTALLED', 'true');
+define('INSTALLED', 'false');
 
 define('BASE_URL', 'http://rss.local/'); // Base URL including trailing slash (e.g. http://localhost/)
 
