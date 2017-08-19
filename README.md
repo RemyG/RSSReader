@@ -13,6 +13,7 @@ To run this application, you need:
 * MySql drivers for PDO
 * the Mod_Rewrite module for Apache
 * the php5-tidy package
+* Composer for the installation
 
 ## Installation
 
@@ -20,26 +21,24 @@ To run this application, you need:
 
 #### With git
 
-* Clone the main project:
-
 ```
 $ mkdir /var/www/rss-reader
 $ cd /var/www/rss-reader
 $ git clone https://github.com/RemyG/RSSReader.git .
 ```
 
-* Fetch the submodules Propel ORM and SimplePie:
-
-```
-$ git submodule init
-$ git submodule update
-```
-
 #### Without git
 
-* Download the application, and extract.
-* Download [Propel](http://propelorm.org/download.html) and extract in `src/plugins/propel`.
-* Download [SimplePie](http://simplepie.org/downloads/) and extract in `src/plugins/simplepie`.
+Download the application ([ZIP file](https://github.com/RemyG/RSSReader/archive/master.zip) or ), and extract.
+
+### Install with Composer
+
+This is a Composer project. To install Composer, follow the directives [here](https://getcomposer.org/doc/00-intro.md).
+
+Then go to the project root and run:
+```
+composer install
+```
 
 ### Configuration
 
@@ -57,7 +56,7 @@ $ git submodule update
 
 This project is released under the MIT License:
 
-Copyright (c) 2013 Rémy Gardette
+Copyright (c) 2013-2017 Rémy Gardette
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -66,6 +65,10 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Changelog
+
+**v0.4**
+
+**v0.3**
 
 **v0.2.0**
 

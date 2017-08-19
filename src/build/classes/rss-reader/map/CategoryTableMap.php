@@ -52,7 +52,7 @@ class CategoryTableMap extends TableMap
     {
         $this->addRelation('ParentCategory', 'Category', RelationMap::MANY_TO_ONE, array('parent_category_id' => 'id', ), null, null);
         $this->addRelation('ChildrenCategory', 'Category', RelationMap::ONE_TO_MANY, array('id' => 'parent_category_id', ), null, null, 'ChildrenCategorys');
-        $this->addRelation('Feed', 'Feed', RelationMap::ONE_TO_MANY, array('id' => 'category_id', ), null, null, 'Feeds');
+        $this->addRelation('Feed', 'Feed', RelationMap::ONE_TO_MANY, array('id' => 'category_id', ), 'CASCADE', null, 'Feeds');
     } // buildRelations()
 
 } // CategoryTableMap

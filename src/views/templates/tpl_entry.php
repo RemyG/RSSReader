@@ -2,7 +2,7 @@
 
 echo '
       <div class="entry-container" id="entry-container-'.$entry->getId().'">
-        <div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').($entry->getFavourite() == 1 ? ' favourite' : '').'">
+        <div class="entry-link-container'.($entry->getRead() == 1 ? ' read' : '').($entry->getFavourite() == 1 ? ' favourite' : '').($entry->getToRead() == 1 ? ' toread' : '').'">
           <div class="toggle-read">
             <a href="#" class="mark-read" data-id="'.$entry->getId().'" title="Mark read">
               <i class="fa fa-square-o"> </i>
@@ -19,10 +19,29 @@ echo '
               <i class="fa fa-star"> </i>
             </a>
           </div>
+          <div class="toggle-toread">
+            <a href="#" class="mark-toread" data-id="'.$entry->getId().'" title="Mark to read">
+              <i class="fa fa-eye"> </i>
+            </a>
+            <a href="#" class="mark-untoread" data-id="'.$entry->getId().'" title="Unmark to read">
+              <i class="fa fa-eye"> </i>
+            </a>
+          </div>
           <div  id="load-entry-link-'.$entry->getId().'"
               class="load-entry-link"
               data-id="'.$entry->getId().'"
-              data-href="'.$entry->getLink().'"
+              data-href="';
+
+if (preg_match('/^http:\/\//', $entry->getLink()))
+{
+    echo PROXY_URL.urlencode($entry->getLink()).'&hash='.crypt($entry->getLink(), PROXY_SALT);
+}
+else
+{
+    echo $entry->getLink();
+}
+
+echo '"
               data-feed-id="'.$entry->getFeed()->getId().'"
               data-viewtype="'.($entry->getFeed()->getViewFrame() == 0 ? 'rss' : 'www').'">
             <div class="title-wrapper">

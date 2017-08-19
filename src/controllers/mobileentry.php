@@ -17,8 +17,7 @@ class MobileEntryController extends Controller {
 	function count($id)
 	{
 		$entry = EntryQuery::create()->findPK($id);
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		$count = $entry->getFeed()->countEntrys($c);
 		echo $count;
 	}

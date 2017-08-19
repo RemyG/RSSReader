@@ -56,7 +56,7 @@ class FeedTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Category', 'Category', RelationMap::MANY_TO_ONE, array('category_id' => 'id', ), null, null);
+        $this->addRelation('Category', 'Category', RelationMap::MANY_TO_ONE, array('category_id' => 'id', ), 'CASCADE', null);
         $this->addRelation('Entry', 'Entry', RelationMap::ONE_TO_MANY, array('id' => 'feed_id', ), 'CASCADE', null, 'Entrys');
     } // buildRelations()
 

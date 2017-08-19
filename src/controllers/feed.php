@@ -59,6 +59,8 @@ class FeedController extends Controller {
 				->filterByRead(0)
 					->_or()
 				->filterByFavourite(1)
+                                    ->_or()
+                                ->filterByToRead(1)
 				->orderByUpdated('desc')
 				->find();
 		}
@@ -70,8 +72,7 @@ class FeedController extends Controller {
 		$template->set('feed', $feed);
 		$template->set('entries', $entries);
 		$template->set('categories', $categories);
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		return json_encode(array(
 			'feedId' => $feed->getId(),
 			'count' => $feed->countEntrys($c),
@@ -118,12 +119,12 @@ class FeedController extends Controller {
 	{
 		set_time_limit(0);
 		$feeds = FeedQuery::create()->filterByValid(1)->find();
-		
+
 		$log = new Logger('Feed.updateAll');
 		$log->pushHandler(new StreamHandler(LOG_DIR."update-".date("Ymd-His")."-".$direction.".log", Logger::INFO));
 		$logHelper = $this->loadHelper('Monolog_helper');
 		$log->addInfo('Updating '.sizeof($feeds).' feeds');
-		
+
 		$updateFeedDTOs = array();
 		$i = 0;
 		foreach ($feeds as $feed)
@@ -132,9 +133,9 @@ class FeedController extends Controller {
 			$errors = array();
 			$dto = $this->updateFeed($feed, $errors);
 			$updateFeedDTOs[] = $dto;
-			
+
 			$logHelper->logUpdateFeedDTO($log, $dto, $i);
-			
+
 		}
 		$feeds = FeedQuery::create()->find();
 		$template = $this->loadView('feed_updateall_view');
@@ -178,8 +179,7 @@ class FeedController extends Controller {
 	function count($id)
 	{
 		$feed = FeedQuery::create()->findPK($id);
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		$count = $feed->countEntrys($c);
 		$catCount = $feed->getCategory()->countEntrys($c);
 		echo json_encode(array('feed' => $count, 'category' => $catCount));
@@ -189,8 +189,7 @@ class FeedController extends Controller {
 	{
 		$categories = CategoryQuery::create()->find();
 		$result = array();
-		$c = new Criteria();
-		$c->add(EntryPeer::READ, 0);
+		$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 		foreach ($categories as $category)
 		{
 			foreach ($category->getFeeds() as $feed)
@@ -364,6 +363,7 @@ class FeedController extends Controller {
 
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url((string)$feedUrl);
+			$feedSP->set_cache_location(CACHE_DIR);
 			$feedSP->init();
 
 			$feed = new Feed();
@@ -470,6 +470,7 @@ class FeedController extends Controller {
 		{
 			$feedSP = new SimplePie();
 			$feedSP->set_feed_url($feedUrl);
+			$feedSP->set_cache_location(CACHE_DIR);
 			$valid = $feedSP->init();
 			$dto->setValid($valid);
 
@@ -517,6 +518,7 @@ class FeedController extends Controller {
 					$entry = new Entry();
 					$entry->setLink($link);
 					$entry->setFeed($feed);
+					$entry->setRead(0);
 				}
 				if ($item->get_author() != null)
 				{
@@ -552,7 +554,7 @@ class FeedController extends Controller {
 		catch (Exception $e)
 		{
 			$dto->setValid(false);
-			$dto->addError('ERROR - Error when updating feed '.$feedUrl.': '.$e->getTraceAsString());
+			$dto->addError('ERROR - Error when updating feed '.$feedUrl.': '.$e->getMessage().' '.$e->getTraceAsString());
 			if ($invalidate)
 			{
 				$feed->setValid(false);
@@ -644,7 +646,7 @@ class FeedController extends Controller {
 			{
 				$read++;
 			}
-			if ($entry->getFavourite() == 1)
+			if ($entry->getFavourite() == 1 || $entry->getToRead() == 1)
 			{
 				continue;
 			}

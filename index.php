@@ -10,6 +10,7 @@ session_start();
 define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
 define('APP_DIR', ROOT_DIR .'src/');
 define('LOG_DIR', ROOT_DIR.'logs/');
+define('CACHE_DIR', ROOT_DIR.'cache/');
 
 // Includes
 require(APP_DIR .'config/config.php');
@@ -25,6 +26,8 @@ Propel::init(APP_DIR."build/conf/rss-reader-conf.php");
 
 // Add the generated 'classes' directory to the include path
 set_include_path(APP_DIR."build/classes" . PATH_SEPARATOR . get_include_path());
+
+require(APP_DIR.'factories/CriteriaFactory.php');
 
 function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
 {

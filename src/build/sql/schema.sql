@@ -1,4 +1,3 @@
-
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
@@ -47,6 +46,7 @@ CREATE TABLE `rss_feed`
     CONSTRAINT `rss_feed_FK_1`
         FOREIGN KEY (`category_id`)
         REFERENCES `rss_category` (`id`)
+        ON DELETE CASCADE
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
@@ -68,6 +68,7 @@ CREATE TABLE `rss_entry`
     `content` TEXT,
     `feed_id` INTEGER NOT NULL,
     `favourite` TINYINT DEFAULT 0 NOT NULL,
+    `to_read` TINYINT DEFAULT 0 NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `rss_entry_FI_1` (`feed_id`),
     CONSTRAINT `rss_entry_FK_1`

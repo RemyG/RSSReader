@@ -1,1 +1,746 @@
-*{font-family:"Gudea",sans-serif}a{color:#333}a:hover{color:#e67e22}a,a:hover,a:focus{text-decoration:none}.fa{vertical-align:baseline;text-align:center}img{max-width:100%;margin-top:20px;margin-bottom:20px;display:block}a>img{display:inline}html,body{padding:0;margin:0}body div#main-container nav#header{height:40px;line-height:40px;background-color:#e67e22}body div#main-container nav#header *{line-height:40px}body div#main-container nav#header a{color:#fff}body div#main-container nav#header a:hover{background-color:#eba05e}body div#main-container nav#header a.brand{display:block;float:left;line-height:inherit;padding:0 15px;font-size:20px;font-family:"Dosis",Helvetica,Arial,sans-serif}body div#main-container nav#header ul{float:left;display:inline-block;padding:0;margin:0}body div#main-container nav#header ul.pull-right{float:right}body div#main-container nav#header ul li{float:left;list-style-type:none;position:relative}body div#main-container nav#header ul li a{display:block;line-height:inherit;padding:0 15px}body div#main-container div.slider{display:none;z-index:20;position:absolute;background-color:#eee;left:325px;right:0;padding:15px}body div#main-container div.slider div.slider-header a.close{position:absolute;top:5px;right:5px;padding:10px}body div#main-container div.slider div.slider-header h3{margin-top:0}body div#main-container div.slider div.slider-body{margin-bottom:15px}body div#main-container div.slider div.slider-body div.errors div.error-message{background-color:#f2dede;border:1px solid transparent;border-color:#ebccd1;color:#a94442;padding:7px 10px;margin:10px 0;border-radius:4px}body div#main-container div.sub-container div#main-table{display:table;table-layout:fixed;width:100%;padding:0;margin:0}body div#main-container div.sub-container div#main-table div#left-menu{white-space:nowrap;display:table-cell;position:relative;vertical-align:top;z-index:14;width:325px;height:200px;background-color:#fff9f5}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner{position:relative;width:325px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container{overflow-y:hidden;overflow-x:hidden;position:absolute;top:0px;bottom:0px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top{border-bottom:4px solid #ddd}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top{width:100%}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite{padding:0;margin:0}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list ul,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite ul,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list ul,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite ul{padding:0;margin:0}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list .feed-link-placeholder,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite .feed-link-placeholder,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list .feed-link-placeholder,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite .feed-link-placeholder{height:24px;border:1px dashed #ccc;margin:2px 10px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li{list-style:none;margin:0;line-height:22px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li a span.feed-title,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li a span.feed-title,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li a span.feed-title,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li a span.feed-title{overflow:hidden;white-space:nowrap;text-overflow:clip ellipsis}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link{font-weight:bold;font-size:12px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .category-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .feed-count{display:inline;position:absolute;margin-top:1px;right:15px;height:20px;padding:0 5px;background:#5b5b5b;line-height:20px;color:#cacaca;font-size:10px;border-radius:4px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.empty,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty{font-weight:normal}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.empty .feed-count,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty .feed-count{display:none}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.not-valid,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.not-valid{font-weight:normal;font-style:italic}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category{border-top:1px solid #ccc;color:#333}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category:first-child,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category:first-child,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category:first-child,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category:first-child{border-top:none}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category>div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category>div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category>div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category>div{cursor:pointer;padding:2px 10px;padding-bottom:5px;padding-top:5px;font-size:14px;font-weight:bold}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category>div i,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category>div i,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category>div i,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category>div i{float:left;font-size:14px;padding:3px;margin-right:5px;margin-top:1px;vertical-align:middle}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category>div:hover,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category>div:hover,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category>div:hover,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category>div:hover{background-color:#e67e22}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds{min-height:15px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link{font-size:14px}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a{display:block;padding:2px 20px;padding-right:5px;color:#333;overflow:hidden}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link a span.feed-title,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link a span.feed-title,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title{max-width:235px;margin-right:5px;display:block;float:left}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link:hover,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link:hover,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link:hover,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link:hover{background-color:#e67e22}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.not-valid a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.not-valid a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.not-valid a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.not-valid a{color:#888}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.active,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.active,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.active,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active{background-color:#eba05e;color:#333}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.active a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.active a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.active a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active a{color:inherit}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.active div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.active div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.active div,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div{background-color:#eba05e;color:#333}body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.active div a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.active div a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.active div a,body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div a{color:inherit}body div#main-container div.sub-container div#main-table div#content{display:table-cell;vertical-align:top;width:100%;z-index:10;overflow-y:auto}body div#main-container div.sub-container div#main-table div#content.padding-20{padding:20px}body div#main-container div.sub-container div#main-table div#content div.slider{left:0}body div#main-container div.sub-container div#main-table div#content #feed-content{position:relative;margin:0}body div#main-container div.sub-container div#main-table div#content #feed-content h1{font-size:20px}body div#main-container div.sub-container div#main-table div#content #feed-content h2{font-size:18px}body div#main-container div.sub-container div#main-table div#content #feed-content h3,body div#main-container div.sub-container div#main-table div#content #feed-content h4,body div#main-container div.sub-container div#main-table div#content #feed-content h5,body div#main-container div.sub-container div#main-table div#content #feed-content h6{font-size:16px}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title{border-bottom:#ececec solid 1px;z-index:10;position:fixed;right:0;font-size:1.4em;padding:15px 20px;background-color:white;margin:0}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.title,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.title{display:inline-block;color:inherit;font-family:"Dosis",Helvetica,Arial,sans-serif}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.meta,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.meta{display:inline-block;float:right;text-align:right}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.meta a i,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.meta a i{font-size:0.8em;color:#333333;text-decoration:none;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;padding:8px 8px}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.meta a i:hover,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.meta a i:hover{color:#e67e22}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.meta span.dropdown,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.meta span.dropdown{font-variant:normal;text-align:left}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.meta span.dropdown ul.dropdown-menu,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.meta span.dropdown ul.dropdown-menu{right:0;left:inherit;font-size:0.6em;min-width:0}body div#main-container div.sub-container div#main-table div#content #feed-content>div.feed-title div.meta span.dropdown ul.dropdown-menu a,body div#main-container div.sub-container div#main-table div#content #feed-content>div.category-title div.meta span.dropdown ul.dropdown-menu a{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}body div#main-container div.sub-container div#main-table div#content div.list-entries{position:absolute;left:0;right:0;overflow-y:auto;padding-right:0px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entries-date{padding:10px;background-color:#ccc;border-top:1px solid white;border-bottom:1px solid white;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;text-transform:uppercase;font-weight:bold;color:white}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container{border-bottom:1px solid #ededed;border-collapse:collapse}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container.active{border-left:5px solid #eda15e}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container{cursor:pointer;overflow:hidden;font-size:14px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container:not(.active):hover{margin-top:-1px;background-color:#ededed;border-top:1px solid white}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read,body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite{padding-left:0;padding-right:0}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a,body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite a{padding:10px;margin:-10px 0}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a{padding-right:20px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a.mark-read{display:block}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a.mark-unread{display:none}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.read div.toggle-read a.mark-read{display:none}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.read div.toggle-read a.mark-unread{display:block}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite a.mark-favourite{display:block}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite a.mark-unfavourite{display:none;color:#e67e22}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.favourite div.toggle-favourite a.mark-favourite{display:none}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.favourite div.toggle-favourite a.mark-unfavourite{display:block}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container>div{padding:10px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.read,body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.active{color:#bbb}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.favourite{color:#333}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link{width:auto;overflow:hidden;cursor:pointer}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.title-wrapper{float:left;width:100%}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.title-wrapper div.feed-title{float:left;width:200px;font-size:inherit;padding:0;overflow:hidden;white-space:nowrap;text-overflow:clip ellipsis;margin-right:20px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.title-wrapper div.title{margin-right:100px;overflow:hidden;white-space:nowrap;text-overflow:clip ellipsis}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.date{width:100px;margin-left:-100px;float:left;text-align:right}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.remove-entry{float:right;width:25px;text-align:center;cursor:pointer}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.remove-entry a{color:inherit;text-decoration:none}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read,body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite{float:right;text-align:center}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div{display:none}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div p{margin:15px 0}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-menu{padding:0 5px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content{background-color:white;margin:0 auto;margin-top:25px;max-width:800px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content.frame{max-width:100%;margin:0 10px;margin-top:25px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.inner-title{font-size:18px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.meta{font-size:11px}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.entry-content-text{margin-top:35px;margin-bottom:50px;overflow:hidden}body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.entry-content-text pre{border:1px solid #CCCCCC;overflow-x:auto;padding:15px}body div#main-container div.sub-container div#main-table div#content form.login-form *,body div#main-container div.sub-container div#main-table div#content form.feed-form *,body div#main-container div.sub-container div#main-table div#content form.settings-form *{font-family:"Gudea",sans-serif}body div#main-container div.sub-container div#main-table div#content form.login-form label,body div#main-container div.sub-container div#main-table div#content form.feed-form label,body div#main-container div.sub-container div#main-table div#content form.settings-form label{display:block;margin-bottom:10px}body div#main-container div.sub-container div#main-table div#content form.login-form input,body div#main-container div.sub-container div#main-table div#content form.login-form select,body div#main-container div.sub-container div#main-table div#content form.feed-form input,body div#main-container div.sub-container div#main-table div#content form.feed-form select,body div#main-container div.sub-container div#main-table div#content form.settings-form input,body div#main-container div.sub-container div#main-table div#content form.settings-form select{display:block;margin-bottom:15px}body div#main-container div.sub-container div#main-table div#content ul#category-list{list-style-type:none;margin:0;padding:0;width:60%}body div#main-container div.sub-container div#main-table div#content ul#category-list li{margin:0 3px 3px 3px;padding:0.4em;padding-left:1.5em;height:18px}body div#main-container div.sub-container div#main-table div#content ul#category-list li span{position:absolute;margin-left:-1.3em}body div#main-container div.sub-container div#main-table div.content-center{width:800px !important;margin:0 auto;margin-bottom:30px;display:block !important}.ajax-overlay{background-color:#fff;opacity:0.7;position:absolute;width:100%;height:100%;top:0px;left:0px;display:none;z-index:99999}.ajax-overlay-content{background-color:#fff;opacity:0.8;position:fixed;top:40px;left:325px;right:0;bottom:0;display:none;z-index:99999}.ajax-loader{background:url("../images/spinner_squares_circle.gif") no-repeat center center transparent;width:100%;height:70px}.ajax-loader-text{margin-top:200px;text-align:center;color:black}.navbar{margin:0}form fieldset{border:0;margin:0;padding:0}form fieldset div.field-group input,form fieldset div.field-group select{margin-bottom:0;border:1px solid #ccc;border-radius:5px;min-width:300px}form fieldset div.field-group input:focus,form fieldset div.field-group select:focus{border-color:#e67e22;outline:none}form fieldset div.field-group input{padding:5px}form fieldset div.field-group select{padding:4px}form fieldset div.field-group input[type=file]{border:none;padding:0}form.form-inline fieldset div.field-group{display:inline-block;margin-right:20px;vertical-align:top}form.form-block fieldset div.field-group{display:block;margin-right:20px}.dropdown-menu{border:1px solid #ccc;padding:0;margin:0;visibility:hidden;position:absolute;top:130%;right:0;height:auto;transition:all 0.1s;background:#fff}.dropdown-menu li{min-width:100px;width:auto;float:none;list-style-type:none}.dropdown-menu li a{display:block;line-height:25px;padding:0 10px;white-space:nowrap}.dropdown-menu li.divider{border-bottom:1px solid #ccc}span.dropdown{position:relative}span.dropdown:hover .dropdown-menu{visibility:visible;top:110%;opacity:1}.modal-backdrop{display:none;background-color:#000000;bottom:0;left:0;position:fixed;right:0;top:0;z-index:10;opacity:0.7}.btn{background-color:#F5F5F5;border-color:#ddd;border-style:solid;border-width:1px;border-radius:5px;color:#333333;cursor:pointer;display:inline-block;font-size:14px;margin-bottom:0;padding:6px 12px;text-align:center;vertical-align:middle}.btn:hover{border-color:#aaa;color:#333}.btn.btn-primary{background-color:#e67e22;color:#fff;border-color:#e67e22}.btn.btn-primary:hover,.btn.btn-primary:active,.btn.btn-primary:focus{background-color:#eba05e;border-color:#e67e22;color:#fff}.btn.danger{color:#fff;background-color:#d9534f;border-color:#d43f3a}.btn.danger:hover,.btn.danger:active,.btn.danger:focus{color:#fff;background-color:#d2322d;border-color:#ac2925}iframe{border:none}.nav-header{cursor:pointer}
+/* COLORS */
+/* GLOBAL */
+/* SLIDERS */
+/* HEADER */
+/* LEFT MENU */
+/* MAIN CONTENT */
+/*** GLOBAL ***/
+* {
+  font-family: "Gudea", sans-serif; }
+
+a {
+  color: #333; }
+  a:hover {
+    color: #e67e22; }
+
+a, a:hover, a:focus {
+  text-decoration: none; }
+
+.fa {
+  vertical-align: baseline;
+  text-align: center; }
+
+img {
+  max-width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: block; }
+
+a > img {
+  display: inline; }
+
+html, body {
+  padding: 0;
+  margin: 0; }
+
+body {
+  /* div#main-container */ }
+  body div#main-container {
+    /* nav#header */
+    /* div.sub-container */ }
+    body div#main-container nav#header {
+      height: 40px;
+      line-height: 40px;
+      background-color: #e67e22; }
+      body div#main-container nav#header * {
+        line-height: 40px; }
+      body div#main-container nav#header a {
+        color: #fff; }
+        body div#main-container nav#header a:hover {
+          background-color: #EBA05E; }
+        body div#main-container nav#header a.brand {
+          display: block;
+          float: left;
+          line-height: inherit;
+          padding: 0 15px;
+          font-size: 20px;
+          font-family: "Dosis", Helvetica, Arial, sans-serif; }
+      body div#main-container nav#header ul {
+        float: left;
+        display: inline-block;
+        padding: 0;
+        margin: 0; }
+        body div#main-container nav#header ul.pull-right {
+          float: right; }
+        body div#main-container nav#header ul li {
+          float: left;
+          list-style-type: none;
+          position: relative; }
+          body div#main-container nav#header ul li a {
+            display: block;
+            line-height: inherit;
+            padding: 0 15px; }
+    body div#main-container div.slider {
+      display: none;
+      z-index: 20;
+      position: absolute;
+      background-color: #eee;
+      left: 325px;
+      right: 0;
+      padding: 15px; }
+      body div#main-container div.slider div.slider-header a.close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        padding: 10px; }
+      body div#main-container div.slider div.slider-header h3 {
+        margin-top: 0; }
+      body div#main-container div.slider div.slider-body {
+        margin-bottom: 15px; }
+        body div#main-container div.slider div.slider-body div.errors div.error-message {
+          background-color: #f2dede;
+          border: 1px solid transparent;
+          border-color: #ebccd1;
+          color: #a94442;
+          padding: 7px 10px;
+          margin: 10px 0;
+          border-radius: 4px; }
+    body div#main-container div.sub-container {
+      /* div#main-table */ }
+      body div#main-container div.sub-container div#main-table {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        /* div#left-menu */
+        /* div#content */ }
+        body div#main-container div.sub-container div#main-table div#left-menu {
+          white-space: nowrap;
+          display: table-cell;
+          position: relative;
+          vertical-align: top;
+          z-index: 14;
+          width: 325px;
+          height: 200px;
+          background-color: #FFF9F5;
+          transition: all 1s linear;
+          -moz-transition: all 1s linear;
+          -webkit-transition: all 1s linear;
+          -o-transition: all 1s linear;
+          /* div#left-menu-inner */ }
+          body div#main-container div.sub-container div#main-table div#left-menu.hidden {
+            width: 0; }
+            body div#main-container div.sub-container div#main-table div#left-menu.hidden #left-menu-inner {
+              width: 0; }
+            body div#main-container div.sub-container div#main-table div#left-menu.hidden #left-menu-toggle {
+              left: 0; }
+          body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-toggle {
+            position: absolute;
+            left: 325px;
+            height: 35px;
+            width: 35px;
+            /*border: 1px solid grey;*/
+            line-height: 35px;
+            text-align: center;
+            cursor: pointer;
+            z-index: 15;
+            background-color: #f5cfae;
+            color: #5a5a5a;
+            border-bottom-right-radius: 2px;
+            transition: all 1s linear;
+            -moz-transition: all 1s linear;
+            -webkit-transition: all 1s linear;
+            -o-transition: all 1s linear; }
+            body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-toggle:hover {
+              background-color: #eba05e;
+              color: #000; }
+          body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner {
+            position: relative;
+            width: 325px;
+            transition: all 1s linear;
+            -moz-transition: all 1s linear;
+            -webkit-transition: all 1s linear;
+            -o-transition: all 1s linear;
+            /* div#feed-list-container */ }
+            body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container {
+              overflow-y: hidden;
+              overflow-x: hidden;
+              position: absolute;
+              top: 0px;
+              bottom: 0px; }
+            body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top {
+              border-bottom: 4px solid #ddd; }
+            body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container,
+            body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top {
+              width: 100%;
+              /* ul#feed-list */ }
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list,
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite,
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list,
+              body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite {
+                padding: 0;
+                margin: 0; }
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list ul,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite ul,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list ul,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite ul {
+                  padding: 0;
+                  margin: 0; }
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list .feed-link-placeholder,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite .feed-link-placeholder,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list .feed-link-placeholder,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite .feed-link-placeholder {
+                  height: 24px;
+                  border: 1px dashed #ccc;
+                  margin: 2px 10px; }
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li {
+                  list-style: none;
+                  margin: 0;
+                  line-height: 22px; }
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li div, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li a span.feed-title,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li a span.feed-title,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li a span.feed-title,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li a span.feed-title {
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: clip ellipsis; }
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link {
+                    font-weight: bold;
+                    font-size: 12px; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category .feed-count, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category .feed-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .category-count,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link .feed-count {
+                      display: inline;
+                      position: absolute;
+                      margin-top: 1px;
+                      right: 15px;
+                      height: 20px;
+                      padding: 0 5px;
+                      background: #5b5b5b;
+                      line-height: 20px;
+                      color: #cacaca;
+                      font-size: 10px;
+                      border-radius: 4px; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.empty, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.empty,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty {
+                      font-weight: normal; }
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.empty .feed-count, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.empty .feed-count,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.empty .feed-count {
+                        display: none; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.not-valid, body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.load-feed-link.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.load-feed-link.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.load-feed-link.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.not-valid,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.load-feed-link.not-valid {
+                      font-weight: normal;
+                      font-style: italic; }
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category,
+                body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category {
+                  border-top: 1px solid #ccc;
+                  color: #333; }
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category:first-child,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category:first-child,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category:first-child,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category:first-child {
+                    border-top: none; }
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category > div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category > div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category > div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div {
+                    cursor: pointer;
+                    padding: 2px 10px;
+                    padding-bottom: 5px;
+                    padding-top: 5px;
+                    font-size: 14px;
+                    font-weight: bold; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category > div i,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category > div i,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category > div i,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div i {
+                      float: left;
+                      font-size: 14px;
+                      padding: 3px;
+                      margin-right: 5px;
+                      margin-top: 1px;
+                      vertical-align: middle; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category > div:hover,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category > div:hover,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category > div:hover,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category > div:hover {
+                      background-color: #e67e22; }
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds {
+                    min-height: 15px; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link {
+                      font-size: 14px; }
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a {
+                        display: block;
+                        padding: 2px 20px;
+                        padding-right: 5px;
+                        color: #333;
+                        overflow: hidden; }
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link a span.feed-title,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link a span.feed-title,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link a span.feed-title {
+                          max-width: 235px;
+                          margin-right: 5px;
+                          display: block;
+                          float: left; }
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link:hover,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link:hover,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link:hover,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link:hover {
+                        background-color: #e67e22; }
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.not-valid a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.not-valid a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.not-valid a,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.not-valid a {
+                        color: #888; }
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.active,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.active,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.active,
+                      body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active {
+                        background-color: #EBA05E;
+                        color: #333; }
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category ul.feeds li.load-feed-link.active a,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category ul.feeds li.load-feed-link.active a,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category ul.feeds li.load-feed-link.active a,
+                        body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category ul.feeds li.load-feed-link.active a {
+                          color: inherit; }
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.active div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.active div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.active div,
+                  body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div {
+                    background-color: #EBA05E;
+                    color: #333; }
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#feed-list li.category.active div a,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#feed-list-container ul#favourite li.category.active div a,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#feed-list li.category.active div a,
+                    body div#main-container div.sub-container div#main-table div#left-menu div#left-menu-inner div#left-menu-top ul#favourite li.category.active div a {
+                      color: inherit; }
+        body div#main-container div.sub-container div#main-table div#content {
+          display: table-cell;
+          vertical-align: top;
+          width: 100%;
+          z-index: 10;
+          overflow-y: auto;
+          /* #feed-content */
+          /* ul#category-list */ }
+          body div#main-container div.sub-container div#main-table div#content.padding-20 {
+            padding: 20px; }
+          body div#main-container div.sub-container div#main-table div#content div.slider {
+            left: 0; }
+          body div#main-container div.sub-container div#main-table div#content #feed-content {
+            position: relative;
+            margin: 0;
+            /* > div.feed-title, > div.category-title */ }
+            body div#main-container div.sub-container div#main-table div#content #feed-content h1 {
+              font-size: 20px; }
+            body div#main-container div.sub-container div#main-table div#content #feed-content h2 {
+              font-size: 18px; }
+            body div#main-container div.sub-container div#main-table div#content #feed-content h3, body div#main-container div.sub-container div#main-table div#content #feed-content h4, body div#main-container div.sub-container div#main-table div#content #feed-content h5, body div#main-container div.sub-container div#main-table div#content #feed-content h6 {
+              font-size: 16px; }
+            body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title {
+              border-bottom: #ececec solid 1px;
+              z-index: 10;
+              right: 0;
+              font-size: 1.4em;
+              padding: 15px 20px;
+              padding-left: 50px;
+              background-color: white;
+              margin: 0; }
+              body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.title, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.title {
+                display: inline-block;
+                color: inherit;
+                font-family: "Dosis", Helvetica, Arial, sans-serif; }
+              body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.meta, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.meta {
+                display: inline-block;
+                float: right;
+                text-align: right; }
+                body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.meta a i, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.meta a i {
+                  font-size: 0.8em;
+                  color: #333333;
+                  text-decoration: none;
+                  -webkit-border-radius: 5px;
+                  -moz-border-radius: 5px;
+                  border-radius: 5px;
+                  padding: 8px 8px; }
+                  body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.meta a i:hover, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.meta a i:hover {
+                    color: #e67e22; }
+                body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.meta span.dropdown, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.meta span.dropdown {
+                  font-variant: normal;
+                  text-align: left; }
+                  body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.meta span.dropdown ul.dropdown-menu, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.meta span.dropdown ul.dropdown-menu {
+                    right: 0;
+                    left: inherit;
+                    font-size: 0.6em;
+                    min-width: 0; }
+                    body div#main-container div.sub-container div#main-table div#content #feed-content > div.feed-title div.meta span.dropdown ul.dropdown-menu a, body div#main-container div.sub-container div#main-table div#content #feed-content > div.category-title div.meta span.dropdown ul.dropdown-menu a {
+                      -webkit-border-radius: 0;
+                      -moz-border-radius: 0;
+                      border-radius: 0; }
+          body div#main-container div.sub-container div#main-table div#content div.list-entries {
+            position: absolute;
+            left: 0;
+            right: 0;
+            overflow-y: auto;
+            padding-right: 0px;
+            /* div.entries-date */ }
+            body div#main-container div.sub-container div#main-table div#content div.list-entries div.entries-date {
+              padding: 10px;
+              background-color: #ccc;
+              border-top: 1px solid white;
+              border-bottom: 1px solid white;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              font-size: 14px;
+              text-transform: uppercase;
+              font-weight: bold;
+              color: white; }
+            body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container {
+              border-bottom: 1px solid #ededed;
+              border-collapse: collapse; }
+              body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container.active {
+                border-left: 5px solid #eda15e; }
+              body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container {
+                cursor: pointer;
+                overflow: hidden;
+                font-size: 14px; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container:not(.active):hover {
+                  margin-top: -1px;
+                  background-color: #ededed;
+                  border-top: 1px solid white; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read,
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite,
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-toread {
+                  padding-left: 0;
+                  padding-right: 0; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a,
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite a,
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-toread a {
+                    padding: 10px;
+                    margin: -10px 0; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-toread a.mark-toread {
+                  display: block;
+                  color: #CCCCCC; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-toread a.mark-untoread {
+                  display: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.toread div.toggle-toread a.mark-toread {
+                  display: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.toread div.toggle-toread a.mark-untoread {
+                  display: block; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a {
+                  padding-right: 20px; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a.mark-read {
+                  display: block; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read a.mark-unread {
+                  display: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.read div.toggle-read a.mark-read {
+                  display: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.read div.toggle-read a.mark-unread {
+                  display: block; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite a.mark-favourite {
+                  display: block; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite a.mark-unfavourite {
+                  display: none;
+                  color: #e67e22; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.favourite div.toggle-favourite a.mark-favourite {
+                  display: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.favourite div.toggle-favourite a.mark-unfavourite {
+                  display: block; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container > div {
+                  padding: 10px; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.read, body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.active {
+                  color: #bbb; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.favourite, body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container.toread {
+                  color: #333; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link {
+                  width: auto;
+                  overflow: hidden;
+                  cursor: pointer; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.title-wrapper {
+                    float: left;
+                    width: 100%; }
+                    body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.title-wrapper div.feed-title {
+                      float: left;
+                      width: 200px;
+                      font-size: inherit;
+                      padding: 0;
+                      overflow: hidden;
+                      white-space: nowrap;
+                      text-overflow: clip ellipsis;
+                      margin-right: 20px; }
+                    body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.title-wrapper div.title {
+                      margin-right: 100px;
+                      overflow: hidden;
+                      white-space: nowrap;
+                      text-overflow: clip ellipsis; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.load-entry-link div.date {
+                    width: 100px;
+                    margin-left: -100px;
+                    float: left;
+                    text-align: right; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.remove-entry {
+                  float: right;
+                  width: 25px;
+                  text-align: center;
+                  cursor: pointer; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.remove-entry a {
+                    color: inherit;
+                    text-decoration: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-read,
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-favourite,
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.entry-link-container div.toggle-toread {
+                  float: right;
+                  text-align: center; }
+              body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div {
+                display: none; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div p {
+                  margin: 15px 0; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-menu {
+                  padding: 0 5px; }
+                body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content {
+                  background-color: white;
+                  margin: 0 auto;
+                  margin-top: 25px;
+                  max-width: 800px; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content.frame {
+                    max-width: 100%;
+                    margin: 0 10px;
+                    margin-top: 25px; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.inner-title {
+                    font-size: 18px; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.meta {
+                    font-size: 11px; }
+                  body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.entry-content-text {
+                    margin-top: 35px;
+                    margin-bottom: 50px;
+                    overflow: hidden; }
+                    body div#main-container div.sub-container div#main-table div#content div.list-entries div.entry-container div.load-entry-div div.entry-content div.entry-content-text pre {
+                      border: 1px solid #CCCCCC;
+                      overflow-x: auto;
+                      padding: 15px; }
+          body div#main-container div.sub-container div#main-table div#content form.login-form *,
+          body div#main-container div.sub-container div#main-table div#content form.feed-form *,
+          body div#main-container div.sub-container div#main-table div#content form.settings-form * {
+            font-family: "Gudea", sans-serif; }
+          body div#main-container div.sub-container div#main-table div#content form.login-form label,
+          body div#main-container div.sub-container div#main-table div#content form.feed-form label,
+          body div#main-container div.sub-container div#main-table div#content form.settings-form label {
+            display: block;
+            margin-bottom: 10px; }
+          body div#main-container div.sub-container div#main-table div#content form.login-form input, body div#main-container div.sub-container div#main-table div#content form.login-form select,
+          body div#main-container div.sub-container div#main-table div#content form.feed-form input,
+          body div#main-container div.sub-container div#main-table div#content form.feed-form select,
+          body div#main-container div.sub-container div#main-table div#content form.settings-form input,
+          body div#main-container div.sub-container div#main-table div#content form.settings-form select {
+            display: block;
+            margin-bottom: 15px; }
+          body div#main-container div.sub-container div#main-table div#content ul#category-list {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 60%; }
+            body div#main-container div.sub-container div#main-table div#content ul#category-list li {
+              margin: 0 3px 3px 3px;
+              padding: 0.4em;
+              padding-left: 1.5em;
+              height: 18px; }
+              body div#main-container div.sub-container div#main-table div#content ul#category-list li span {
+                position: absolute;
+                margin-left: -1.3em; }
+        body div#main-container div.sub-container div#main-table div.content-center {
+          width: 800px !important;
+          margin: 0 auto;
+          margin-bottom: 30px;
+          display: block !important; }
+
+/* body */
+.ajax-overlay {
+  background-color: #fff;
+  opacity: 0.7;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  display: none;
+  z-index: 99999; }
+
+.ajax-overlay-content {
+  background-color: #fff;
+  opacity: 0.8;
+  position: fixed;
+  top: 40px;
+  left: 325px;
+  right: 0;
+  bottom: 0;
+  display: none;
+  z-index: 99999; }
+
+.ajax-loader {
+  background: url("../images/spinner_squares_circle.gif") no-repeat center center transparent;
+  width: 100%;
+  height: 70px; }
+
+.ajax-loader-text {
+  margin-top: 200px;
+  text-align: center;
+  color: black; }
+
+.navbar {
+  margin: 0; }
+
+form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0; }
+  form fieldset div.field-group input, form fieldset div.field-group select {
+    margin-bottom: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-width: 300px; }
+    form fieldset div.field-group input:focus, form fieldset div.field-group select:focus {
+      border-color: #e67e22;
+      outline: none; }
+  form fieldset div.field-group input {
+    padding: 5px; }
+  form fieldset div.field-group select {
+    padding: 4px; }
+  form fieldset div.field-group input[type=file] {
+    border: none;
+    padding: 0; }
+
+form.form-inline fieldset div.field-group {
+  display: inline-block;
+  margin-right: 20px;
+  vertical-align: top; }
+
+form.form-block fieldset div.field-group {
+  display: block;
+  margin-right: 20px; }
+
+.dropdown-menu {
+  border: 1px solid #ccc;
+  padding: 0;
+  margin: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 130%;
+  right: 0;
+  height: auto;
+  transition: all 0.1s;
+  background: #fff; }
+  .dropdown-menu li {
+    min-width: 100px;
+    width: auto;
+    float: none;
+    list-style-type: none; }
+    .dropdown-menu li a {
+      display: block;
+      line-height: 25px;
+      padding: 0 10px;
+      white-space: nowrap; }
+    .dropdown-menu li.divider {
+      border-bottom: 1px solid #ccc; }
+
+span.dropdown {
+  position: relative; }
+
+span.dropdown:hover .dropdown-menu {
+  visibility: visible;
+  top: 110%;
+  opacity: 1; }
+
+.modal-backdrop {
+  display: none;
+  background-color: #000000;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  opacity: 0.7; }
+
+.btn {
+  background-color: #F5F5F5;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  /*line-height: 20px;*/
+  margin-bottom: 0;
+  padding: 6px 12px;
+  text-align: center;
+  vertical-align: middle; }
+  .btn:hover {
+    border-color: #aaa;
+    color: #333; }
+  .btn.btn-primary {
+    background-color: #e67e22;
+    color: #fff;
+    border-color: #e67e22; }
+    .btn.btn-primary:hover, .btn.btn-primary:active, .btn.btn-primary:focus {
+      background-color: #EBA05E;
+      border-color: #e67e22;
+      color: #fff; }
+  .btn.danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a; }
+    .btn.danger:hover, .btn.danger:active, .btn.danger:focus {
+      color: #fff;
+      background-color: #d2322d;
+      border-color: #ac2925; }
+
+iframe {
+  border: none; }
+
+.nav-header {
+  cursor: pointer; }
+
+/*# sourceMappingURL=style.css.map */

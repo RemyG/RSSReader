@@ -17,6 +17,7 @@
  * @method EntryQuery orderByContent($order = Criteria::ASC) Order by the content column
  * @method EntryQuery orderByFeedId($order = Criteria::ASC) Order by the feed_id column
  * @method EntryQuery orderByFavourite($order = Criteria::ASC) Order by the favourite column
+ * @method EntryQuery orderByToRead($order = Criteria::ASC) Order by the to_read column
  *
  * @method EntryQuery groupById() Group by the id column
  * @method EntryQuery groupByPublished() Group by the published column
@@ -29,6 +30,7 @@
  * @method EntryQuery groupByContent() Group by the content column
  * @method EntryQuery groupByFeedId() Group by the feed_id column
  * @method EntryQuery groupByFavourite() Group by the favourite column
+ * @method EntryQuery groupByToRead() Group by the to_read column
  *
  * @method EntryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method EntryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -51,6 +53,7 @@
  * @method Entry findOneByContent(string $content) Return the first Entry filtered by the content column
  * @method Entry findOneByFeedId(int $feed_id) Return the first Entry filtered by the feed_id column
  * @method Entry findOneByFavourite(int $favourite) Return the first Entry filtered by the favourite column
+ * @method Entry findOneByToRead(int $to_read) Return the first Entry filtered by the to_read column
  *
  * @method array findById(int $id) Return Entry objects filtered by the id column
  * @method array findByPublished(string $published) Return Entry objects filtered by the published column
@@ -63,6 +66,7 @@
  * @method array findByContent(string $content) Return Entry objects filtered by the content column
  * @method array findByFeedId(int $feed_id) Return Entry objects filtered by the feed_id column
  * @method array findByFavourite(int $favourite) Return Entry objects filtered by the favourite column
+ * @method array findByToRead(int $to_read) Return Entry objects filtered by the to_read column
  *
  * @package    propel.generator.rss-reader.om
  */
@@ -170,7 +174,7 @@ abstract class BaseEntryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `author`, `read`, `content`, `feed_id`, `favourite` FROM `rss_entry` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `published`, `updated`, `link`, `title`, `description`, `author`, `read`, `content`, `feed_id`, `favourite`, `to_read` FROM `rss_entry` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -658,6 +662,48 @@ abstract class BaseEntryQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EntryPeer::FAVOURITE, $favourite, $comparison);
+    }
+
+    /**
+     * Filter the query on the to_read column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByToRead(1234); // WHERE to_read = 1234
+     * $query->filterByToRead(array(12, 34)); // WHERE to_read IN (12, 34)
+     * $query->filterByToRead(array('min' => 12)); // WHERE to_read >= 12
+     * $query->filterByToRead(array('max' => 12)); // WHERE to_read <= 12
+     * </code>
+     *
+     * @param     mixed $toRead The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EntryQuery The current query, for fluid interface
+     */
+    public function filterByToRead($toRead = null, $comparison = null)
+    {
+        if (is_array($toRead)) {
+            $useMinMax = false;
+            if (isset($toRead['min'])) {
+                $this->addUsingAlias(EntryPeer::TO_READ, $toRead['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($toRead['max'])) {
+                $this->addUsingAlias(EntryPeer::TO_READ, $toRead['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EntryPeer::TO_READ, $toRead, $comparison);
     }
 
     /**

@@ -9,12 +9,12 @@
 	<title><?php echo isset($pageTitle) ? $pageTitle : DEFAULT_TITLE; ?></title>
 
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<script src="https://use.fontawesome.com/138187b05a.js"></script>
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/style.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="<?php echo BASE_URL; ?>static/css/perfect-scrollbar-0.4.8.min.css" type="text/css" media="screen" />
 
-	<link href='http://fonts.googleapis.com/css?family=Dosis:700' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Dosis:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Gudea:400,400italic,700' rel='stylesheet' type='text/css'>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
@@ -74,6 +74,10 @@
 
 				<div id="left-menu">
 
+					<div id="left-menu-toggle">
+					    <i class="fa fa-fw fa-arrow-left"> </i><i class="fa fa-fw fa-arrow-right" style="display: none"> </i>
+					</div>
+
 					<div id="left-menu-inner">
 
 						<div id="left-menu-top">
@@ -86,6 +90,14 @@
 									</div>
 								</li>
 							</ul>
+							<ul id="by-date">
+								<li class="category" data-cat-id="by-date">
+									<div>
+										<i class="fa fa-fw fa-calendar"> </i>
+										<span class="category-title">By date</span>
+									</div>
+								</li>
+							</ul>
 
 						</div>
 
@@ -93,8 +105,7 @@
 
 							<ul id="feed-list">
 								<?php
-									$c = new Criteria();
-									$c->add(EntryPeer::READ, 0);
+									$c = CriteriaFactory::getUnreadOrFavouriteEntriesCriteria();
 									$i = 0;
 									foreach ($categoriesTree as $category)
 									{
@@ -103,7 +114,7 @@
 												<div>
 													<i class="fa fa-fw fa-caret-down"> </i>
 													<span class="category-title">'.$category->getName().'</span>
-													<span class="category-count">'.$category->countEntrys().'</span>
+													<span class="category-count">'.$category->countEntrys($c).'</span>
 												</div>
 												<ul class="feeds">';
 

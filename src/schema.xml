@@ -27,7 +27,7 @@
 		<column name="valid" type="boolean" defaultValue="1" />
 		<column name="viewframe" type="boolean" defaultValue="0" />
 		<column name="cat_order" type="integer" phpName="catOrder" defaultValue="0" />
-		<foreign-key foreignTable="category" phpName="Category" refPhpName="Feed">
+		<foreign-key foreignTable="category" phpName="Category" refPhpName="Feed" onDelete="CASCADE">
 			<reference local="category_id" foreign="id" />
 		</foreign-key>
 		<unique>
@@ -50,6 +50,7 @@
 		<column name="content" type="longvarchar" required="false" />
 		<column name="feed_id" type="integer" required="true" />
 		<column name="favourite" type="tinyint" required="true" defaultValue="0" />
+                <column name="to_read" type="tinyint" required="true" defaultValue="0" />
 		<foreign-key foreignTable="feed" phpName="Feed" refPhpName="Entry" onDelete="CASCADE">
 			<reference local="feed_id" foreign="id" />
 		</foreign-key>

@@ -1,3 +1,24 @@
+<div id="slider-delete-category" class="slider">
+
+	<div class="slider-header">
+		<a href="#" class="close cancel-delete-category">&times;</a>
+		<h3 class="title">Delete Category</h3>
+	</div>
+	<div class="slider-body">
+		<p>
+			You are about to delete this category, with its associated feeds (<span
+				id="totalFeeds"></span>) and entries (<span id="totalEntries"></span>).
+			This procedure is irreversible.
+		</p>
+		<p>Do you want to proceed?</p>
+	</div>
+	<div class="slider-footer">
+		<a href="#" data-id=""
+			class="btn danger confirm-delete-category">Yes</a> <a href="#"
+			class="btn secondary cancel-delete-category">No</a>
+	</div>
+</div>
+
 <div id="content" class="content-center">
 
 <h1>Settings</h1>
@@ -8,7 +29,10 @@
 <?php
 	foreach ($categories as $category)
 	{
-		echo '<li class="ui-state-default" data-id="'.$category->getId().'"><i class="fa fa-arrows-v"> </i> '.$category->getName().'</li>';
+		echo '<li class="ui-state-default managed-cat" data-id="'.$category->getId().'">
+        <i class="fa fa-arrows-v"> </i> '.$category->getName().'
+	    <i class="fa fa-trash pull-right"> </i>
+	    </li>';
 	}
 ?>
 </ul>
@@ -27,6 +51,10 @@
 		</div>
 	</fieldset>
 </form>
+
+<h2>Export OPML</h2>
+
+<a class="btn btn-default" href="settings/exportOpml" role="button">Export OPML</a>
 
 <h2>Update user</h2>
 
@@ -76,8 +104,79 @@ $("#category-list").on("click", "a", function(e) {
 	e.preventDefault();
 });
 
+$("#category-list").on("click", "i.fa-trash", function(e) {
+	e.preventDefault();
+	var catId = $(this).parents('li').attr('data-id');
+	var request = $.ajax({
+		url: "category/details/" + catId,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		$(".confirm-delete-category").attr('data-id', catId);
+		$("#totalFeeds").html(data.totalFeeds);
+		$("#totalEntries").html(data.totalEntries);
+		$("#slider-delete-category").slideToggle();
+	});
+	request.fail(function(jqXHR, textStatus) {
+	});
+});
+
+// Close the feed deletion modal
+$("#slider-delete-category").on("click", ".cancel-delete-category", function(e) {
+	e.preventDefault();
+	$("#slider-delete-category").slideUp();
+});
+
+// Delete a feed (and its entries)
+$("#slider-delete-category").on("click", ".confirm-delete-category", function(e) {
+	e.preventDefault();
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text("Deleting this category.");
+	var catId = $(this).attr("data-id");
+	var request = $.ajax({
+		url: 'category/delete/' + catId,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		if (data.result === 1)
+		{
+			$('li.managed-cat[data-id=' + catId + ']').remove();
+			$("#slider-delete-category").slideUp();
+		}
+		else if (data.errors)
+		{
+			$.each(data.errors, function(i, item) {
+				$("#slider-delete-category").find("div.errors").append('<div class="error-message">' + item + '</div>');
+			});
+		}
+		$('#overlay').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay').hide();
+		$("#slider-delete-feed").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
+	});
+});
+
+
+
+
+
+$("form#form-create-category").find("input#category-name").keypress(function(e) {
+    if(e.which == 13) {
+        e.preventDefault();
+		createCategory();
+    }
+});
+
 $("form#form-create-category").on("click", "a.create-category", function(e) {
 	e.preventDefault();
+	createCategory();
+});
+
+function createCategory()
+{
 	var name = $("form#form-create-category").find("input#category-name").val();
 	var request = $.ajax({
 		url: "category/create",
@@ -88,11 +187,12 @@ $("form#form-create-category").on("click", "a.create-category", function(e) {
 	request.done(function(data) {
 		var template = $('<li class="ui-state-default" data-id=""></li>');
 		template.attr('data-id', data.id);
-		template.html(data.name);
+		template.html('<i class="fa fa-arrows-v"> </i> ' + data.name);
 		$('ul#category-list').append(template);
+		$("form#form-create-category").find("input#category-name").val('');
 	});
 	request.fail(function(jqXHR, textStatus) {
 	});
-});
+}
 
 </script>

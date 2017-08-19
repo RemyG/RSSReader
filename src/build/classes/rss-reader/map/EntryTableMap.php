@@ -49,6 +49,7 @@ class EntryTableMap extends TableMap
         $this->addColumn('content', 'Content', 'LONGVARCHAR', false, null, null);
         $this->addForeignKey('feed_id', 'FeedId', 'INTEGER', 'rss_feed', 'id', true, null, null);
         $this->addColumn('favourite', 'Favourite', 'TINYINT', true, null, 0);
+        $this->addColumn('to_read', 'ToRead', 'TINYINT', true, null, 0);
         // validators
     } // initialize()
 
