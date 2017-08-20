@@ -169,6 +169,60 @@ class EntryController extends Controller
             'counts' => array()
         ));
     }
+	
+	/**
+     * Return a json representation of the entries for a specific date.
+     *
+     * @param string $date
+     *            the date in format 'Y-m-d'.
+     * @return type
+     */
+    public function markReadByDate($date = null)
+    {
+        if (sizeof($date) != 0) {
+			$entries = EntryQuery::create()
+				->filterByPublished(array("min" => $date." 00:00:00", "max" => $date." 23:59:59"))
+				->find();
+			foreach ($entries as $entry) {
+				$entry->setRead(1);
+				$entry->save();
+			}
+            $data = $this->logicLoadByDate($date);
+			$template = $this->viewLoadByDate($data, $date);
+        }        
+        return json_encode(array(
+            'html' => $template,
+            'count' => sizeof($data),
+            'counts' => array()
+        ));
+    }
+	
+	/**
+     * Return a json representation of the entries for a specific date.
+     *
+     * @param string $date
+     *            the date in format 'Y-m-d'.
+     * @return type
+     */
+    public function markUnreadByDate($date = null)
+    {
+        if (sizeof($date) != 0) {
+			$entries = EntryQuery::create()
+				->filterByPublished(array("min" => $date." 00:00:00", "max" => $date." 23:59:59"))
+				->find();
+			foreach ($entries as $entry) {
+				$entry->setRead(0);
+				$entry->save();
+			}
+            $data = $this->logicLoadByDate($date);
+			$template = $this->viewLoadByDate($data, $date);
+        }        
+        return json_encode(array(
+            'html' => $template,
+            'count' => sizeof($data),
+            'counts' => array()
+        ));
+    }
 
     /* LOGIC */
 

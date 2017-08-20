@@ -497,6 +497,48 @@ $("#feed-content").on("click", ".feed-marknotread", function(e) {
 	});
 });
 
+// Mark all entries from a date as read
+$("#feed-content").on("click", ".date-markread", function(e) {
+	e.preventDefault();
+	$('#overlay-content').show();
+	$('#overlay-content').find('.ajax-loader-text').text("Marking this date as read.");
+	var id = $(this).attr('data-id');
+	var request = $.ajax({
+		url: 'entry/markreadbydate/'+id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayCategory('by-date', data.html, data.count);
+		$('#overlay-content').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay-content').hide();
+		alert("Request failed: " + textStatus);
+	});
+
+});
+
+$("#feed-content").on("click", ".date-marknotread", function(e) {
+	e.preventDefault();
+	$('#overlay-content').show();
+	$('#overlay-content').find('.ajax-loader-text').text("Marking this date as not read.");
+	var id = $(this).attr('data-id');
+	var request = $.ajax({
+		url: 'entry/markunreadbydate/'+id,
+		type: "GET",
+		dataType: "json"
+	});
+	request.done(function(data) {
+		displayCategory('by-date', data.html, data.count);
+		$('#overlay-content').hide();
+	});
+	request.fail(function(jqXHR, textStatus) {
+		$('#overlay-content').hide();
+		alert("Request failed: " + textStatus);
+	});
+});
+
 // Mark all entries from a category as read
 $("#feed-content").on("click", ".category-markread", function(e) {
 	e.preventDefault();
