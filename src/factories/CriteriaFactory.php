@@ -13,7 +13,7 @@ class CriteriaFactory
 		$c = new Criteria();
 		$c->addOr(EntryPeer::READ, 0);
 		$c->addOr(EntryPeer::FAVOURITE, 1);
-                $c->addOr(EntryPeer::TO_READ, 1);
+		$c->addOr(EntryPeer::TO_READ, 1);
 		return $c;
 	}
 }

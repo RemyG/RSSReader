@@ -16,6 +16,8 @@ class EntryDAO implements iEntryDAO
 				->filterByRead(0)
 					->_or()
 				->filterByFavourite(1)
+					->_or()
+				->filterByToRead(1)
 				->orderByUpdated('desc')
 				->find();
 	}

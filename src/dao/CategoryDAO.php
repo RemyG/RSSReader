@@ -37,6 +37,8 @@ class CategoryDAO implements iCategoryDAO
 				->filterByRead(0)
 					->_or()
 				->filterByFavourite(1)
+					->_or()
+				->filterByToRead(1)
 				->find();
 	}
 
