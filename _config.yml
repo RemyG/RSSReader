@@ -1,7 +1,6 @@
 highlighter: rouge
 
-#permalink: /:year/:month/:day/:title
-permalink: /post/:title/
+permalink: /blog/:title/
 
 baseurl: /RSSReader
 
