@@ -1,6 +1,6 @@
 highlighter: rouge
 
-permalink: :year/:month/:day/:title
+permalink: /:year/:month/:day/:title
 
 baseurl: /RSSReader
 
@@ -8,7 +8,6 @@ title : RSS Reader
 author :
   name : Rémy Gardette
   website: http://remyg.fr
-  email : remy.gardette@gmail.com
+  email : github@remyg.fr
   github : RemyG
   twitter : remygardette
-  feedburner : feedname
