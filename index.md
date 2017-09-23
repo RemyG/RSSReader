@@ -3,8 +3,6 @@ layout: page
 title: RSS Reader
 ---
 
-# {{ page.title }}
-
 <div class="grid-container">
 	<div class="grid-100 main-description">
 		<p>RSSReader has been created to be an open-source, self-hosted alternative to traditional RSS aggregators and readers like <a href="https://www.google.com/reader/">Google Reader</a>, <a href="https://www.netvibes.com/">Netvibes</a> or <a href="http://blog.feedly.com/">Feedly</a>.</p>

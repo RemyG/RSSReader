@@ -3,8 +3,6 @@ layout: page
 title: Changelog
 ---
 
-# {{ page.title }}
-
 ## v0.3
 
 * favourite entries

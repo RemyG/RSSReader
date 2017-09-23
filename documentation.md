@@ -3,8 +3,6 @@ layout: page
 title: Documentation
 ---
 
-# {{ page.title }}
-
 This application is a self-hosted RSS aggregator and reader.
 
 ## Requirements

@@ -3,8 +3,6 @@ layout: page
 title: Download
 ---
 
-# {{ page.title }}
-
 ## With Git
 
 * Clone the main project:

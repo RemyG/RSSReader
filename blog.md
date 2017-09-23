@@ -3,8 +3,6 @@ layout: page
 title: Blog Posts
 ---
 
-# {{ page.title }}
-
 {% for post in site.posts %}
 
 <article class="post post-list">
