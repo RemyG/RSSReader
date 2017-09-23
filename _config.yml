@@ -1,4 +1,5 @@
-pygments: true
+highlighter: rouge
+
 permalink: :year/:month/:day/:title
 
 baseurl: /RSSReader
