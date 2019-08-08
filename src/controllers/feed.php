@@ -337,6 +337,8 @@ class FeedController extends Controller {
 				$feed->setLink($_POST['feed-link']);
 				$feed->setBaseLink($_POST['feed-base-link']);
 				$feed->setCategory($category);
+				$feed->setToUpdate(array_key_exists('feed-to-update', $_POST));
+				$feed->setMarkNewToRead(array_key_exists('feed-mark-new-to-read', $_POST));
 				$feed->save();
 				if ($oldCat != $newCat)
 				{
@@ -460,11 +462,16 @@ class FeedController extends Controller {
 	 */
 	private function updateFeed($feed, $errors, $invalidate = true)
 	{
+
+		$dto = new UpdateFeedDTO($feed);
+
+		if (!$feed->getToUpdate()) {
+			return $dto;
+		}
+
 		set_time_limit(0);
 
 		$feedUrl = $feed->getLink();
-
-		$dto = new UpdateFeedDTO($feed);
 
 		try
 		{
@@ -502,6 +509,8 @@ class FeedController extends Controller {
 			$feed->setBaseLink($feedSP->get_link());
 			$feed->save();
 
+			$markNewToRead = $feed->getMarkNewToRead();
+			
 			foreach ($feedSP->get_items() as $item)
 			{
 				$entryUpdated = $item->get_date('U');
@@ -519,6 +528,7 @@ class FeedController extends Controller {
 					$entry->setLink($link);
 					$entry->setFeed($feed);
 					$entry->setRead(0);
+					$entry->setToRead($markNewToRead);
 				}
 				if ($item->get_author() != null)
 				{

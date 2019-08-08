@@ -12,6 +12,8 @@
  * @method FeedQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method FeedQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method FeedQuery orderByUpdated($order = Criteria::ASC) Order by the updated column
+ * @method FeedQuery orderByToUpdate($order = Criteria::ASC) Order by the to_update column
+ * @method FeedQuery orderByMarkNewToRead($order = Criteria::ASC) Order by the mark_new_to_read column
  * @method FeedQuery orderByCategoryId($order = Criteria::ASC) Order by the category_id column
  * @method FeedQuery orderByValid($order = Criteria::ASC) Order by the valid column
  * @method FeedQuery orderByViewframe($order = Criteria::ASC) Order by the viewframe column
@@ -23,6 +25,8 @@
  * @method FeedQuery groupByTitle() Group by the title column
  * @method FeedQuery groupByDescription() Group by the description column
  * @method FeedQuery groupByUpdated() Group by the updated column
+ * @method FeedQuery groupByToUpdate() Group by the to_update column
+ * @method FeedQuery groupByMarkNewToRead() Group by the mark_new_to_read column
  * @method FeedQuery groupByCategoryId() Group by the category_id column
  * @method FeedQuery groupByValid() Group by the valid column
  * @method FeedQuery groupByViewframe() Group by the viewframe column
@@ -48,6 +52,8 @@
  * @method Feed findOneByTitle(string $title) Return the first Feed filtered by the title column
  * @method Feed findOneByDescription(string $description) Return the first Feed filtered by the description column
  * @method Feed findOneByUpdated(string $updated) Return the first Feed filtered by the updated column
+ * @method Feed findOneByToUpdate(boolean $to_update) Return the first Feed filtered by the to_update column
+ * @method Feed findOneByMarkNewToRead(boolean $mark_new_to_read) Return the first Feed filtered by the mark_new_to_read column
  * @method Feed findOneByCategoryId(int $category_id) Return the first Feed filtered by the category_id column
  * @method Feed findOneByValid(boolean $valid) Return the first Feed filtered by the valid column
  * @method Feed findOneByViewframe(boolean $viewframe) Return the first Feed filtered by the viewframe column
@@ -59,6 +65,8 @@
  * @method array findByTitle(string $title) Return Feed objects filtered by the title column
  * @method array findByDescription(string $description) Return Feed objects filtered by the description column
  * @method array findByUpdated(string $updated) Return Feed objects filtered by the updated column
+ * @method array findByToUpdate(boolean $to_update) Return Feed objects filtered by the to_update column
+ * @method array findByMarkNewToRead(boolean $mark_new_to_read) Return Feed objects filtered by the mark_new_to_read column
  * @method array findByCategoryId(int $category_id) Return Feed objects filtered by the category_id column
  * @method array findByValid(boolean $valid) Return Feed objects filtered by the valid column
  * @method array findByViewframe(boolean $viewframe) Return Feed objects filtered by the viewframe column
@@ -170,7 +178,7 @@ abstract class BaseFeedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `link`, `base_link`, `title`, `description`, `updated`, `category_id`, `valid`, `viewframe`, `cat_order` FROM `rss_feed` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `link`, `base_link`, `title`, `description`, `updated`, `to_update`, `mark_new_to_read`, `category_id`, `valid`, `viewframe`, `cat_order` FROM `rss_feed` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -458,6 +466,60 @@ abstract class BaseFeedQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(FeedPeer::UPDATED, $updated, $comparison);
+    }
+
+    /**
+     * Filter the query on the to_update column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByToUpdate(true); // WHERE to_update = true
+     * $query->filterByToUpdate('yes'); // WHERE to_update = true
+     * </code>
+     *
+     * @param     boolean|string $toUpdate The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterByToUpdate($toUpdate = null, $comparison = null)
+    {
+        if (is_string($toUpdate)) {
+            $toUpdate = in_array(strtolower($toUpdate), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(FeedPeer::TO_UPDATE, $toUpdate, $comparison);
+    }
+
+    /**
+     * Filter the query on the mark_new_to_read column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMarkNewToRead(true); // WHERE mark_new_to_read = true
+     * $query->filterByMarkNewToRead('yes'); // WHERE mark_new_to_read = true
+     * </code>
+     *
+     * @param     boolean|string $markNewToRead The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return FeedQuery The current query, for fluid interface
+     */
+    public function filterByMarkNewToRead($markNewToRead = null, $comparison = null)
+    {
+        if (is_string($markNewToRead)) {
+            $markNewToRead = in_array(strtolower($markNewToRead), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(FeedPeer::MARK_NEW_TO_READ, $markNewToRead, $comparison);
     }
 
     /**

@@ -23,6 +23,8 @@
 		<column name="title" type="varchar" size="255" required="true" />
 		<column name="description" type="longvarchar" size="255" required="false" />
 		<column name="updated" type="timestamp" required="false" />
+		<column name="to_update" type="boolean" defaultValue="1" />
+		<column name="mark_new_to_read" type="boolean" defaultValue="0" />
 		<column name="category_id" type="integer" required="true" />
 		<column name="valid" type="boolean" defaultValue="1" />
 		<column name="viewframe" type="boolean" defaultValue="0" />

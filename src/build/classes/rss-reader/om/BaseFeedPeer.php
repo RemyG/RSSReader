@@ -24,13 +24,13 @@ abstract class BaseFeedPeer
     const TM_CLASS = 'FeedTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 12;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /** the column name for the id field */
     const ID = 'rss_feed.id';
@@ -49,6 +49,12 @@ abstract class BaseFeedPeer
 
     /** the column name for the updated field */
     const UPDATED = 'rss_feed.updated';
+
+    /** the column name for the to_update field */
+    const TO_UPDATE = 'rss_feed.to_update';
+
+    /** the column name for the mark_new_to_read field */
+    const MARK_NEW_TO_READ = 'rss_feed.mark_new_to_read';
 
     /** the column name for the category_id field */
     const CATEGORY_ID = 'rss_feed.category_id';
@@ -81,12 +87,12 @@ abstract class BaseFeedPeer
      * e.g. FeedPeer::$fieldNames[FeedPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Link', 'BaseLink', 'Title', 'Description', 'Updated', 'CategoryId', 'Valid', 'Viewframe', 'catOrder', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'link', 'baseLink', 'title', 'description', 'updated', 'categoryId', 'valid', 'viewframe', 'catOrder', ),
-        BasePeer::TYPE_COLNAME => array (FeedPeer::ID, FeedPeer::LINK, FeedPeer::BASE_LINK, FeedPeer::TITLE, FeedPeer::DESCRIPTION, FeedPeer::UPDATED, FeedPeer::CATEGORY_ID, FeedPeer::VALID, FeedPeer::VIEWFRAME, FeedPeer::CAT_ORDER, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LINK', 'BASE_LINK', 'TITLE', 'DESCRIPTION', 'UPDATED', 'CATEGORY_ID', 'VALID', 'VIEWFRAME', 'CAT_ORDER', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'link', 'base_link', 'title', 'description', 'updated', 'category_id', 'valid', 'viewframe', 'cat_order', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Link', 'BaseLink', 'Title', 'Description', 'Updated', 'ToUpdate', 'MarkNewToRead', 'CategoryId', 'Valid', 'Viewframe', 'catOrder', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'link', 'baseLink', 'title', 'description', 'updated', 'toUpdate', 'markNewToRead', 'categoryId', 'valid', 'viewframe', 'catOrder', ),
+        BasePeer::TYPE_COLNAME => array (FeedPeer::ID, FeedPeer::LINK, FeedPeer::BASE_LINK, FeedPeer::TITLE, FeedPeer::DESCRIPTION, FeedPeer::UPDATED, FeedPeer::TO_UPDATE, FeedPeer::MARK_NEW_TO_READ, FeedPeer::CATEGORY_ID, FeedPeer::VALID, FeedPeer::VIEWFRAME, FeedPeer::CAT_ORDER, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LINK', 'BASE_LINK', 'TITLE', 'DESCRIPTION', 'UPDATED', 'TO_UPDATE', 'MARK_NEW_TO_READ', 'CATEGORY_ID', 'VALID', 'VIEWFRAME', 'CAT_ORDER', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'link', 'base_link', 'title', 'description', 'updated', 'to_update', 'mark_new_to_read', 'category_id', 'valid', 'viewframe', 'cat_order', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -96,12 +102,12 @@ abstract class BaseFeedPeer
      * e.g. FeedPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Link' => 1, 'BaseLink' => 2, 'Title' => 3, 'Description' => 4, 'Updated' => 5, 'CategoryId' => 6, 'Valid' => 7, 'Viewframe' => 8, 'catOrder' => 9, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'link' => 1, 'baseLink' => 2, 'title' => 3, 'description' => 4, 'updated' => 5, 'categoryId' => 6, 'valid' => 7, 'viewframe' => 8, 'catOrder' => 9, ),
-        BasePeer::TYPE_COLNAME => array (FeedPeer::ID => 0, FeedPeer::LINK => 1, FeedPeer::BASE_LINK => 2, FeedPeer::TITLE => 3, FeedPeer::DESCRIPTION => 4, FeedPeer::UPDATED => 5, FeedPeer::CATEGORY_ID => 6, FeedPeer::VALID => 7, FeedPeer::VIEWFRAME => 8, FeedPeer::CAT_ORDER => 9, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LINK' => 1, 'BASE_LINK' => 2, 'TITLE' => 3, 'DESCRIPTION' => 4, 'UPDATED' => 5, 'CATEGORY_ID' => 6, 'VALID' => 7, 'VIEWFRAME' => 8, 'CAT_ORDER' => 9, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'link' => 1, 'base_link' => 2, 'title' => 3, 'description' => 4, 'updated' => 5, 'category_id' => 6, 'valid' => 7, 'viewframe' => 8, 'cat_order' => 9, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Link' => 1, 'BaseLink' => 2, 'Title' => 3, 'Description' => 4, 'Updated' => 5, 'ToUpdate' => 6, 'MarkNewToRead' => 7, 'CategoryId' => 8, 'Valid' => 9, 'Viewframe' => 10, 'catOrder' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'link' => 1, 'baseLink' => 2, 'title' => 3, 'description' => 4, 'updated' => 5, 'toUpdate' => 6, 'markNewToRead' => 7, 'categoryId' => 8, 'valid' => 9, 'viewframe' => 10, 'catOrder' => 11, ),
+        BasePeer::TYPE_COLNAME => array (FeedPeer::ID => 0, FeedPeer::LINK => 1, FeedPeer::BASE_LINK => 2, FeedPeer::TITLE => 3, FeedPeer::DESCRIPTION => 4, FeedPeer::UPDATED => 5, FeedPeer::TO_UPDATE => 6, FeedPeer::MARK_NEW_TO_READ => 7, FeedPeer::CATEGORY_ID => 8, FeedPeer::VALID => 9, FeedPeer::VIEWFRAME => 10, FeedPeer::CAT_ORDER => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LINK' => 1, 'BASE_LINK' => 2, 'TITLE' => 3, 'DESCRIPTION' => 4, 'UPDATED' => 5, 'TO_UPDATE' => 6, 'MARK_NEW_TO_READ' => 7, 'CATEGORY_ID' => 8, 'VALID' => 9, 'VIEWFRAME' => 10, 'CAT_ORDER' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'link' => 1, 'base_link' => 2, 'title' => 3, 'description' => 4, 'updated' => 5, 'to_update' => 6, 'mark_new_to_read' => 7, 'category_id' => 8, 'valid' => 9, 'viewframe' => 10, 'cat_order' => 11, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -181,6 +187,8 @@ abstract class BaseFeedPeer
             $criteria->addSelectColumn(FeedPeer::TITLE);
             $criteria->addSelectColumn(FeedPeer::DESCRIPTION);
             $criteria->addSelectColumn(FeedPeer::UPDATED);
+            $criteria->addSelectColumn(FeedPeer::TO_UPDATE);
+            $criteria->addSelectColumn(FeedPeer::MARK_NEW_TO_READ);
             $criteria->addSelectColumn(FeedPeer::CATEGORY_ID);
             $criteria->addSelectColumn(FeedPeer::VALID);
             $criteria->addSelectColumn(FeedPeer::VIEWFRAME);
@@ -192,6 +200,8 @@ abstract class BaseFeedPeer
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.updated');
+            $criteria->addSelectColumn($alias . '.to_update');
+            $criteria->addSelectColumn($alias . '.mark_new_to_read');
             $criteria->addSelectColumn($alias . '.category_id');
             $criteria->addSelectColumn($alias . '.valid');
             $criteria->addSelectColumn($alias . '.viewframe');

@@ -44,6 +44,8 @@ class FeedTableMap extends TableMap
         $this->addColumn('title', 'Title', 'VARCHAR', true, 255, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, 255, null);
         $this->addColumn('updated', 'Updated', 'TIMESTAMP', false, null, null);
+        $this->addColumn('to_update', 'ToUpdate', 'BOOLEAN', false, 1, true);
+        $this->addColumn('mark_new_to_read', 'MarkNewToRead', 'BOOLEAN', false, 1, false);
         $this->addForeignKey('category_id', 'CategoryId', 'INTEGER', 'rss_category', 'id', true, null, null);
         $this->addColumn('valid', 'Valid', 'BOOLEAN', false, 1, true);
         $this->addColumn('viewframe', 'Viewframe', 'BOOLEAN', false, 1, false);

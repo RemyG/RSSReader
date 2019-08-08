@@ -37,6 +37,14 @@
 							?>
 						</select>
 					</div>
+					<div class="field-group">
+						<label for="feed-to-update">Keep updated</label>
+						<input type="checkbox" name="feed-to-update" <?php if ($feed->getToUpdate()) echo 'checked'; ?>>
+					</div>
+					<div class="field-group">
+						<label for="feed-mark-new-to-read">Mark new entries to read</label>
+						<input type="checkbox" name="feed-mark-new-to-read" <?php if ($feed->getMarkNewToRead()) echo 'checked'; ?>>
+					</div>
 				</fieldset>
 			</form>
 		</div>
