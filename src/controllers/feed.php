@@ -354,7 +354,7 @@ class FeedController extends Controller {
 		}
 	}
 
-	private function importFeed($feedUrl, $errors, $parentCat = null, $logFile = null)
+	private function importFeed(string $feedUrl, $errors, $parentCat = null, $logFile = null)
 	{
 		try
 		{
@@ -364,53 +364,20 @@ class FeedController extends Controller {
 			}
 
 			$feedSP = new SimplePie();
-			$feedSP->set_feed_url((string)$feedUrl);
+			$feedSP->set_feed_url($feedUrl);
 			$feedSP->set_cache_location(CACHE_DIR);
 			$feedSP->init();
 
 			$feed = new Feed();
 			$title = $feedSP->get_title();
-			/*
 			if ($title == null || $title == '')
 			{
-				$feedSP = new SimplePie();
-				$feedSP->set_feed_url((string)$feedUrl);
-				$feedSP->set_timeout(20);
-				$feedSP->enable_cache(false);
-				$feedSP->force_feed(true);
-				$feedSP->init();
-				$title = $feedSP->get_title();
+				$title = $feedUrl;
 			}
-			if (($title == null || $title == '') && class_exists('tidy'))
-			{
-				$feedSP = new SimplePie();
-				$feedAsString = file_get_contents($feedUrl);
-				$config = array(
-					'input-xml'  => true,
-					'output-xml' => true,
-					'wrap'       => false);
-				$tidy = new tidy();
-				$tidy->parseString($feedAsString, $config);
-				$tidy->cleanRepair();
-				$feedSP->set_raw_data($tidy);
-				$feedSP->set_timeout(20);
-				$feedSP->enable_cache(false);
-				$feedSP->force_feed(true);
-				$feedSP->init();
-				$feedSP->handle_content_type();
-				$title = $feedSP->get_title();
-			}
-			*/
-			if ($title == null || $title == '')
-			{
-				$errors[] = '[Error] Feed not imported (no title): '.(string)$feedUrl;
-				$this->logToFile($logFile, '[Error] Feed not imported (no title): '.(string)$feedUrl);
-				return $errors;
-			}
-			$feed->setTitle($feedSP->get_title());
+			$feed->setTitle($title);
 			$feed->setUpdated(0);
 			$feed->setDescription($feedSP->get_description());
-			$feed->setLink((string)$feedUrl);
+			$feed->setLink($feedUrl);
 			$feed->setBaseLink($feedSP->get_link());
 			$feed->setValid(1);
 			if ($parentCat != null)
@@ -418,23 +385,6 @@ class FeedController extends Controller {
 				$feed->setCategory($parentCat);
 			}
 			$feed->save();
-
-			/*if ($importEntries)
-			{*/
-				/*
-				foreach ($feedSP->get_items() as $item)
-				{
-					$entry = new Entry();
-					$entry->setPublished($item->get_date('U'));
-					$entry->setUpdated($item->get_date('U'));
-					$entry->setLink($item->get_link());
-					$entry->setTitle($item->get_title());
-					$entry->setContent($item->get_content());
-					$entry->setFeed($feed);
-					$entry->save();
-				}
-				*/
-			/*}*/
 			$this->logToFile($logFile, 'Feed imported: '.$feedUrl);
 			return $feed;
 		}
