@@ -16,23 +16,16 @@ class UserController extends Controller
 				$password = $_POST['password'];
 				$user = UserQuery::create()->findOneByLogin($login);
 				$passwordHashed = crypt($password, '$5$rounds=5000$'.md5($password).'$');
-				if ($user != null)
+				if ($user != null && $passwordHashed == $user->getPassword())
 				{
-					if ($passwordHashed == $user->getPassword())
-					{
-						SessionUtils::destroy();
-						session_start();
-						SessionUtils::set('user-login', $user->getLogin());
-						$this->redirect('');
-					}
-					else
-					{
-						$errors[] = 'Wrong password for this username.';
-					}
+					SessionUtils::destroy();
+					session_start();
+					SessionUtils::set('user-login', $user->getLogin());
+					$this->redirect('');
 				}
 				else
 				{
-					$errors[] = 'Wrong username';
+					$errors[] = 'Login failed. Invalid username or password.';
 				}
 			}
 			$template = $this->loadView('user_login_view');
