@@ -184,6 +184,12 @@ class CategoryController extends Controller
 
         $category = $this->categoryDAO->findById($id);
 
+        if ($category == null) {
+            return array(
+                'error' => 'Could not find category ' + $id
+            );
+        }
+
         $totalFeeds = 0;
         $totalEntries = 0;
 
@@ -192,7 +198,7 @@ class CategoryController extends Controller
         return $result;
     }
 
-    private function countCategoryDetails($category, $totalFeeds, $totalEntries)
+    private function countCategoryDetails(Category $category, $totalFeeds, $totalEntries)
     {
         foreach ($category->getFeeds() as $feed) {
             $totalFeeds++;
@@ -200,7 +206,7 @@ class CategoryController extends Controller
         }
         foreach ($category->getChildrenCategorys() as $childCat)
         {
-            $result = countCategoryDetails($childCat, $totalFeeds, $totalEntries);
+            $result = $this->countCategoryDetails($childCat, $totalFeeds, $totalEntries);
             $totalFeeds += $result['totalFeeds'];
             $totalEntries += $result['totalEntries'];
         }
@@ -247,7 +253,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Delete an existing category with its associated feeds and entries.
+     * Delete an existing category with its associated feeds and entries and child categories.
      *
      * @param unknown $id
      * @return string[]
@@ -263,6 +269,11 @@ class CategoryController extends Controller
         }
 
         $category = $this->categoryDAO->findById($id);
+
+        foreach ($category->getChildrenCategorys() as $childCat)
+        {
+            $childCat->delete();
+        }
 
         $category->delete();
 
