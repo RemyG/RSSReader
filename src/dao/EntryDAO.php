@@ -30,6 +30,20 @@ class EntryDAO implements iEntryDAO
 				->find();
 	}
 
+	public function findLatest($page)
+	{
+		return EntryQuery::create()
+				->filterByRead(0)
+					->_or()
+				->filterByFavourite(1)
+					->_or()
+				->filterByToRead(1)
+				->orderByUpdated('desc')
+				->limit(100)
+				->offset(100 * $page)
+				->find();
+	}
+
 	public function save($entry)
 	{
 		$entry->save();

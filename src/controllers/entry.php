@@ -169,7 +169,24 @@ class EntryController extends Controller
             'counts' => array()
         ));
     }
-	
+
+    /**
+     * Returns the latest entries, paginated.
+     */
+    public function loadLatest($page = 0) {
+
+        $data = $this->entryDAO->findLatest($page);
+        $template = $this->loadView('entry_latest_view');
+        $template->set('entries', $data);
+        $template->set('current_page', $page);
+        $html = $template->renderString();
+        return json_encode(array(
+            'html' => $html,
+            'count' => sizeof($data),
+            'counts' => array()
+        ));
+    }
+
 	/**
      * Return a json representation of the entries for a specific date.
      *

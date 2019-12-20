@@ -98,6 +98,14 @@
 									</div>
 								</li>
 							</ul>
+							<ul id="latest">
+								<li class="category" data-cat-id="latest">
+									<div>
+										<i class="fa fa-fw fa-clock"> </i>
+										<span class="category-title">Latest</span>
+									</div>
+								</li>
+							</ul>
 
 						</div>
 
