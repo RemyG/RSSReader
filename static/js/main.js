@@ -1,10 +1,27 @@
+function displayOverlay(text) {
+	$('#overlay').show();
+	$('#overlay').find('.ajax-loader-text').text(text);
+}
+
+function hideOverlay() {
+	$('#overlay').hide();
+}
+
+function displayOverlayContent(text) {
+	$('#overlay-content').show();
+	$('#overlay-content').find('.ajax-loader-text').text(text);
+}
+
+function hideOverlayContent() {
+	$('#overlay-content').hide();
+}
+
 /*** FUNCTIONS - FEEDS ***/
 
 function loadFeed(feedId)
 {
 	var href = 'feed/load/' + feedId;
-	$('#overlay-content').show();
-	$('#overlay-content').find('.ajax-loader-text').text("Loading feed entries.");
+	displayOverlayContent("Loading entries");
 	var request = $.ajax({
 		url: href,
 		type: "GET",
@@ -12,10 +29,10 @@ function loadFeed(feedId)
 	});
 	request.done(function(data) {
 		displayFeed(feedId, data.html, data.count, data.categorycount, data.valid);
-		$('#overlay-content').hide();
+		hideOverlayContent();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay-content').hide();
+		hideOverlayContent();
 		alert("Request failed: " + textStatus);
 	});
 }
@@ -23,8 +40,7 @@ function loadFeed(feedId)
 function updateFeed(feedId)
 {
 	var href = 'feed/update/' + feedId;
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Updating feed.");
+	displayOverlay("Updating feed.");
 	var request = $.ajax({
 		url: href,
 		type: "GET",
@@ -32,10 +48,10 @@ function updateFeed(feedId)
 	});
 	request.done(function(data) {
 		displayFeed(feedId, data.html, data.count, data.categorycount, data.valid);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 }
@@ -124,7 +140,7 @@ function loadCategory(catId)
 
 function ajaxLoadCategory(catId, catUrl)
 {
-	$('#overlay-content').show();
+	displayOverlayContent("Loading entries");
 	var request = $.ajax({
 		url: catUrl,
 		type: "GET",
@@ -132,10 +148,10 @@ function ajaxLoadCategory(catId, catUrl)
 	});
 	request.done(function(data) {
 		displayCategory(catId, data.html, data.count);
-		$('#overlay-content').hide();
+		hideOverlayContent();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay-content').hide();
+		hideOverlayContent();
 		alert("Request failed: " + textStatus);
 	});
 }
@@ -164,7 +180,7 @@ function setCountForCategory(catId, catCount)
 
 function updateCategory(catId)
 {
-	$('#overlay').show();
+	displayOverlay("Updating category");
 	var request = $.ajax({
 		url: 'category/update/' + catId,
 		type: "GET",
@@ -172,10 +188,10 @@ function updateCategory(catId)
 	});
 	request.done(function(data) {
 		displayCategory(catId, data.html, data.count, data.counts);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 }
@@ -249,7 +265,6 @@ $("#feed-list").on("click", "li.category div i", function(e) {
 // Open a category
 $("#feed-list").on("click", "li.category div", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
 	var id = $(this).parents('li.category').data('cat-id');
 	loadCategory(id);
 });
@@ -257,7 +272,6 @@ $("#feed-list").on("click", "li.category div", function(e) {
 // Load favourites
 $("#favourite").on("click", "li.category div", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
 	var id = $(this).parents('li.category').data('cat-id');
 	loadCategory(id);
 });
@@ -265,7 +279,6 @@ $("#favourite").on("click", "li.category div", function(e) {
 // Load by date
 $("#by-date").on("click", "li.category div", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
 	var id = $(this).parents('li.category').data('cat-id');
 	loadCategory(id);
 });
@@ -273,21 +286,18 @@ $("#by-date").on("click", "li.category div", function(e) {
 // Load by date
 $("#latest").on("click", "li.category div", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
 	var id = $(this).parents('li.category').data('cat-id');
 	loadCategory(id);
 });
 
 $("#feed-content").on("click", "a.load-date", function(e) {
 	e.preventDefault();
-        $('#overlay-content').show();
 	var date = $(this).attr('data-date');
 	loadCategoryByDate(date);
 });
 
 $("#feed-content").on("click", "a.load-latest", function(e) {
 	e.preventDefault();
-        $('#overlay-content').show();
 	var page = $(this).attr('data-page');
 	loadLatestPage(page);
 });
@@ -387,8 +397,7 @@ function openEntryAsSource(id)
 $("#feed-content").on("click", ".feed-update", function(e) {
 
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Updating the feed");
+	displayOverlay("Updating feed");
 	var id = $(this).attr('data-id');
 	var href = this.href;
 	var request = $.ajax({
@@ -399,10 +408,10 @@ $("#feed-content").on("click", ".feed-update", function(e) {
 	request.done(function(msg) {
 		$("#feed-content").html(msg);
 		updateCountForFeed(id);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 
@@ -423,8 +432,7 @@ $("#feed-content").on("click", "div#slider-edit-feed a.cancel-edit-feed", functi
 // Confirm the edition of a feed
 $("#feed-content").on("click", "div#slider-edit-feed a.confirm-edit-feed", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Editing this feed.");
+	displayOverlay("Saving feed");
 	var request = $.ajax({
 		url: "feed/edit",
 		type: "POST",
@@ -450,19 +458,18 @@ $("#feed-content").on("click", "div#slider-edit-feed a.confirm-edit-feed", funct
 				$("#feed-content").find("#slider-edit-feed").find("div.errors").append('<div class="error-message">' + item + '</div>');
 			});
 		}
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
 		$("#feed-content").find("#slider-edit-feed").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
-		$('#overlay').hide();
+		hideOverlay();
 	});
 });
 
 // Update all feeds
 $('.link-update-all').click(function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Updating all feeds");
+	displayOverlay("Updating all feeds");
 	var request = $.ajax({
 		url: 'feed/forceupdateall',
 		type: "GET",
@@ -471,10 +478,10 @@ $('.link-update-all').click(function(e) {
 	request.done(function(msg) {
 		$("#feed-content").html('');
 		$("list-feeds").html(msg);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -482,8 +489,7 @@ $('.link-update-all').click(function(e) {
 // Mark all entries from a feed as read
 $("#feed-content").on("click", ".feed-markread", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Marking this feed as read.");
+	displayOverlay("Marking feed as read");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'feed/markread/'+id,
@@ -492,10 +498,10 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 	});
 	request.done(function(data) {
 		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 
@@ -503,8 +509,7 @@ $("#feed-content").on("click", ".feed-markread", function(e) {
 
 $("#feed-content").on("click", ".feed-marknotread", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Marking this feed as not read.");
+	displayOverlay("Marking feed as not read");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'feed/marknotread/'+id,
@@ -513,10 +518,10 @@ $("#feed-content").on("click", ".feed-marknotread", function(e) {
 	});
 	request.done(function(data) {
 		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -524,8 +529,7 @@ $("#feed-content").on("click", ".feed-marknotread", function(e) {
 // Mark all entries from a date as read
 $("#feed-content").on("click", ".date-markread", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
-	$('#overlay-content').find('.ajax-loader-text').text("Marking this date as read.");
+	displayOverlayContent("Marking date as read");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'entry/markreadbydate/'+id,
@@ -534,10 +538,10 @@ $("#feed-content").on("click", ".date-markread", function(e) {
 	});
 	request.done(function(data) {
 		displayCategory('by-date', data.html, data.count);
-		$('#overlay-content').hide();
+		hideOverlayContent();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay-content').hide();
+		hideOverlayContent();
 		alert("Request failed: " + textStatus);
 	});
 
@@ -545,8 +549,7 @@ $("#feed-content").on("click", ".date-markread", function(e) {
 
 $("#feed-content").on("click", ".date-marknotread", function(e) {
 	e.preventDefault();
-	$('#overlay-content').show();
-	$('#overlay-content').find('.ajax-loader-text').text("Marking this date as not read.");
+	displayOverlayContent("Marking date as not read");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'entry/markunreadbydate/'+id,
@@ -555,10 +558,10 @@ $("#feed-content").on("click", ".date-marknotread", function(e) {
 	});
 	request.done(function(data) {
 		displayCategory('by-date', data.html, data.count);
-		$('#overlay-content').hide();
+		hideOverlayContent();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay-content').hide();
+		hideOverlayContent();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -566,8 +569,7 @@ $("#feed-content").on("click", ".date-marknotread", function(e) {
 // Mark all entries from a category as read
 $("#feed-content").on("click", ".category-markread", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Marking this category as read.");
+	displayOverlay("Marking category as read");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'category/markread/'+id,
@@ -576,10 +578,10 @@ $("#feed-content").on("click", ".category-markread", function(e) {
 	});
 	request.done(function(data) {
 		displayCategory(id, data.html, data.count, data.counts);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 
@@ -587,8 +589,7 @@ $("#feed-content").on("click", ".category-markread", function(e) {
 
 $("#feed-content").on("click", ".category-marknotread", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Marking this category as not read.");
+	displayOverlay("Marking category as not read");
 	var id = $(this).attr('data-id');
 	var request = $.ajax({
 		url: 'category/marknotread/'+id,
@@ -597,10 +598,10 @@ $("#feed-content").on("click", ".category-marknotread", function(e) {
 	});
 	request.done(function(data) {
 		displayCategory(id, data.html, data.count, data.counts);
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -620,8 +621,7 @@ $("#feed-content").on("click", "#slider-delete-feed .cancel-delete-feed", functi
 // Delete a feed (and its entries)
 $("#feed-content").on("click", "#slider-delete-feed .confirm-delete-feed", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Deleting this feed.");
+	displayOverlay("Deleting feed");
 	var id = $(this).attr("data-id");
 	var request = $.ajax({
 		url: 'feed/delete/' + id,
@@ -641,10 +641,10 @@ $("#feed-content").on("click", "#slider-delete-feed .confirm-delete-feed", funct
 				$("#feed-content").find("#slider-delete-feed").find("div.errors").append('<div class="error-message">' + item + '</div>');
 			});
 		}
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		$("#feed-content").find("#slider-delete-feed").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
 	});
 });
@@ -652,8 +652,7 @@ $("#feed-content").on("click", "#slider-delete-feed .confirm-delete-feed", funct
 // Show all entries from a feed (read and unread)
 $("#feed-content").on("click", ".show-all", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Retrieving feed entries.");
+	displayOverlay("Loading entries");
 	var id = $(this).data("id");
 	var request = $.ajax({
 		url: 'feed/load/' + id + '/1',
@@ -664,10 +663,10 @@ $("#feed-content").on("click", ".show-all", function(e) {
 		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
 		$('.show-unread').parent().show();
 		$('.show-all').parent().hide();
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -675,8 +674,7 @@ $("#feed-content").on("click", ".show-all", function(e) {
 // Show only the unread entries from a feed
 $("#feed-content").on("click", ".show-unread", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Retrieving feed entries.");
+	displayOverlay("Loading entries");
 	var id = $(this).data("id");
 	var request = $.ajax({
 		url: 'feed/load/' + id + '/0',
@@ -687,10 +685,10 @@ $("#feed-content").on("click", ".show-unread", function(e) {
 		displayFeed(data.feedId, data.html, data.count, data.categorycount, data.valid);
 		$('.show-unread').parent().hide();
 		$('.show-all').parent().show();
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -698,8 +696,7 @@ $("#feed-content").on("click", ".show-unread", function(e) {
 // Show all entries from a category (read and unread)
 $("#feed-content").on("click", ".category-show-all", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Retrieving category entries.");
+	displayOverlay("Loading entries");
 	var id = $(this).data("id");
 	var request = $.ajax({
 		url: 'category/load/' + id + '/1',
@@ -710,10 +707,10 @@ $("#feed-content").on("click", ".category-show-all", function(e) {
 		displayCategory(id, data.html, data.count, data.counts);
 		$('.category-show-unread').parent().show();
 		$('.category-show-all').parent().hide();
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -721,8 +718,7 @@ $("#feed-content").on("click", ".category-show-all", function(e) {
 // Show only the unread entries from a feed
 $("#feed-content").on("click", ".category-show-unread", function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').text("Retrieving category entries.");
+	displayOverlay("Loading entries");
 	var id = $(this).data("id");
 	var request = $.ajax({
 		url: 'category/load/' + id + '/0',
@@ -733,10 +729,10 @@ $("#feed-content").on("click", ".category-show-unread", function(e) {
 		displayCategory(id, data.html, data.count, data.counts);
 		$('.category-show-unread').parent().hide();
 		$('.category-show-all').parent().show();
-		$('#overlay').hide();
+		hideOverlay();
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		alert("Request failed: " + textStatus);
 	});
 });
@@ -1127,8 +1123,7 @@ $("#slider-import-opml").on("click", ".cancel-import-opml", function(e) {
 
 $("#slider-import-opml").on("click", '.confirm-import-opml', function(e) {
 	e.preventDefault();
-	$('#overlay').show();
-	$('#overlay').find('.ajax-loader-text').html("Importing the OPML file");
+	displayOverlay("Importing OPML file");
 
 //	var	oData = new FormData($('#slider-import-opml').find('form'));
 	var oData = new FormData();
@@ -1143,17 +1138,17 @@ $("#slider-import-opml").on("click", '.confirm-import-opml', function(e) {
 	    type: 'POST'
 	});
 	request.done(function(data) {
-        $('#overlay').find('.ajax-loader-text').html("Updating all the feeds");
+		displayOverlay("Updating all feeds");
         $.ajax({
 			url: "/feed/forceupdateall",
 			type: "GET",
 			success: function(data2) {
-				$('#overlay').hide();
+				hideOverlay();
 			}
 		});
 	});
 	request.fail(function(jqXHR, textStatus) {
-		$('#overlay').hide();
+		hideOverlay();
 		$("#slider-import-opml").find("div.errors").append('<div class="error-message">' + textStatus + '</div>');
 	});
 });
