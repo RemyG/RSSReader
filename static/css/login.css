@@ -1,0 +1,47 @@
+#main-container {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: auto;
+  margin-top: 70px;
+  padding-bottom: 40px;
+  width: 500px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  -webkit-box-shadow: 0 8px 6px -6px black;
+  -moz-box-shadow: 0 8px 6px -6px black;
+  box-shadow: 0 8px 6px -6px black; }
+  #main-container #header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-color: #e67e22;
+    text-align: center;
+    margin-bottom: 60px;
+    background-color: #e67e22;
+    padding: 30px 0; }
+    #main-container #header h1 {
+      margin: 0;
+      color: #fff; }
+  #main-container #login-form {
+    padding: 0 50px; }
+    #main-container #login-form div.form-group {
+      margin: 20px 0; }
+      #main-container #login-form div.form-group input, #main-container #login-form div.form-group button {
+        font-size: 18px;
+        box-sizing: border-box;
+        display: inline-block;
+        width: 100%;
+        line-height: 2; }
+      #main-container #login-form div.form-group input {
+        padding: 5px 20px; }
+      #main-container #login-form div.form-group button {
+        display: block;
+        margin: auto;
+        width: 300px; }
+  #main-container #login-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    padding: 0 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f5c6cb;
+    border-radius: .25rem; }
+
+/*# sourceMappingURL=login.css.map */

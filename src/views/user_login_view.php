@@ -5,13 +5,7 @@
 	<meta name="viewport" content=" width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
 	<title><?php echo isset($pageTitle) ? $pageTitle : DEFAULT_TITLE; ?></title>
 
-	<link rel="stylesheet" href="/static/css/style.css" type="text/css" media="screen" />
-
-	<style type="text/css">
-		div#content {
-			margin-left: 325px;
-		}
-	</style>
+	<link rel="stylesheet" href="/static/css/login.css" type="text/css" media="screen" />
 
 </head>
 <body>
@@ -26,52 +20,37 @@ document.location = "<?php echo BASE_URL; ?>m/user/login";
 
 <div id="main-container">
 
-	<nav id="header" class="navbar navbar-fixed-top">
-		<div class="navbar">
-			<div class="navbar-inner">
-				<a class="brand" href=""><?php echo PROJECT_NAME; ?></a>
+	<div id="header">
+		<h1><?php echo PROJECT_NAME; ?></h1>
+	</div>
+
+	<div id="login-form">
+		<form method="post" novalidate="novalidate" class="login-form">
+			<div class="form-group">
+			<input type="text" name="login" id="login" placeholder="Login" required />
 			</div>
-		</div>
-	</nav>
-
-	<div id="content">
-
+			<div class="form-group">
+			<input type="password" name="password" id="password" placeholder="Password" required />
+			</div>
+			<div class="form-group">
+			<button type="submit" class="btn">Sign in</button>
+			</div>
+		</form>
 		<?php
 
 		if (count($errors) > 0)
 		{
-			echo '
-			<div class="alert alert-error">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>Error</strong> ';
+			echo '<div id="login-error">';
+			echo '<p>';
 			foreach ($errors as $error)
 			{
 				echo $error.'<br/>';
 			}
-			echo '
-			</div>';
+			echo '</p>';
+			echo '</div>';
 		}
 
 		?>
-
-		<h1>Sign in</h1>
-
-		<form method="post" novalidate>
-			<fieldset>
-				<div class="field-group">
-					<label for="login">Login</label>
-					<input type="email" name="login" id="login" required />
-				</div>
-				<div class="field-group">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="password" required />
-				</div>
-				<div class="field-group">
-					<button type="submit" class="btn">Sign in</button>
-				</div>
-			</fieldset>
-		</form>
-
 	</div>
 </div>
 
